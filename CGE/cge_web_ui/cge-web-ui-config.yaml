@@ -1,0 +1,21 @@
+## Configuration file for the analytics user-interface
+## Configurations for Mojolicious
+MOJO_MAX_MESSAGE_SIZE: 2147483648
+MOJO_USERAGENT_DEBUG: 1
+MOJO_CONNECT_TIMEOUT: 60
+MOJO_IOLOOP_DEBUG: 1
+MOJO_WEBSOCKET_DEBUG: 1
+MOJO_INACTIVITY_TIMEOUT: 0
+
+## These are specific to the hypnotoad web server
+multi_accept: 100
+workers: 10
+
+## Please omit 'http://' or 'https://' from the hostname as shown below
+host: 'democritus-login1.cray.com'
+## Default web-app session timeout in seconds
+session_timeout: 1800
+
+## These are LDAP settings for authentication 'cfdcg03.us.cray.com' 'dc=datacenter,dc=cray,dc=com'
+ldap_host: '10.142.0.130'
+search_base: 'dc=local'

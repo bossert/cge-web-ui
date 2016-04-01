@@ -1,0 +1,198 @@
+html {
+  width: 100%;
+  height: 100%;
+  margin:  0;
+  padding:  0;
+  font-family:  Michroma;
+  font-size: 12px;
+  min-width: 800px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+#navigation {
+  position: fixed;
+  top: 0;
+  left: -500px;
+  width: 500px;
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #005696; /**/
+  transition: left 1s;
+}
+
+#content_area {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  transition: left 1s;
+  background-color: white;
+}
+
+/* Hamburger menu that morphs into an X */
+.c-hamburger {
+  display: block;
+  position: absolute;
+  overflow: hidden;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  font-size: 0;
+  text-indent: -9999px;
+  appearance: none;
+  box-shadow: none;
+  border-radius: none;
+  border: none;
+  cursor: pointer;
+  transition: background 1s, left 1s;
+}
+
+.c-hamburger:focus {
+  outline: none;
+}
+
+.c-hamburger span {
+  display: block;
+  position: absolute;
+  top: 14px;
+  left: 6px;
+  right: 6px;
+  height: 3px;
+  background: white;
+}
+
+.c-hamburger span::before,
+.c-hamburger span::after {
+  position: absolute;
+  display: block;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #fff;
+  content: "";
+}
+
+.c-hamburger span::before {
+  top: -6px;
+}
+
+.c-hamburger span::after {
+  bottom: -6px;
+}
+
+.c-hamburger--htx {
+  background-color: #005696;
+}
+
+.c-hamburger--htx span {
+  transition: background 0s 0.3s;
+}
+
+.c-hamburger--htx span::before,
+.c-hamburger--htx span::after {
+  transition-duration: 0.3s, 0.3s;
+  transition-delay: 0.3s, 0s;
+}
+
+.c-hamburger--htx span::before {
+  transition-property: top, transform;
+}
+
+.c-hamburger--htx span::after {
+  transition-property: bottom, transform;
+}
+
+/* active state, i.e. menu open */
+.c-hamburger--htx.is-active {
+  background-color: #005696;
+}
+
+.c-hamburger--htx.is-active span {
+  background: none;
+}
+
+.c-hamburger--htx.is-active span::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+.c-hamburger--htx.is-active span::after {
+  bottom: 0;
+  transform: rotate(-45deg);
+}
+
+.c-hamburger--htx.is-active span::before,
+.c-hamburger--htx.is-active span::after {
+  transition-delay: 0s, 0.3s;
+}
+
+/* Accordion Menu */
+.ss_button { 
+	background-color: #005696;
+	border-bottom: 1px solid #EFEFEF;
+	cursor: pointer;
+	padding: 15px;
+	color: #FFFFFF;
+  font-size: 14px;
+  font-weight: bold;
+}
+	
+.ss_content {
+	background-color: #EFEFEF;
+	display: none;
+	padding: 10px;
+  box-shadow: inset -3px 3px 10px -5px rgba(0,0,0,0.8);
+}
+
+/* Footer with Cray logo at bottom of slide out menu */
+#cray_logo {
+  width: 350px;
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 0;
+  margin-bottom: -5px;
+}
+
+#logo_copyright {
+  position: absolute;
+  bottom: 0;
+  width: 500px;
+  height: 120px;
+  margin: 0;
+  padding: 0;
+  color: rgba(255,255,255,0.5);
+  font-weight: bold;
+  font-size: 10px;
+}
+
+#logo_copyright a {
+  color: rgba(255,255,255,0.5);
+  font-weight: bold;
+  font-size: 10px;
+}
+
+#logo_copyright h1 {
+  text-align: center;
+  font-size: 16px;
+  color: white;
+  font-weight: 100;
+  margin-bottom: 30px;
+}
+
+#copyright {
+  margin-left: 10px;
+}
