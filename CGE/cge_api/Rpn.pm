@@ -21,15 +21,15 @@ my $cge_cli = can_run('cge-cli') or croak $@;
 sub compile2rpn {
   my ($query) = @_;
   my $hex;
-  
+
   #=+ Wouldn't it be nice if cge-cli accepted input on STDIN?
   open(my $TEMP, '>', 'test.rq') or croak $@;
   print {$TEMP} $query;
   close($TEMP);
-  
+
   my ($success,$error,$full_buf,$stdout,$stderr) = run(command => $cge_cli.' compile -c rpn test.rq');
   if ($success) {
-    $hex = unpack('H*',join('',@$stdout));
+    $hex = pack('Q*',unpack('Q*',join('',@$stdout)));
     unlink('test.rq');
   }
   else {

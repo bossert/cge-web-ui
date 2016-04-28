@@ -1,0 +1,911 @@
+[Mon Apr 25 11:43:13 2016] [debug] GET "/"
+[Mon Apr 25 11:43:13 2016] [debug] Routing to a callback
+[Mon Apr 25 11:43:13 2016] [debug] 302 Found (0.002661s, 375.799/s)
+[Mon Apr 25 11:43:14 2016] [debug] GET "/login"
+[Mon Apr 25 11:43:14 2016] [debug] Routing to a callback
+[Mon Apr 25 11:43:14 2016] [debug] Rendering template "login.html.ep"
+[Mon Apr 25 11:43:14 2016] [debug] 200 OK (0.062357s, 16.037/s)
+[Mon Apr 25 11:43:26 2016] [debug] POST "/bonafides"
+[Mon Apr 25 11:43:26 2016] [debug] Routing to a callback
+[Mon Apr 25 11:43:26 2016] [debug] 200 OK (0.07769s, 12.872/s)
+[Mon Apr 25 11:43:27 2016] [debug] GET "/main"
+[Mon Apr 25 11:43:27 2016] [debug] Routing to a callback
+[Mon Apr 25 11:43:27 2016] [debug] Routing to a callback
+[Mon Apr 25 11:43:27 2016] [debug] Rendering template "main.html.ep"
+[Mon Apr 25 11:43:27 2016] [debug] 200 OK (0.029259s, 34.178/s)
+[Mon Apr 25 11:43:42 2016] [debug] GET "/main"
+[Mon Apr 25 11:43:42 2016] [debug] Routing to a callback
+[Mon Apr 25 11:43:42 2016] [debug] Routing to a callback
+[Mon Apr 25 11:43:42 2016] [debug] Rendering cached template "main.html.ep"
+[Mon Apr 25 11:43:42 2016] [debug] 200 OK (0.004121s, 242.660/s)
+[Mon Apr 25 11:43:43 2016] [debug] GET "/"
+[Mon Apr 25 11:43:43 2016] [debug] Routing to a callback
+[Mon Apr 25 11:43:43 2016] [debug] 302 Found (0.001232s, 811.688/s)
+[Mon Apr 25 11:43:43 2016] [debug] GET "/login"
+[Mon Apr 25 11:43:43 2016] [debug] Routing to a callback
+[Mon Apr 25 11:43:43 2016] [debug] Rendering cached template "login.html.ep"
+[Mon Apr 25 11:43:43 2016] [debug] 200 OK (0.002233s, 447.828/s)
+[Mon Apr 25 11:43:44 2016] [debug] GET "/sinfo"
+[Mon Apr 25 11:43:44 2016] [debug] Template "not_found.development.html.ep" not found
+[Mon Apr 25 11:43:44 2016] [debug] Template "not_found.html.ep" not found
+[Mon Apr 25 11:43:44 2016] [debug] Rendering template "mojo/debug.html.ep"
+[Mon Apr 25 11:43:44 2016] [debug] Rendering template "mojo/menubar.html.ep"
+[Mon Apr 25 11:43:45 2016] [debug] 404 Not Found (0.037484s, 26.678/s)
+[Mon Apr 25 13:19:26 2016] [debug] GET "/main"
+[Mon Apr 25 13:19:26 2016] [debug] Routing to a callback
+[Mon Apr 25 13:19:26 2016] [debug] 302 Found (0.002278s, 438.982/s)
+[Mon Apr 25 13:19:26 2016] [debug] Routing to a callback
+[Mon Apr 25 13:19:26 2016] [debug] GET "/login"
+[Mon Apr 25 13:19:26 2016] [debug] Routing to a callback
+[Mon Apr 25 13:19:26 2016] [debug] Rendering template "login.html.ep"
+[Mon Apr 25 13:19:26 2016] [debug] 200 OK (0.007318s, 136.649/s)
+[Mon Apr 25 13:19:34 2016] [debug] POST "/bonafides"
+[Mon Apr 25 13:19:34 2016] [debug] Routing to a callback
+[Mon Apr 25 13:19:34 2016] [debug] 200 OK (0.01872s, 53.419/s)
+[Mon Apr 25 13:19:35 2016] [debug] GET "/main"
+[Mon Apr 25 13:19:35 2016] [debug] Routing to a callback
+[Mon Apr 25 13:19:35 2016] [debug] Routing to a callback
+[Mon Apr 25 13:19:35 2016] [debug] Rendering template "main.html.ep"
+[Mon Apr 25 13:19:35 2016] [debug] 200 OK (0.007417s, 134.825/s)
+[Tue Apr 26 09:20:34 2016] [debug] GET "/main"
+[Tue Apr 26 09:20:34 2016] [debug] Routing to a callback
+[Tue Apr 26 09:20:34 2016] [debug] 302 Found (0.005706s, 175.254/s)
+[Tue Apr 26 09:20:34 2016] [debug] Routing to a callback
+[Tue Apr 26 09:20:34 2016] [debug] GET "/login"
+[Tue Apr 26 09:20:34 2016] [debug] Routing to a callback
+[Tue Apr 26 09:20:34 2016] [debug] Rendering template "login.html.ep"
+[Tue Apr 26 09:20:34 2016] [debug] 200 OK (0.088415s, 11.310/s)
+[Tue Apr 26 09:20:40 2016] [debug] POST "/bonafides"
+[Tue Apr 26 09:20:40 2016] [debug] Routing to a callback
+[Tue Apr 26 09:20:40 2016] [debug] 200 OK (0.067667s, 14.778/s)
+[Tue Apr 26 09:20:42 2016] [debug] GET "/main"
+[Tue Apr 26 09:20:42 2016] [debug] Routing to a callback
+[Tue Apr 26 09:20:42 2016] [debug] Routing to a callback
+[Tue Apr 26 09:20:42 2016] [debug] Rendering template "main.html.ep"
+[Tue Apr 26 09:20:42 2016] [debug] 200 OK (0.021151s, 47.279/s)
+[Tue Apr 26 09:20:56 2016] [debug] GET "/main"
+[Tue Apr 26 09:20:56 2016] [debug] Routing to a callback
+[Tue Apr 26 09:20:56 2016] [debug] Routing to a callback
+[Tue Apr 26 09:20:56 2016] [debug] Rendering cached template "main.html.ep"
+[Tue Apr 26 09:20:56 2016] [debug] 200 OK (0.003297s, 303.306/s)
+[Tue Apr 26 09:20:56 2016] [debug] GET "/"
+[Tue Apr 26 09:20:56 2016] [debug] Routing to a callback
+[Tue Apr 26 09:20:56 2016] [debug] 302 Found (0.001521s, 657.462/s)
+[Tue Apr 26 09:20:56 2016] [debug] GET "/login"
+[Tue Apr 26 09:20:56 2016] [debug] Routing to a callback
+[Tue Apr 26 09:20:56 2016] [debug] Rendering cached template "login.html.ep"
+[Tue Apr 26 09:20:56 2016] [debug] 200 OK (0.002653s, 376.932/s)
+[Tue Apr 26 09:20:58 2016] [debug] GET "/login"
+[Tue Apr 26 09:20:58 2016] [debug] Routing to a callback
+[Tue Apr 26 09:20:58 2016] [debug] Rendering cached template "login.html.ep"
+[Tue Apr 26 09:20:58 2016] [debug] 200 OK (0.002831s, 353.232/s)
+[Tue Apr 26 09:21:01 2016] [debug] GET "/list_directory"
+[Tue Apr 26 09:21:01 2016] [debug] Template "not_found.development.html.ep" not found
+[Tue Apr 26 09:21:01 2016] [debug] Template "not_found.html.ep" not found
+[Tue Apr 26 09:21:01 2016] [debug] Rendering template "mojo/debug.html.ep"
+[Tue Apr 26 09:21:01 2016] [debug] Rendering template "mojo/menubar.html.ep"
+[Tue Apr 26 09:21:01 2016] [debug] 404 Not Found (0.112995s, 8.850/s)
+[Tue Apr 26 09:21:18 2016] [debug] GET "/list_directory"
+[Tue Apr 26 09:21:18 2016] [debug] Template "not_found.development.html.ep" not found
+[Tue Apr 26 09:21:18 2016] [debug] Template "not_found.html.ep" not found
+[Tue Apr 26 09:21:18 2016] [debug] Rendering cached template "mojo/debug.html.ep"
+[Tue Apr 26 09:21:18 2016] [debug] Rendering cached template "mojo/menubar.html.ep"
+[Tue Apr 26 09:21:19 2016] [debug] 404 Not Found (0.00957799999999999998s, 104.406/s)
+[Tue Apr 26 09:21:21 2016] [debug] GET "/list"
+[Tue Apr 26 09:21:21 2016] [debug] Routing to a callback
+[Tue Apr 26 09:21:21 2016] [debug] Routing to a callback
+[Tue Apr 26 09:21:21 2016] [debug] 200 OK (0.014518s, 68.880/s)
+[Tue Apr 26 09:21:55 2016] [debug] GET "/list"
+[Tue Apr 26 09:21:55 2016] [debug] Routing to a callback
+[Tue Apr 26 09:21:55 2016] [debug] Routing to a callback
+[Tue Apr 26 09:21:56 2016] [debug] 200 OK (0.034786s, 28.747/s)
+[Tue Apr 26 09:32:54 2016] [debug] GET "/"
+[Tue Apr 26 09:32:54 2016] [debug] Routing to a callback
+[Tue Apr 26 09:32:54 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Tue Apr 26 09:32:54 2016] [debug] 302 Found (0.002607s, 383.583/s)
+[Tue Apr 26 09:32:54 2016] [debug] GET "/login"
+[Tue Apr 26 09:32:54 2016] [debug] Routing to a callback
+[Tue Apr 26 09:32:54 2016] [debug] Rendering template "login.html.ep"
+[Tue Apr 26 09:32:54 2016] [debug] 200 OK (0.006546s, 152.765/s)
+[Tue Apr 26 09:32:54 2016] [debug] GET "/"
+[Tue Apr 26 09:32:54 2016] [debug] Routing to a callback
+[Tue Apr 26 09:32:54 2016] [debug] 302 Found (0.001324s, 755.287/s)
+[Tue Apr 26 09:32:54 2016] [debug] GET "/login"
+[Tue Apr 26 09:32:54 2016] [debug] Routing to a callback
+[Tue Apr 26 09:32:54 2016] [debug] Rendering cached template "login.html.ep"
+[Tue Apr 26 09:32:54 2016] [debug] 200 OK (0.002819s, 354.736/s)
+[Tue Apr 26 09:33:02 2016] [debug] POST "/bonafides"
+[Tue Apr 26 09:33:02 2016] [debug] Routing to a callback
+[Tue Apr 26 09:33:02 2016] [debug] 200 OK (0.022665s, 44.121/s)
+[Tue Apr 26 09:33:03 2016] [debug] GET "/main"
+[Tue Apr 26 09:33:03 2016] [debug] Routing to a callback
+[Tue Apr 26 09:33:03 2016] [debug] Routing to a callback
+[Tue Apr 26 09:33:03 2016] [debug] Rendering template "main.html.ep"
+[Tue Apr 26 09:33:03 2016] [debug] 200 OK (0.005591s, 178.859/s)
+[Tue Apr 26 09:33:08 2016] [debug] GET "/main"
+[Tue Apr 26 09:33:08 2016] [debug] Routing to a callback
+[Tue Apr 26 09:33:08 2016] [debug] Routing to a callback
+[Tue Apr 26 09:33:08 2016] [debug] Rendering cached template "main.html.ep"
+[Tue Apr 26 09:33:08 2016] [debug] 200 OK (0.003394s, 294.638/s)
+[Tue Apr 26 09:33:09 2016] [debug] GET "/"
+[Tue Apr 26 09:33:09 2016] [debug] Routing to a callback
+[Tue Apr 26 09:33:09 2016] [debug] 302 Found (0.001108s, 902.527/s)
+[Tue Apr 26 09:33:09 2016] [debug] GET "/login"
+[Tue Apr 26 09:33:09 2016] [debug] Routing to a callback
+[Tue Apr 26 09:33:09 2016] [debug] Rendering cached template "login.html.ep"
+[Tue Apr 26 09:33:09 2016] [debug] 200 OK (0.00234s, 427.350/s)
+[Tue Apr 26 09:33:10 2016] [debug] GET "/login"
+[Tue Apr 26 09:33:10 2016] [debug] Routing to a callback
+[Tue Apr 26 09:33:10 2016] [debug] Rendering cached template "login.html.ep"
+[Tue Apr 26 09:33:10 2016] [debug] 200 OK (0.002466s, 405.515/s)
+[Tue Apr 26 09:33:10 2016] [debug] GET "/list"
+[Tue Apr 26 09:33:10 2016] [debug] Routing to a callback
+[Tue Apr 26 09:33:10 2016] [debug] Routing to a callback
+[Tue Apr 26 09:33:10 2016] [debug] 200 OK (0.005367s, 186.324/s)
+[Tue Apr 26 09:33:10 2016] [debug] GET "/list"
+[Tue Apr 26 09:33:10 2016] [debug] Routing to a callback
+[Tue Apr 26 09:33:10 2016] [debug] Routing to a callback
+[Tue Apr 26 09:33:10 2016] [debug] 200 OK (0.005625s, 177.778/s)
+[Tue Apr 26 09:33:12 2016] [debug] GET "/list"
+[Tue Apr 26 09:33:12 2016] [debug] Routing to a callback
+[Tue Apr 26 09:33:12 2016] [debug] Routing to a callback
+[Tue Apr 26 09:33:12 2016] [debug] 200 OK (0.004147s, 241.138/s)
+[Tue Apr 26 09:33:14 2016] [debug] GET "/list"
+[Tue Apr 26 09:33:14 2016] [debug] Routing to a callback
+[Tue Apr 26 09:33:14 2016] [debug] Routing to a callback
+[Tue Apr 26 09:33:14 2016] [debug] 200 OK (0.003431s, 291.460/s)
+[Tue Apr 26 09:36:25 2016] [debug] GET "/list"
+[Tue Apr 26 09:36:25 2016] [debug] Routing to a callback
+[Tue Apr 26 09:36:25 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Tue Apr 26 09:36:25 2016] [debug] 302 Found (0.003126s, 319.898/s)
+[Tue Apr 26 09:36:25 2016] [debug] Routing to a callback
+[Tue Apr 26 09:36:25 2016] [debug] GET "/login"
+[Tue Apr 26 09:36:25 2016] [debug] Routing to a callback
+[Tue Apr 26 09:36:25 2016] [debug] Rendering template "login.html.ep"
+[Tue Apr 26 09:36:25 2016] [debug] 200 OK (0.006427s, 155.594/s)
+[Tue Apr 26 09:36:36 2016] [debug] POST "/bonafides"
+[Tue Apr 26 09:36:36 2016] [debug] Routing to a callback
+[Tue Apr 26 09:36:36 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Tue Apr 26 09:36:36 2016] [debug] 200 OK (0.02213s, 45.188/s)
+[Tue Apr 26 09:36:37 2016] [debug] GET "/main"
+[Tue Apr 26 09:36:37 2016] [debug] Routing to a callback
+[Tue Apr 26 09:36:37 2016] [debug] Routing to a callback
+[Tue Apr 26 09:36:37 2016] [debug] Rendering template "main.html.ep"
+[Tue Apr 26 09:36:37 2016] [debug] 200 OK (0.007241s, 138.102/s)
+[Tue Apr 26 09:37:16 2016] [debug] GET "/main"
+[Tue Apr 26 09:37:16 2016] [debug] Routing to a callback
+[Tue Apr 26 09:37:16 2016] [debug] Routing to a callback
+[Tue Apr 26 09:37:16 2016] [debug] Rendering cached template "main.html.ep"
+[Tue Apr 26 09:37:16 2016] [debug] 200 OK (0.003624s, 275.938/s)
+[Tue Apr 26 09:37:16 2016] [debug] GET "/"
+[Tue Apr 26 09:37:16 2016] [debug] Routing to a callback
+[Tue Apr 26 09:37:16 2016] [debug] 302 Found (0.001584s, 631.313/s)
+[Tue Apr 26 09:37:16 2016] [debug] GET "/login"
+[Tue Apr 26 09:37:16 2016] [debug] Routing to a callback
+[Tue Apr 26 09:37:16 2016] [debug] Rendering cached template "login.html.ep"
+[Tue Apr 26 09:37:16 2016] [debug] 200 OK (0.002563s, 390.168/s)
+[Tue Apr 26 09:37:17 2016] [debug] GET "/login"
+[Tue Apr 26 09:37:17 2016] [debug] Routing to a callback
+[Tue Apr 26 09:37:17 2016] [debug] Rendering cached template "login.html.ep"
+[Tue Apr 26 09:37:17 2016] [debug] 200 OK (0.002677s, 373.552/s)
+[Tue Apr 26 09:37:17 2016] [debug] GET "/list"
+[Tue Apr 26 09:37:17 2016] [debug] Routing to a callback
+[Tue Apr 26 09:37:17 2016] [debug] Routing to a callback
+[Tue Apr 26 09:37:17 2016] [debug] 200 OK (0.004248s, 235.405/s)
+[Tue Apr 26 09:37:18 2016] [debug] GET "/list"
+[Tue Apr 26 09:37:18 2016] [debug] Routing to a callback
+[Tue Apr 26 09:37:18 2016] [debug] Routing to a callback
+[Tue Apr 26 09:37:18 2016] [debug] 200 OK (0.006278s, 159.286/s)
+[Tue Apr 26 09:37:20 2016] [debug] GET "/list"
+[Tue Apr 26 09:37:20 2016] [debug] Routing to a callback
+[Tue Apr 26 09:37:20 2016] [debug] Routing to a callback
+[Tue Apr 26 09:37:20 2016] [debug] 200 OK (0.004375s, 228.571/s)
+[Tue Apr 26 09:37:22 2016] [debug] GET "/list"
+[Tue Apr 26 09:37:22 2016] [debug] Routing to a callback
+[Tue Apr 26 09:37:22 2016] [debug] Routing to a callback
+[Tue Apr 26 09:37:22 2016] [debug] 200 OK (0.004452s, 224.618/s)
+[Tue Apr 26 09:39:27 2016] [debug] GET "/list"
+[Tue Apr 26 09:39:27 2016] [debug] Routing to a callback
+[Tue Apr 26 09:39:27 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Tue Apr 26 09:39:27 2016] [debug] 302 Found (0.003061s, 326.691/s)
+[Tue Apr 26 09:39:27 2016] [debug] Routing to a callback
+[Tue Apr 26 09:39:27 2016] [debug] GET "/login"
+[Tue Apr 26 09:39:27 2016] [debug] Routing to a callback
+[Tue Apr 26 09:39:27 2016] [debug] Rendering template "login.html.ep"
+[Tue Apr 26 09:39:27 2016] [debug] 200 OK (0.006857s, 145.836/s)
+[Tue Apr 26 09:39:33 2016] [debug] POST "/bonafides"
+[Tue Apr 26 09:39:33 2016] [debug] Routing to a callback
+[Tue Apr 26 09:39:33 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Tue Apr 26 09:39:33 2016] [debug] 200 OK (0.02195s, 45.558/s)
+[Tue Apr 26 09:39:34 2016] [debug] GET "/main"
+[Tue Apr 26 09:39:34 2016] [debug] Routing to a callback
+[Tue Apr 26 09:39:34 2016] [debug] Routing to a callback
+[Tue Apr 26 09:39:34 2016] [debug] Rendering template "main.html.ep"
+[Tue Apr 26 09:39:34 2016] [debug] 200 OK (0.007113s, 140.588/s)
+[Tue Apr 26 09:39:40 2016] [debug] GET "/"
+[Tue Apr 26 09:39:40 2016] [debug] Routing to a callback
+[Tue Apr 26 09:39:40 2016] [debug] 302 Found (0.001264s, 791.139/s)
+[Tue Apr 26 09:39:40 2016] [debug] GET "/login"
+[Tue Apr 26 09:39:40 2016] [debug] Routing to a callback
+[Tue Apr 26 09:39:40 2016] [debug] Rendering cached template "login.html.ep"
+[Tue Apr 26 09:39:40 2016] [debug] 200 OK (0.002444s, 409.165/s)
+[Tue Apr 26 09:39:41 2016] [debug] GET "/login"
+[Tue Apr 26 09:39:41 2016] [debug] Routing to a callback
+[Tue Apr 26 09:39:41 2016] [debug] Rendering cached template "login.html.ep"
+[Tue Apr 26 09:39:41 2016] [debug] 200 OK (0.002952s, 338.753/s)
+[Tue Apr 26 09:39:41 2016] [debug] GET "/list"
+[Tue Apr 26 09:39:41 2016] [debug] Routing to a callback
+[Tue Apr 26 09:39:41 2016] [debug] Routing to a callback
+[Tue Apr 26 09:39:41 2016] [debug] 200 OK (0.003805s, 262.812/s)
+[Tue Apr 26 09:39:42 2016] [debug] GET "/list"
+[Tue Apr 26 09:39:42 2016] [debug] Routing to a callback
+[Tue Apr 26 09:39:42 2016] [debug] Routing to a callback
+[Tue Apr 26 09:39:42 2016] [debug] 200 OK (0.006138s, 162.920/s)
+[Tue Apr 26 09:39:42 2016] [debug] GET "/list"
+[Tue Apr 26 09:39:42 2016] [debug] Routing to a callback
+[Tue Apr 26 09:39:42 2016] [debug] Routing to a callback
+[Tue Apr 26 09:39:42 2016] [debug] 200 OK (0.002285s, 437.637/s)
+[Tue Apr 26 09:41:56 2016] [debug] GET "/list"
+[Tue Apr 26 09:41:56 2016] [debug] Routing to a callback
+[Tue Apr 26 09:41:56 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Tue Apr 26 09:41:56 2016] [debug] 302 Found (0.003428s, 291.715/s)
+[Tue Apr 26 09:41:56 2016] [debug] Routing to a callback
+[Tue Apr 26 09:41:56 2016] [debug] GET "/login"
+[Tue Apr 26 09:41:56 2016] [debug] Routing to a callback
+[Tue Apr 26 09:41:56 2016] [debug] Rendering template "login.html.ep"
+[Tue Apr 26 09:41:56 2016] [debug] 200 OK (0.006805s, 146.951/s)
+[Tue Apr 26 09:42:03 2016] [debug] POST "/bonafides"
+[Tue Apr 26 09:42:03 2016] [debug] Routing to a callback
+[Tue Apr 26 09:42:03 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Tue Apr 26 09:42:03 2016] [debug] 200 OK (0.023351s, 42.825/s)
+[Tue Apr 26 09:42:04 2016] [debug] GET "/main"
+[Tue Apr 26 09:42:04 2016] [debug] Routing to a callback
+[Tue Apr 26 09:42:04 2016] [debug] Routing to a callback
+[Tue Apr 26 09:42:04 2016] [debug] Rendering template "main.html.ep"
+[Tue Apr 26 09:42:04 2016] [debug] 200 OK (0.006887s, 145.201/s)
+[Tue Apr 26 09:42:17 2016] [debug] GET "/main"
+[Tue Apr 26 09:42:17 2016] [debug] Routing to a callback
+[Tue Apr 26 09:42:17 2016] [debug] Routing to a callback
+[Tue Apr 26 09:42:17 2016] [debug] Rendering cached template "main.html.ep"
+[Tue Apr 26 09:42:17 2016] [debug] 200 OK (0.003975s, 251.572/s)
+[Tue Apr 26 09:42:17 2016] [debug] GET "/"
+[Tue Apr 26 09:42:17 2016] [debug] Routing to a callback
+[Tue Apr 26 09:42:17 2016] [debug] 302 Found (0.00167s, 598.802/s)
+[Tue Apr 26 09:42:18 2016] [debug] GET "/login"
+[Tue Apr 26 09:42:18 2016] [debug] Routing to a callback
+[Tue Apr 26 09:42:18 2016] [debug] Rendering cached template "login.html.ep"
+[Tue Apr 26 09:42:18 2016] [debug] 200 OK (0.002754s, 363.108/s)
+[Tue Apr 26 09:42:18 2016] [debug] GET "/login"
+[Tue Apr 26 09:42:18 2016] [debug] Routing to a callback
+[Tue Apr 26 09:42:18 2016] [debug] Rendering cached template "login.html.ep"
+[Tue Apr 26 09:42:18 2016] [debug] 200 OK (0.002062s, 484.966/s)
+[Tue Apr 26 09:42:19 2016] [debug] GET "/list"
+[Tue Apr 26 09:42:19 2016] [debug] Routing to a callback
+[Tue Apr 26 09:42:19 2016] [debug] Routing to a callback
+[Tue Apr 26 09:42:19 2016] [debug] 200 OK (0.002227s, 449.035/s)
+[Tue Apr 26 09:42:19 2016] [debug] GET "/list"
+[Tue Apr 26 09:42:19 2016] [debug] Routing to a callback
+[Tue Apr 26 09:42:19 2016] [debug] Routing to a callback
+[Tue Apr 26 09:42:19 2016] [debug] 200 OK (0.004665s, 214.362/s)
+[Tue Apr 26 09:42:20 2016] [debug] GET "/list"
+[Tue Apr 26 09:42:20 2016] [debug] Routing to a callback
+[Tue Apr 26 09:42:20 2016] [debug] Routing to a callback
+[Tue Apr 26 09:42:20 2016] [debug] 200 OK (0.003383s, 295.596/s)
+[Tue Apr 26 09:43:42 2016] [debug] GET "/list"
+[Tue Apr 26 09:43:42 2016] [debug] Routing to a callback
+[Tue Apr 26 09:43:42 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Tue Apr 26 09:43:42 2016] [debug] 302 Found (0.003103s, 322.269/s)
+[Tue Apr 26 09:43:42 2016] [debug] Routing to a callback
+[Tue Apr 26 09:43:42 2016] [debug] GET "/login"
+[Tue Apr 26 09:43:42 2016] [debug] Routing to a callback
+[Tue Apr 26 09:43:42 2016] [debug] Rendering template "login.html.ep"
+[Tue Apr 26 09:43:42 2016] [debug] 200 OK (0.007119s, 140.469/s)
+[Tue Apr 26 09:43:48 2016] [debug] POST "/bonafides"
+[Tue Apr 26 09:43:48 2016] [debug] Routing to a callback
+[Tue Apr 26 09:43:49 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Tue Apr 26 09:43:49 2016] [debug] 200 OK (0.021753s, 45.971/s)
+[Tue Apr 26 09:43:50 2016] [debug] GET "/main"
+[Tue Apr 26 09:43:50 2016] [debug] Routing to a callback
+[Tue Apr 26 09:43:50 2016] [debug] Routing to a callback
+[Tue Apr 26 09:43:50 2016] [debug] Rendering template "main.html.ep"
+[Tue Apr 26 09:43:50 2016] [debug] 200 OK (0.006685s, 149.589/s)
+[Tue Apr 26 09:43:54 2016] [debug] GET "/main"
+[Tue Apr 26 09:43:54 2016] [debug] Routing to a callback
+[Tue Apr 26 09:43:54 2016] [debug] Routing to a callback
+[Tue Apr 26 09:43:54 2016] [debug] Rendering cached template "main.html.ep"
+[Tue Apr 26 09:43:54 2016] [debug] 200 OK (0.003439s, 290.782/s)
+[Tue Apr 26 09:43:55 2016] [debug] GET "/"
+[Tue Apr 26 09:43:55 2016] [debug] Routing to a callback
+[Tue Apr 26 09:43:55 2016] [debug] 302 Found (0.001337s, 747.943/s)
+[Tue Apr 26 09:43:55 2016] [debug] GET "/login"
+[Tue Apr 26 09:43:55 2016] [debug] Routing to a callback
+[Tue Apr 26 09:43:55 2016] [debug] Rendering cached template "login.html.ep"
+[Tue Apr 26 09:43:55 2016] [debug] 200 OK (0.002414s, 414.250/s)
+[Tue Apr 26 09:43:56 2016] [debug] GET "/login"
+[Tue Apr 26 09:43:56 2016] [debug] Routing to a callback
+[Tue Apr 26 09:43:56 2016] [debug] Rendering cached template "login.html.ep"
+[Tue Apr 26 09:43:56 2016] [debug] 200 OK (0.003089s, 323.729/s)
+[Tue Apr 26 09:43:56 2016] [debug] GET "/list"
+[Tue Apr 26 09:43:56 2016] [debug] Routing to a callback
+[Tue Apr 26 09:43:56 2016] [debug] Routing to a callback
+[Tue Apr 26 09:43:56 2016] [debug] 200 OK (0.004389s, 227.842/s)
+[Tue Apr 26 09:43:56 2016] [debug] GET "/list"
+[Tue Apr 26 09:43:56 2016] [debug] Routing to a callback
+[Tue Apr 26 09:43:56 2016] [debug] Routing to a callback
+[Tue Apr 26 09:43:56 2016] [debug] 200 OK (0.002538s, 394.011/s)
+[Tue Apr 26 09:43:58 2016] [debug] GET "/list"
+[Tue Apr 26 09:43:58 2016] [debug] Routing to a callback
+[Tue Apr 26 09:43:58 2016] [debug] Routing to a callback
+[Tue Apr 26 09:43:58 2016] [debug] 200 OK (0.003745s, 267.023/s)
+[Tue Apr 26 09:43:59 2016] [debug] GET "/list"
+[Tue Apr 26 09:43:59 2016] [debug] Routing to a callback
+[Tue Apr 26 09:43:59 2016] [debug] Routing to a callback
+[Tue Apr 26 09:43:59 2016] [debug] 200 OK (0.003411s, 293.169/s)
+[Tue Apr 26 10:38:28 2016] [debug] GET "/list"
+[Tue Apr 26 10:38:28 2016] [debug] Routing to a callback
+[Tue Apr 26 10:38:28 2016] [debug] 302 Found (0.00221s, 452.489/s)
+[Tue Apr 26 10:38:28 2016] [debug] Routing to a callback
+[Tue Apr 26 10:38:28 2016] [debug] GET "/login"
+[Tue Apr 26 10:38:28 2016] [debug] Routing to a callback
+[Tue Apr 26 10:38:28 2016] [debug] Rendering template "login.html.ep"
+[Tue Apr 26 10:38:28 2016] [debug] 200 OK (0.006853s, 145.921/s)
+[Tue Apr 26 10:38:35 2016] [debug] POST "/bonafides"
+[Tue Apr 26 10:38:35 2016] [debug] Routing to a callback
+[Tue Apr 26 10:38:35 2016] [debug] 200 OK (0.020389s, 49.046/s)
+[Tue Apr 26 10:38:36 2016] [debug] GET "/main"
+[Tue Apr 26 10:38:36 2016] [debug] Routing to a callback
+[Tue Apr 26 10:38:36 2016] [debug] Routing to a callback
+[Tue Apr 26 10:38:36 2016] [debug] Rendering template "main.html.ep"
+[Tue Apr 26 10:38:36 2016] [debug] 200 OK (0.007373s, 135.630/s)
+[Tue Apr 26 10:38:45 2016] [debug] GET "/"
+[Tue Apr 26 10:38:45 2016] [debug] Routing to a callback
+[Tue Apr 26 10:38:45 2016] [debug] 302 Found (0.001196s, 836.120/s)
+[Tue Apr 26 10:38:46 2016] [debug] GET "/login"
+[Tue Apr 26 10:38:46 2016] [debug] Routing to a callback
+[Tue Apr 26 10:38:46 2016] [debug] Rendering cached template "login.html.ep"
+[Tue Apr 26 10:38:46 2016] [debug] 200 OK (0.002539s, 393.856/s)
+[Tue Apr 26 10:38:46 2016] [debug] GET "/list"
+[Tue Apr 26 10:38:46 2016] [debug] Routing to a callback
+[Tue Apr 26 10:38:46 2016] [debug] Routing to a callback
+[Tue Apr 26 10:38:47 2016] [debug] 200 OK (0.083016s, 12.046/s)
+[Tue Apr 26 10:38:48 2016] [debug] GET "/list"
+[Tue Apr 26 10:38:48 2016] [debug] Routing to a callback
+[Tue Apr 26 10:38:48 2016] [debug] Routing to a callback
+[Tue Apr 26 10:38:48 2016] [debug] 200 OK (0.023357s, 42.814/s)
+[Tue Apr 26 10:38:48 2016] [debug] GET "/list"
+[Tue Apr 26 10:38:48 2016] [debug] Routing to a callback
+[Tue Apr 26 10:38:48 2016] [debug] Routing to a callback
+[Tue Apr 26 10:38:48 2016] [debug] 200 OK (0.019339s, 51.709/s)
+[Tue Apr 26 10:41:09 2016] [debug] GET "/list"
+[Tue Apr 26 10:41:09 2016] [debug] Routing to a callback
+[Tue Apr 26 10:41:09 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Tue Apr 26 10:41:09 2016] [debug] 302 Found (0.002792s, 358.166/s)
+[Tue Apr 26 10:41:09 2016] [debug] Routing to a callback
+[Tue Apr 26 10:41:09 2016] [debug] GET "/login"
+[Tue Apr 26 10:41:09 2016] [debug] Routing to a callback
+[Tue Apr 26 10:41:09 2016] [debug] Rendering template "login.html.ep"
+[Tue Apr 26 10:41:09 2016] [debug] 200 OK (0.006348s, 157.530/s)
+[Tue Apr 26 10:41:16 2016] [debug] POST "/bonafides"
+[Tue Apr 26 10:41:16 2016] [debug] Routing to a callback
+[Tue Apr 26 10:41:16 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Tue Apr 26 10:41:16 2016] [debug] 200 OK (0.024641s, 40.583/s)
+[Tue Apr 26 10:41:17 2016] [debug] GET "/main"
+[Tue Apr 26 10:41:17 2016] [debug] Routing to a callback
+[Tue Apr 26 10:41:17 2016] [debug] Routing to a callback
+[Tue Apr 26 10:41:17 2016] [debug] Rendering template "main.html.ep"
+[Tue Apr 26 10:41:17 2016] [debug] 200 OK (0.007661s, 130.531/s)
+[Tue Apr 26 10:41:21 2016] [debug] GET "/main"
+[Tue Apr 26 10:41:21 2016] [debug] Routing to a callback
+[Tue Apr 26 10:41:21 2016] [debug] Routing to a callback
+[Tue Apr 26 10:41:21 2016] [debug] Rendering cached template "main.html.ep"
+[Tue Apr 26 10:41:21 2016] [debug] 200 OK (0.00352s, 284.091/s)
+[Tue Apr 26 10:41:22 2016] [debug] GET "/"
+[Tue Apr 26 10:41:22 2016] [debug] Routing to a callback
+[Tue Apr 26 10:41:22 2016] [debug] 302 Found (0.001728s, 578.704/s)
+[Tue Apr 26 10:41:22 2016] [debug] GET "/login"
+[Tue Apr 26 10:41:22 2016] [debug] Routing to a callback
+[Tue Apr 26 10:41:22 2016] [debug] Rendering cached template "login.html.ep"
+[Tue Apr 26 10:41:22 2016] [debug] 200 OK (0.002967s, 337.041/s)
+[Tue Apr 26 10:41:23 2016] [debug] GET "/login"
+[Tue Apr 26 10:41:23 2016] [debug] Routing to a callback
+[Tue Apr 26 10:41:23 2016] [debug] Rendering cached template "login.html.ep"
+[Tue Apr 26 10:41:23 2016] [debug] 200 OK (0.002709s, 369.140/s)
+[Tue Apr 26 10:41:23 2016] [debug] GET "/list"
+[Tue Apr 26 10:41:23 2016] [debug] Routing to a callback
+[Tue Apr 26 10:41:23 2016] [debug] Routing to a callback
+[Tue Apr 26 10:41:23 2016] [debug] 200 OK (0.022167s, 45.112/s)
+[Tue Apr 26 10:41:23 2016] [debug] GET "/list"
+[Tue Apr 26 10:41:23 2016] [debug] Routing to a callback
+[Tue Apr 26 10:41:23 2016] [debug] Routing to a callback
+[Tue Apr 26 10:41:23 2016] [debug] 200 OK (0.044163s, 22.643/s)
+[Tue Apr 26 10:41:24 2016] [debug] GET "/list"
+[Tue Apr 26 10:41:24 2016] [debug] Routing to a callback
+[Tue Apr 26 10:41:24 2016] [debug] Routing to a callback
+[Tue Apr 26 10:41:24 2016] [debug] 200 OK (0.020185s, 49.542/s)
+[Tue Apr 26 10:41:25 2016] [debug] GET "/list"
+[Tue Apr 26 10:41:25 2016] [debug] Routing to a callback
+[Tue Apr 26 10:41:25 2016] [debug] Routing to a callback
+[Tue Apr 26 10:41:25 2016] [debug] 200 OK (0.015629s, 63.984/s)
+[Tue Apr 26 10:51:42 2016] [debug] GET "/list"
+[Tue Apr 26 10:51:42 2016] [debug] Routing to a callback
+[Tue Apr 26 10:51:42 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Tue Apr 26 10:51:42 2016] [debug] 302 Found (0.00303s, 330.033/s)
+[Tue Apr 26 10:51:42 2016] [debug] Routing to a callback
+[Tue Apr 26 10:51:42 2016] [debug] GET "/login"
+[Tue Apr 26 10:51:42 2016] [debug] Routing to a callback
+[Tue Apr 26 10:51:42 2016] [debug] Rendering template "login.html.ep"
+[Tue Apr 26 10:51:42 2016] [debug] 200 OK (0.006758s, 147.973/s)
+[Tue Apr 26 10:51:49 2016] [debug] POST "/bonafides"
+[Tue Apr 26 10:51:49 2016] [debug] Routing to a callback
+[Tue Apr 26 10:51:49 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Tue Apr 26 10:51:49 2016] [debug] 200 OK (0.041691s, 23.986/s)
+[Tue Apr 26 10:51:50 2016] [debug] GET "/main"
+[Tue Apr 26 10:51:50 2016] [debug] Routing to a callback
+[Tue Apr 26 10:51:50 2016] [debug] Routing to a callback
+[Tue Apr 26 10:51:50 2016] [debug] Rendering template "main.html.ep"
+[Tue Apr 26 10:51:50 2016] [debug] 200 OK (0.007631s, 131.044/s)
+[Tue Apr 26 10:51:56 2016] [debug] GET "/main"
+[Tue Apr 26 10:51:56 2016] [debug] Routing to a callback
+[Tue Apr 26 10:51:56 2016] [debug] Routing to a callback
+[Tue Apr 26 10:51:56 2016] [debug] Rendering cached template "main.html.ep"
+[Tue Apr 26 10:51:56 2016] [debug] 200 OK (0.003458s, 289.184/s)
+[Tue Apr 26 10:51:56 2016] [debug] GET "/"
+[Tue Apr 26 10:51:56 2016] [debug] Routing to a callback
+[Tue Apr 26 10:51:56 2016] [debug] 302 Found (0.001463s, 683.527/s)
+[Tue Apr 26 10:51:56 2016] [debug] GET "/login"
+[Tue Apr 26 10:51:56 2016] [debug] Routing to a callback
+[Tue Apr 26 10:51:56 2016] [debug] Rendering cached template "login.html.ep"
+[Tue Apr 26 10:51:56 2016] [debug] 200 OK (0.002731s, 366.166/s)
+[Tue Apr 26 10:51:57 2016] [debug] GET "/list"
+[Tue Apr 26 10:51:57 2016] [debug] Routing to a callback
+[Tue Apr 26 10:51:57 2016] [debug] Routing to a callback
+[Tue Apr 26 10:51:57 2016] [debug] 200 OK (0.019833s, 50.421/s)
+[Tue Apr 26 10:51:57 2016] [debug] GET "/list"
+[Tue Apr 26 10:51:57 2016] [debug] Routing to a callback
+[Tue Apr 26 10:51:57 2016] [debug] Routing to a callback
+[Tue Apr 26 10:51:57 2016] [debug] 200 OK (0.031644s, 31.602/s)
+[Tue Apr 26 10:51:59 2016] [debug] GET "/list"
+[Tue Apr 26 10:51:59 2016] [debug] Routing to a callback
+[Tue Apr 26 10:51:59 2016] [debug] Routing to a callback
+[Tue Apr 26 10:51:59 2016] [debug] 200 OK (0.022505s, 44.435/s)
+[Tue Apr 26 10:52:03 2016] [debug] GET "/list"
+[Tue Apr 26 10:52:03 2016] [debug] Routing to a callback
+[Tue Apr 26 10:52:03 2016] [debug] Routing to a callback
+[Tue Apr 26 10:52:03 2016] [debug] 200 OK (0.018054s, 55.389/s)
+[Tue Apr 26 10:52:16 2016] [debug] GET "/list"
+[Tue Apr 26 10:52:16 2016] [debug] Routing to a callback
+[Tue Apr 26 10:52:16 2016] [debug] Routing to a callback
+[Tue Apr 26 10:52:16 2016] [debug] 200 OK (0.004568s, 218.914/s)
+[Tue Apr 26 10:52:28 2016] [debug] GET "/list"
+[Tue Apr 26 10:52:28 2016] [debug] Routing to a callback
+[Tue Apr 26 10:52:28 2016] [debug] Routing to a callback
+[Tue Apr 26 10:52:28 2016] [debug] 200 OK (0.004739s, 211.015/s)
+[Tue Apr 26 10:52:29 2016] [debug] GET "/list"
+[Tue Apr 26 10:52:29 2016] [debug] Routing to a callback
+[Tue Apr 26 10:52:29 2016] [debug] Routing to a callback
+[Tue Apr 26 10:52:29 2016] [debug] 200 OK (0.003803s, 262.950/s)
+[Tue Apr 26 10:54:12 2016] [debug] GET "/list"
+[Tue Apr 26 10:54:12 2016] [debug] Routing to a callback
+[Tue Apr 26 10:54:12 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Tue Apr 26 10:54:12 2016] [debug] 302 Found (0.002891s, 345.901/s)
+[Tue Apr 26 10:54:12 2016] [debug] Routing to a callback
+[Tue Apr 26 10:54:12 2016] [debug] GET "/login"
+[Tue Apr 26 10:54:12 2016] [debug] Routing to a callback
+[Tue Apr 26 10:54:12 2016] [debug] Rendering template "login.html.ep"
+[Tue Apr 26 10:54:12 2016] [debug] 200 OK (0.00641s, 156.006/s)
+[Tue Apr 26 10:54:21 2016] [debug] POST "/bonafides"
+[Tue Apr 26 10:54:21 2016] [debug] Routing to a callback
+[Tue Apr 26 10:54:21 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Tue Apr 26 10:54:21 2016] [debug] 200 OK (0.020289s, 49.288/s)
+[Tue Apr 26 10:54:22 2016] [debug] GET "/main"
+[Tue Apr 26 10:54:22 2016] [debug] Routing to a callback
+[Tue Apr 26 10:54:22 2016] [debug] Routing to a callback
+[Tue Apr 26 10:54:22 2016] [debug] Rendering template "main.html.ep"
+[Tue Apr 26 10:54:22 2016] [debug] 200 OK (0.006915s, 144.613/s)
+[Tue Apr 26 10:54:47 2016] [debug] GET "/main"
+[Tue Apr 26 10:54:47 2016] [debug] Routing to a callback
+[Tue Apr 26 10:54:47 2016] [debug] Routing to a callback
+[Tue Apr 26 10:54:47 2016] [debug] Rendering cached template "main.html.ep"
+[Tue Apr 26 10:54:47 2016] [debug] 200 OK (0.003768s, 265.393/s)
+[Tue Apr 26 10:54:47 2016] [debug] GET "/"
+[Tue Apr 26 10:54:47 2016] [debug] Routing to a callback
+[Tue Apr 26 10:54:47 2016] [debug] 302 Found (0.001719s, 581.734/s)
+[Tue Apr 26 10:54:48 2016] [debug] GET "/login"
+[Tue Apr 26 10:54:48 2016] [debug] Routing to a callback
+[Tue Apr 26 10:54:48 2016] [debug] Rendering cached template "login.html.ep"
+[Tue Apr 26 10:54:48 2016] [debug] 200 OK (0.002894s, 345.543/s)
+[Tue Apr 26 10:54:49 2016] [debug] GET "/list"
+[Tue Apr 26 10:54:49 2016] [debug] Routing to a callback
+[Tue Apr 26 10:54:49 2016] [debug] Routing to a callback
+[Tue Apr 26 10:54:49 2016] [debug] 200 OK (0.022375s, 44.693/s)
+[Tue Apr 26 10:54:49 2016] [debug] GET "/list"
+[Tue Apr 26 10:54:49 2016] [debug] Routing to a callback
+[Tue Apr 26 10:54:49 2016] [debug] Routing to a callback
+[Tue Apr 26 10:54:49 2016] [debug] 200 OK (0.030589s, 32.691/s)
+[Tue Apr 26 10:54:53 2016] [debug] GET "/list"
+[Tue Apr 26 10:54:53 2016] [debug] Routing to a callback
+[Tue Apr 26 10:54:53 2016] [debug] Routing to a callback
+[Tue Apr 26 10:54:53 2016] [debug] 200 OK (0.020351s, 49.138/s)
+[Tue Apr 26 10:54:58 2016] [debug] GET "/list"
+[Tue Apr 26 10:54:58 2016] [debug] Routing to a callback
+[Tue Apr 26 10:54:58 2016] [debug] Routing to a callback
+[Tue Apr 26 10:54:58 2016] [debug] 200 OK (0.004117s, 242.895/s)
+[Tue Apr 26 10:55:05 2016] [debug] GET "/list"
+[Tue Apr 26 10:55:05 2016] [debug] Routing to a callback
+[Tue Apr 26 10:55:05 2016] [debug] Routing to a callback
+[Tue Apr 26 10:55:05 2016] [debug] 200 OK (0.004998s, 200.080/s)
+[Tue Apr 26 12:41:18 2016] [debug] GET "/list"
+[Tue Apr 26 12:41:18 2016] [debug] Routing to a callback
+[Tue Apr 26 12:41:18 2016] [debug] 302 Found (0.002603s, 384.172/s)
+[Tue Apr 26 12:41:18 2016] [debug] Routing to a callback
+[Tue Apr 26 12:41:18 2016] [debug] GET "/login"
+[Tue Apr 26 12:41:18 2016] [debug] Routing to a callback
+[Tue Apr 26 12:41:18 2016] [debug] Rendering template "login.html.ep"
+[Tue Apr 26 12:41:18 2016] [debug] 200 OK (0.007865s, 127.146/s)
+[Tue Apr 26 12:41:32 2016] [debug] POST "/bonafides"
+[Tue Apr 26 12:41:32 2016] [debug] Routing to a callback
+[Tue Apr 26 12:41:32 2016] [debug] 200 OK (0.020071s, 49.823/s)
+[Tue Apr 26 12:41:33 2016] [debug] GET "/main"
+[Tue Apr 26 12:41:33 2016] [debug] Routing to a callback
+[Tue Apr 26 12:41:33 2016] [debug] Routing to a callback
+[Tue Apr 26 12:41:33 2016] [debug] Rendering template "main.html.ep"
+[Tue Apr 26 12:41:33 2016] [debug] 200 OK (0.006424s, 155.666/s)
+[Tue Apr 26 12:45:33 2016] [debug] GET "/main"
+[Tue Apr 26 12:45:33 2016] [debug] Routing to a callback
+[Tue Apr 26 12:45:33 2016] [debug] Routing to a callback
+[Tue Apr 26 12:45:33 2016] [debug] Rendering cached template "main.html.ep"
+[Tue Apr 26 12:45:33 2016] [debug] 200 OK (0.003523s, 283.849/s)
+[Tue Apr 26 12:46:04 2016] [debug] GET "/main"
+[Tue Apr 26 12:46:04 2016] [debug] Routing to a callback
+[Tue Apr 26 12:46:04 2016] [debug] Routing to a callback
+[Tue Apr 26 12:46:04 2016] [debug] Rendering cached template "main.html.ep"
+[Tue Apr 26 12:46:04 2016] [debug] 200 OK (0.004839s, 206.654/s)
+[Tue Apr 26 12:46:04 2016] [debug] GET "/list"
+[Tue Apr 26 12:46:04 2016] [debug] Routing to a callback
+[Tue Apr 26 12:46:04 2016] [debug] Routing to a callback
+[Tue Apr 26 12:46:04 2016] [debug] 200 OK (0.032634s, 30.643/s)
+[Tue Apr 26 12:46:16 2016] [debug] GET "/list"
+[Tue Apr 26 12:46:16 2016] [debug] Routing to a callback
+[Tue Apr 26 12:46:16 2016] [debug] Routing to a callback
+[Tue Apr 26 12:46:16 2016] [debug] 200 OK (0.029873s, 33.475/s)
+[Tue Apr 26 12:46:19 2016] [debug] GET "/list"
+[Tue Apr 26 12:46:19 2016] [debug] Routing to a callback
+[Tue Apr 26 12:46:19 2016] [debug] Routing to a callback
+[Tue Apr 26 12:46:19 2016] [debug] 200 OK (0.029458s, 33.947/s)
+[Tue Apr 26 12:46:22 2016] [debug] GET "/list"
+[Tue Apr 26 12:46:22 2016] [debug] Routing to a callback
+[Tue Apr 26 12:46:22 2016] [debug] Routing to a callback
+[Tue Apr 26 12:46:22 2016] [debug] 200 OK (0.029716s, 33.652/s)
+[Tue Apr 26 12:46:46 2016] [debug] GET "/list"
+[Tue Apr 26 12:46:46 2016] [debug] Routing to a callback
+[Tue Apr 26 12:46:46 2016] [debug] Routing to a callback
+[Tue Apr 26 12:46:46 2016] [debug] 200 OK (0.029832s, 33.521/s)
+[Tue Apr 26 12:46:48 2016] [debug] GET "/list"
+[Tue Apr 26 12:46:48 2016] [debug] Routing to a callback
+[Tue Apr 26 12:46:48 2016] [debug] Routing to a callback
+[Tue Apr 26 12:46:48 2016] [debug] 200 OK (0.029591s, 33.794/s)
+[Tue Apr 26 12:46:50 2016] [debug] GET "/list"
+[Tue Apr 26 12:46:50 2016] [debug] Routing to a callback
+[Tue Apr 26 12:46:50 2016] [debug] Routing to a callback
+[Tue Apr 26 12:46:50 2016] [debug] 200 OK (0.029452s, 33.954/s)
+[Tue Apr 26 12:46:52 2016] [debug] GET "/list"
+[Tue Apr 26 12:46:52 2016] [debug] Routing to a callback
+[Tue Apr 26 12:46:52 2016] [debug] Routing to a callback
+[Tue Apr 26 12:46:52 2016] [debug] 200 OK (0.029532s, 33.862/s)
+[Tue Apr 26 12:46:54 2016] [debug] GET "/list"
+[Tue Apr 26 12:46:54 2016] [debug] Routing to a callback
+[Tue Apr 26 12:46:54 2016] [debug] Routing to a callback
+[Tue Apr 26 12:46:54 2016] [debug] 200 OK (0.029612s, 33.770/s)
+[Tue Apr 26 12:46:56 2016] [debug] GET "/list"
+[Tue Apr 26 12:46:56 2016] [debug] Routing to a callback
+[Tue Apr 26 12:46:56 2016] [debug] Routing to a callback
+[Tue Apr 26 12:46:56 2016] [debug] 200 OK (0.029564s, 33.825/s)
+[Tue Apr 26 12:46:58 2016] [debug] GET "/list"
+[Tue Apr 26 12:46:58 2016] [debug] Routing to a callback
+[Tue Apr 26 12:46:58 2016] [debug] Routing to a callback
+[Tue Apr 26 12:46:58 2016] [debug] 200 OK (0.029046s, 34.428/s)
+[Tue Apr 26 12:46:59 2016] [debug] GET "/list"
+[Tue Apr 26 12:46:59 2016] [debug] Routing to a callback
+[Tue Apr 26 12:46:59 2016] [debug] Routing to a callback
+[Tue Apr 26 12:46:59 2016] [debug] 200 OK (0.029041s, 34.434/s)
+[Tue Apr 26 12:47:01 2016] [debug] GET "/list"
+[Tue Apr 26 12:47:01 2016] [debug] Routing to a callback
+[Tue Apr 26 12:47:01 2016] [debug] Routing to a callback
+[Tue Apr 26 12:47:01 2016] [debug] 200 OK (0.029379s, 34.038/s)
+[Tue Apr 26 12:47:08 2016] [debug] GET "/list"
+[Tue Apr 26 12:47:08 2016] [debug] Routing to a callback
+[Tue Apr 26 12:47:08 2016] [debug] Routing to a callback
+[Tue Apr 26 12:47:08 2016] [debug] 200 OK (0.029122s, 34.338/s)
+[Tue Apr 26 20:08:08 2016] [debug] GET "/list"
+[Tue Apr 26 20:08:08 2016] [debug] Routing to a callback
+[Tue Apr 26 20:08:08 2016] [debug] 302 Found (0.005389s, 185.563/s)
+[Tue Apr 26 20:08:08 2016] [debug] Routing to a callback
+[Tue Apr 26 20:08:09 2016] [debug] GET "/login"
+[Tue Apr 26 20:08:09 2016] [debug] Routing to a callback
+[Tue Apr 26 20:08:09 2016] [debug] Rendering cached template "login.html.ep"
+[Tue Apr 26 20:08:09 2016] [debug] 200 OK (0.002931s, 341.180/s)
+[Tue Apr 26 20:08:18 2016] [debug] GET "/main"
+[Tue Apr 26 20:08:18 2016] [debug] Routing to a callback
+[Tue Apr 26 20:08:18 2016] [debug] 302 Found (0.00111s, 900.901/s)
+[Tue Apr 26 20:08:18 2016] [debug] Routing to a callback
+[Tue Apr 26 20:08:18 2016] [debug] GET "/login"
+[Tue Apr 26 20:08:18 2016] [debug] Routing to a callback
+[Tue Apr 26 20:08:18 2016] [debug] Rendering cached template "login.html.ep"
+[Tue Apr 26 20:08:18 2016] [debug] 200 OK (0.002796s, 357.654/s)
+[Tue Apr 26 20:09:29 2016] [debug] GET "/login"
+[Tue Apr 26 20:09:29 2016] [debug] Routing to a callback
+[Tue Apr 26 20:09:29 2016] [debug] Rendering cached template "login.html.ep"
+[Tue Apr 26 20:09:29 2016] [debug] 200 OK (0.002339s, 427.533/s)
+[Wed Apr 27 00:03:20 2016] [debug] GET "/login"
+[Wed Apr 27 00:03:20 2016] [debug] Routing to a callback
+[Wed Apr 27 00:03:20 2016] [debug] Rendering template "login.html.ep"
+[Wed Apr 27 00:03:20 2016] [debug] 200 OK (0.018172s, 55.030/s)
+[Wed Apr 27 00:03:26 2016] [debug] POST "/bonafides"
+[Wed Apr 27 00:03:26 2016] [debug] Routing to a callback
+[Wed Apr 27 00:03:26 2016] [debug] 200 OK (0.031576s, 31.670/s)
+[Wed Apr 27 00:03:27 2016] [debug] GET "/main"
+[Wed Apr 27 00:03:27 2016] [debug] Routing to a callback
+[Wed Apr 27 00:03:27 2016] [debug] Routing to a callback
+[Wed Apr 27 00:03:27 2016] [debug] Rendering template "main.html.ep"
+[Wed Apr 27 00:03:27 2016] [debug] 200 OK (0.026444s, 37.816/s)
+[Wed Apr 27 00:03:28 2016] [debug] GET "/list"
+[Wed Apr 27 00:03:28 2016] [debug] Routing to a callback
+[Wed Apr 27 00:03:28 2016] [debug] Routing to a callback
+[Wed Apr 27 00:03:28 2016] [error] fileparse(): need a valid pathname at /mnt/lustre/bossert/git/CGE/cge_web_ui/cge-web-ui.pl line 542.
+
+[Wed Apr 27 00:03:28 2016] [debug] Template "exception.development.html.ep" not found
+[Wed Apr 27 00:03:28 2016] [debug] Template "exception.html.ep" not found
+[Wed Apr 27 00:03:28 2016] [debug] Rendering template "mojo/debug.html.ep"
+[Wed Apr 27 00:03:28 2016] [debug] Rendering template "mojo/menubar.html.ep"
+[Wed Apr 27 00:03:28 2016] [debug] 500 Internal Server Error (0.042417s, 23.575/s)
+[Wed Apr 27 00:04:43 2016] [debug] GET "/main"
+[Wed Apr 27 00:04:43 2016] [debug] Routing to a callback
+[Wed Apr 27 00:04:43 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Wed Apr 27 00:04:43 2016] [debug] 302 Found (0.00368s, 271.739/s)
+[Wed Apr 27 00:04:43 2016] [debug] Routing to a callback
+[Wed Apr 27 00:04:43 2016] [debug] GET "/login"
+[Wed Apr 27 00:04:43 2016] [debug] Routing to a callback
+[Wed Apr 27 00:04:43 2016] [debug] Rendering template "login.html.ep"
+[Wed Apr 27 00:04:43 2016] [debug] 200 OK (0.00762s, 131.234/s)
+[Wed Apr 27 00:04:49 2016] [debug] POST "/bonafides"
+[Wed Apr 27 00:04:49 2016] [debug] Routing to a callback
+[Wed Apr 27 00:04:49 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Wed Apr 27 00:04:49 2016] [debug] 200 OK (0.020542s, 48.681/s)
+[Wed Apr 27 00:04:50 2016] [debug] GET "/main"
+[Wed Apr 27 00:04:50 2016] [debug] Routing to a callback
+[Wed Apr 27 00:04:50 2016] [debug] Routing to a callback
+[Wed Apr 27 00:04:50 2016] [debug] Rendering template "main.html.ep"
+[Wed Apr 27 00:04:50 2016] [debug] 200 OK (0.006583s, 151.906/s)
+[Wed Apr 27 00:04:51 2016] [debug] GET "/list"
+[Wed Apr 27 00:04:51 2016] [debug] Routing to a callback
+[Wed Apr 27 00:04:51 2016] [debug] Routing to a callback
+[Wed Apr 27 00:04:56 2016] [error] Permission denied at /mnt/lustre/bossert/git/CGE/cge_web_ui/cge-web-ui.pl line 556.
+
+[Wed Apr 27 00:04:56 2016] [debug] Template "exception.development.html.ep" not found
+[Wed Apr 27 00:04:56 2016] [debug] Template "exception.html.ep" not found
+[Wed Apr 27 00:04:56 2016] [debug] Rendering template "mojo/debug.html.ep"
+[Wed Apr 27 00:04:56 2016] [debug] Rendering template "mojo/menubar.html.ep"
+[Wed Apr 27 00:04:56 2016] [debug] 500 Internal Server Error (5.646533s, 0.177/s)
+[Wed Apr 27 00:06:55 2016] [debug] GET "/main"
+[Wed Apr 27 00:06:55 2016] [debug] Routing to a callback
+[Wed Apr 27 00:06:55 2016] [debug] Routing to a callback
+[Wed Apr 27 00:06:55 2016] [debug] Rendering cached template "main.html.ep"
+[Wed Apr 27 00:06:55 2016] [debug] 200 OK (0.004075s, 245.399/s)
+[Wed Apr 27 00:06:56 2016] [debug] GET "/list"
+[Wed Apr 27 00:06:56 2016] [debug] Routing to a callback
+[Wed Apr 27 00:06:56 2016] [debug] Routing to a callback
+[Wed Apr 27 00:07:00 2016] [error] Permission denied at /mnt/lustre/bossert/git/CGE/cge_web_ui/cge-web-ui.pl line 556.
+
+[Wed Apr 27 00:07:00 2016] [debug] Template "exception.development.html.ep" not found
+[Wed Apr 27 00:07:00 2016] [debug] Template "exception.html.ep" not found
+[Wed Apr 27 00:07:00 2016] [debug] Rendering cached template "mojo/debug.html.ep"
+[Wed Apr 27 00:07:00 2016] [debug] Rendering cached template "mojo/menubar.html.ep"
+[Wed Apr 27 00:07:00 2016] [debug] 500 Internal Server Error (4.351086s, 0.230/s)
+[Wed Apr 27 00:07:15 2016] [debug] GET "/main"
+[Wed Apr 27 00:07:15 2016] [debug] Routing to a callback
+[Wed Apr 27 00:07:15 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Wed Apr 27 00:07:15 2016] [debug] 302 Found (0.002593s, 385.654/s)
+[Wed Apr 27 00:07:15 2016] [debug] Routing to a callback
+[Wed Apr 27 00:07:15 2016] [debug] GET "/login"
+[Wed Apr 27 00:07:15 2016] [debug] Routing to a callback
+[Wed Apr 27 00:07:15 2016] [debug] Rendering template "login.html.ep"
+[Wed Apr 27 00:07:15 2016] [debug] 200 OK (0.00659s, 151.745/s)
+[Wed Apr 27 00:07:23 2016] [debug] POST "/bonafides"
+[Wed Apr 27 00:07:23 2016] [debug] Routing to a callback
+[Wed Apr 27 00:07:23 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Wed Apr 27 00:07:23 2016] [debug] 200 OK (0.021371s, 46.792/s)
+[Wed Apr 27 00:07:24 2016] [debug] GET "/main"
+[Wed Apr 27 00:07:24 2016] [debug] Routing to a callback
+[Wed Apr 27 00:07:24 2016] [debug] Routing to a callback
+[Wed Apr 27 00:07:24 2016] [debug] Rendering template "main.html.ep"
+[Wed Apr 27 00:07:24 2016] [debug] 200 OK (0.006893s, 145.075/s)
+[Wed Apr 27 00:07:24 2016] [debug] GET "/list"
+[Wed Apr 27 00:07:24 2016] [debug] Routing to a callback
+[Wed Apr 27 00:07:24 2016] [debug] Routing to a callback
+[Wed Apr 27 00:07:29 2016] [error] Permission denied at /mnt/lustre/bossert/git/CGE/cge_web_ui/cge-web-ui.pl line 556.
+
+[Wed Apr 27 00:07:29 2016] [debug] Template "exception.development.html.ep" not found
+[Wed Apr 27 00:07:29 2016] [debug] Template "exception.html.ep" not found
+[Wed Apr 27 00:07:29 2016] [debug] Rendering template "mojo/debug.html.ep"
+[Wed Apr 27 00:07:29 2016] [debug] Rendering template "mojo/menubar.html.ep"
+[Wed Apr 27 00:07:29 2016] [debug] 500 Internal Server Error (4.306762s, 0.232/s)
+[Wed Apr 27 00:07:47 2016] [debug] GET "/list"
+[Wed Apr 27 00:07:47 2016] [debug] Routing to a callback
+[Wed Apr 27 00:07:47 2016] [debug] Routing to a callback
+[Wed Apr 27 00:07:51 2016] [error] Permission denied at /mnt/lustre/bossert/git/CGE/cge_web_ui/cge-web-ui.pl line 556.
+
+[Wed Apr 27 00:07:51 2016] [debug] Template "exception.development.html.ep" not found
+[Wed Apr 27 00:07:51 2016] [debug] Template "exception.html.ep" not found
+[Wed Apr 27 00:07:51 2016] [debug] Rendering cached template "mojo/debug.html.ep"
+[Wed Apr 27 00:07:51 2016] [debug] Rendering cached template "mojo/menubar.html.ep"
+[Wed Apr 27 00:07:51 2016] [debug] 500 Internal Server Error (4.209056s, 0.238/s)
+[Wed Apr 27 00:10:02 2016] [debug] GET "/list"
+[Wed Apr 27 00:10:02 2016] [debug] Routing to a callback
+[Wed Apr 27 00:10:02 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Wed Apr 27 00:10:02 2016] [debug] 302 Found (0.003291s, 303.859/s)
+[Wed Apr 27 00:10:02 2016] [debug] Routing to a callback
+[Wed Apr 27 00:10:32 2016] [error] Permission denied at /mnt/lustre/bossert/git/CGE/cge_web_ui/cge-web-ui.pl line 549.
+
+[Wed Apr 27 00:10:32 2016] [debug] Template "exception.development.html.ep" not found
+[Wed Apr 27 00:10:32 2016] [debug] Template "exception.html.ep" not found
+[Wed Apr 27 00:10:32 2016] [debug] Rendering template "mojo/debug.html.ep"
+[Wed Apr 27 00:10:32 2016] [debug] Rendering template "mojo/menubar.html.ep"
+[Wed Apr 27 00:10:32 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Wed Apr 27 00:10:32 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Wed Apr 27 00:13:11 2016] [debug] GET "/list"
+[Wed Apr 27 00:13:11 2016] [debug] Routing to a callback
+[Wed Apr 27 00:13:11 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Wed Apr 27 00:13:11 2016] [debug] 302 Found (0.003136s, 318.878/s)
+[Wed Apr 27 00:13:11 2016] [debug] Routing to a callback
+[Wed Apr 27 00:13:14 2016] [debug] GET "/login"
+[Wed Apr 27 00:13:14 2016] [debug] Routing to a callback
+[Wed Apr 27 00:13:14 2016] [debug] Rendering template "login.html.ep"
+[Wed Apr 27 00:13:14 2016] [debug] 200 OK (0.006089s, 164.231/s)
+[Wed Apr 27 00:13:22 2016] [debug] POST "/bonafides"
+[Wed Apr 27 00:13:22 2016] [debug] Routing to a callback
+[Wed Apr 27 00:13:22 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Wed Apr 27 00:13:22 2016] [debug] 200 OK (0.021172s, 47.232/s)
+[Wed Apr 27 00:13:24 2016] [debug] GET "/main"
+[Wed Apr 27 00:13:24 2016] [debug] Routing to a callback
+[Wed Apr 27 00:13:24 2016] [debug] Routing to a callback
+[Wed Apr 27 00:13:24 2016] [debug] Rendering template "main.html.ep"
+[Wed Apr 27 00:13:24 2016] [debug] 200 OK (0.007076s, 141.323/s)
+[Wed Apr 27 00:13:24 2016] [debug] GET "/list"
+[Wed Apr 27 00:13:24 2016] [debug] Routing to a callback
+[Wed Apr 27 00:13:24 2016] [debug] Routing to a callback
+[Wed Apr 27 00:13:26 2016] [debug] 200 OK (2.615218s, 0.382/s)
+[Wed Apr 27 00:26:54 2016] [debug] GET "/main"
+[Wed Apr 27 00:26:54 2016] [debug] Routing to a callback
+[Wed Apr 27 00:26:54 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Wed Apr 27 00:26:54 2016] [debug] 302 Found (0.002646s, 377.929/s)
+[Wed Apr 27 00:26:54 2016] [debug] Routing to a callback
+[Wed Apr 27 00:26:54 2016] [debug] GET "/login"
+[Wed Apr 27 00:26:54 2016] [debug] Routing to a callback
+[Wed Apr 27 00:26:54 2016] [debug] Rendering template "login.html.ep"
+[Wed Apr 27 00:26:54 2016] [debug] 200 OK (0.006522s, 153.327/s)
+[Wed Apr 27 00:27:02 2016] [debug] POST "/bonafides"
+[Wed Apr 27 00:27:02 2016] [debug] Routing to a callback
+[Wed Apr 27 00:27:02 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Wed Apr 27 00:27:02 2016] [debug] 200 OK (0.021265s, 47.026/s)
+[Wed Apr 27 00:27:03 2016] [debug] GET "/main"
+[Wed Apr 27 00:27:03 2016] [debug] Routing to a callback
+[Wed Apr 27 00:27:03 2016] [debug] Routing to a callback
+[Wed Apr 27 00:27:03 2016] [debug] Rendering template "main.html.ep"
+[Wed Apr 27 00:27:03 2016] [debug] 200 OK (0.007629s, 131.079/s)
+[Wed Apr 27 00:27:03 2016] [debug] GET "/list"
+[Wed Apr 27 00:27:03 2016] [debug] Routing to a callback
+[Wed Apr 27 00:27:03 2016] [debug] Routing to a callback
+[Wed Apr 27 00:27:06 2016] [debug] 200 OK (2.598785s, 0.385/s)
+[Wed Apr 27 00:27:33 2016] [debug] GET "/list"
+[Wed Apr 27 00:27:33 2016] [debug] Routing to a callback
+[Wed Apr 27 00:27:33 2016] [debug] Routing to a callback
+[Wed Apr 27 00:27:35 2016] [debug] 200 OK (2.553048s, 0.392/s)
+[Wed Apr 27 00:30:30 2016] [debug] GET "/list"
+[Wed Apr 27 00:30:30 2016] [debug] Routing to a callback
+[Wed Apr 27 00:30:30 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Wed Apr 27 00:30:30 2016] [debug] 302 Found (0.002121s, 471.476/s)
+[Wed Apr 27 00:30:30 2016] [debug] Routing to a callback
+[Wed Apr 27 00:30:33 2016] [debug] GET "/list"
+[Wed Apr 27 00:30:33 2016] [debug] Routing to a callback
+[Wed Apr 27 00:30:33 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Wed Apr 27 00:30:33 2016] [debug] 302 Found (0.001171s, 853.971/s)
+[Wed Apr 27 00:30:33 2016] [debug] Routing to a callback
+[Wed Apr 27 00:30:36 2016] [debug] GET "/login"
+[Wed Apr 27 00:30:36 2016] [debug] Routing to a callback
+[Wed Apr 27 00:30:36 2016] [debug] Rendering template "login.html.ep"
+[Wed Apr 27 00:30:36 2016] [debug] 200 OK (0.006072s, 164.690/s)
+[Wed Apr 27 00:30:42 2016] [debug] POST "/bonafides"
+[Wed Apr 27 00:30:42 2016] [debug] Routing to a callback
+[Wed Apr 27 00:30:42 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Wed Apr 27 00:30:42 2016] [debug] 200 OK (0.022078s, 45.294/s)
+[Wed Apr 27 00:30:43 2016] [debug] GET "/main"
+[Wed Apr 27 00:30:43 2016] [debug] Routing to a callback
+[Wed Apr 27 00:30:43 2016] [debug] Routing to a callback
+[Wed Apr 27 00:30:43 2016] [debug] Rendering template "main.html.ep"
+[Wed Apr 27 00:30:43 2016] [debug] 200 OK (0.006596s, 151.607/s)
+[Wed Apr 27 00:30:44 2016] [debug] GET "/list"
+[Wed Apr 27 00:30:44 2016] [debug] Routing to a callback
+[Wed Apr 27 00:30:44 2016] [debug] Routing to a callback
+[Wed Apr 27 00:30:46 2016] [debug] 200 OK (2.785385s, 0.359/s)
+[Wed Apr 27 00:30:53 2016] [debug] GET "/list"
+[Wed Apr 27 00:30:53 2016] [debug] Routing to a callback
+[Wed Apr 27 00:30:53 2016] [debug] Routing to a callback
+[Wed Apr 27 00:30:56 2016] [debug] 200 OK (2.782588s, 0.359/s)
+[Wed Apr 27 00:32:08 2016] [debug] GET "/list"
+[Wed Apr 27 00:32:08 2016] [debug] Routing to a callback
+[Wed Apr 27 00:32:08 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Wed Apr 27 00:32:08 2016] [debug] 302 Found (0.003481s, 287.274/s)
+[Wed Apr 27 00:32:08 2016] [debug] Routing to a callback
+[Wed Apr 27 00:32:11 2016] [debug] GET "/login"
+[Wed Apr 27 00:32:11 2016] [debug] Routing to a callback
+[Wed Apr 27 00:32:11 2016] [debug] Rendering template "login.html.ep"
+[Wed Apr 27 00:32:11 2016] [debug] 200 OK (0.006321s, 158.203/s)
+[Wed Apr 27 00:32:53 2016] [debug] POST "/bonafides"
+[Wed Apr 27 00:32:53 2016] [debug] Routing to a callback
+[Wed Apr 27 00:32:53 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Wed Apr 27 00:32:53 2016] [debug] 200 OK (0.021196s, 47.179/s)
+[Wed Apr 27 00:32:54 2016] [debug] GET "/main"
+[Wed Apr 27 00:32:54 2016] [debug] Routing to a callback
+[Wed Apr 27 00:32:54 2016] [debug] Routing to a callback
+[Wed Apr 27 00:32:54 2016] [debug] Rendering template "main.html.ep"
+[Wed Apr 27 00:32:54 2016] [debug] 200 OK (0.007322s, 136.575/s)
+[Wed Apr 27 00:32:55 2016] [debug] GET "/list"
+[Wed Apr 27 00:32:55 2016] [debug] Routing to a callback
+[Wed Apr 27 00:32:55 2016] [debug] Routing to a callback
+[Wed Apr 27 00:32:58 2016] [debug] 200 OK (2.890454s, 0.346/s)
+[Wed Apr 27 00:33:04 2016] [debug] GET "/list"
+[Wed Apr 27 00:33:04 2016] [debug] Routing to a callback
+[Wed Apr 27 00:33:04 2016] [debug] Routing to a callback
+[Wed Apr 27 00:33:07 2016] [debug] 200 OK (2.842568s, 0.352/s)
+[Wed Apr 27 00:34:28 2016] [debug] GET "/list"
+[Wed Apr 27 00:34:28 2016] [debug] Routing to a callback
+[Wed Apr 27 00:34:28 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Wed Apr 27 00:34:28 2016] [debug] 302 Found (0.003406s, 293.600/s)
+[Wed Apr 27 00:34:28 2016] [debug] Routing to a callback
+[Wed Apr 27 00:34:31 2016] [debug] GET "/login"
+[Wed Apr 27 00:34:31 2016] [debug] Routing to a callback
+[Wed Apr 27 00:34:31 2016] [debug] Rendering template "login.html.ep"
+[Wed Apr 27 00:34:31 2016] [debug] 200 OK (0.007322s, 136.575/s)
+[Wed Apr 27 00:34:37 2016] [debug] POST "/bonafides"
+[Wed Apr 27 00:34:37 2016] [debug] Routing to a callback
+[Wed Apr 27 00:34:37 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Wed Apr 27 00:34:37 2016] [debug] 200 OK (0.020026s, 49.935/s)
+[Wed Apr 27 00:34:38 2016] [debug] GET "/main"
+[Wed Apr 27 00:34:38 2016] [debug] Routing to a callback
+[Wed Apr 27 00:34:38 2016] [debug] Routing to a callback
+[Wed Apr 27 00:34:38 2016] [debug] Rendering template "main.html.ep"
+[Wed Apr 27 00:34:38 2016] [debug] 200 OK (0.006443s, 155.207/s)
+[Wed Apr 27 00:34:39 2016] [debug] GET "/list"
+[Wed Apr 27 00:34:39 2016] [debug] Routing to a callback
+[Wed Apr 27 00:34:39 2016] [debug] Routing to a callback
+[Wed Apr 27 00:34:41 2016] [debug] 200 OK (2.745124s, 0.364/s)
+[Wed Apr 27 00:34:46 2016] [debug] GET "/list"
+[Wed Apr 27 00:34:46 2016] [debug] Routing to a callback
+[Wed Apr 27 00:34:46 2016] [debug] Routing to a callback
+[Wed Apr 27 00:34:49 2016] [debug] 200 OK (2.842664s, 0.352/s)
+[Wed Apr 27 00:41:11 2016] [debug] GET "/list"
+[Wed Apr 27 00:41:11 2016] [debug] Routing to a callback
+[Wed Apr 27 00:41:11 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Wed Apr 27 00:41:11 2016] [debug] 302 Found (0.003257s, 307.031/s)
+[Wed Apr 27 00:41:11 2016] [debug] Routing to a callback
+[Wed Apr 27 00:41:11 2016] [debug] GET "/login"
+[Wed Apr 27 00:41:11 2016] [debug] Routing to a callback
+[Wed Apr 27 00:41:11 2016] [debug] Rendering template "login.html.ep"
+[Wed Apr 27 00:41:11 2016] [debug] 200 OK (0.007079s, 141.263/s)
+[Wed Apr 27 00:41:18 2016] [debug] POST "/bonafides"
+[Wed Apr 27 00:41:18 2016] [debug] Routing to a callback
+[Wed Apr 27 00:41:18 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Wed Apr 27 00:41:18 2016] [debug] 200 OK (0.020845s, 47.973/s)
+[Wed Apr 27 00:41:19 2016] [debug] GET "/main"
+[Wed Apr 27 00:41:19 2016] [debug] Routing to a callback
+[Wed Apr 27 00:41:19 2016] [debug] Routing to a callback
+[Wed Apr 27 00:41:19 2016] [debug] Rendering template "main.html.ep"
+[Wed Apr 27 00:41:19 2016] [debug] 200 OK (0.00713s, 140.252/s)
+[Wed Apr 27 00:41:19 2016] [debug] GET "/list"
+[Wed Apr 27 00:41:19 2016] [debug] Routing to a callback
+[Wed Apr 27 00:41:19 2016] [debug] Routing to a callback
+[Wed Apr 27 00:41:19 2016] [debug] 200 OK (0.002138s, 467.727/s)
+[Wed Apr 27 00:41:28 2016] [debug] GET "/list"
+[Wed Apr 27 00:41:28 2016] [debug] Routing to a callback
+[Wed Apr 27 00:41:28 2016] [debug] Routing to a callback
+[Wed Apr 27 00:41:28 2016] [debug] 200 OK (0.002372s, 421.585/s)

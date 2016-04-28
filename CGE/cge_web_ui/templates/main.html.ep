@@ -2,7 +2,7 @@
 <html>
   <head>
     <title><%= title %></title>
-    
+
     <link href="images/favicon.ico" rel="icon" type="image/x-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=1.0, minimum-scale=1.0, maximum-scale=1.0"/>
     <link type="text/css" href="//fonts.googleapis.com/css?family=Michroma" rel="stylesheet" />
@@ -12,7 +12,7 @@
     <link type="text/css" href="styles/kendo.dataviz.bootstrap.min.css" rel="stylesheet" />
     <link type="text/css" href="styles/yasqe.min.css" rel="stylesheet" />
     <link type="text/css" href="styles/main.css" rel="stylesheet" />
-    
+
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script type="text/javascript" src="js/yasqe.bundled.min.js"></script>
     <script type="text/javascript" src="js/kendo.all.min.js"></script>
@@ -26,14 +26,18 @@
     <div id='navigation'>
       <div id='database_management' class='ss_button'>Database Management</div>
       <div class='ss_content'>
-        <table id='database_management_table' class='navigation_tables'>
+        <div id='file_browser'></div>
+        <div id='start_db_container'>
+          <input id="startDB" type="button" value="Start" class="k-button">
+        </div>
+        <!-- <table id='database_management_table' class='navigation_tables'>
           <tbody>
             <tr>
               <td><input id="selectDB" placeholder="Select Database"></td>
               <td><input id="startDB" type="button" value="Start" class="k-button"></td>
             </tr>
           </tbody>
-        </table>
+        </table> -->
       </div>
       <div id='access_control' class='ss_button'>Access Control</div>
       <div class='ss_content'>

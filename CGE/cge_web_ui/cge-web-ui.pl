@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use 5.016;
 use Carp qw(cluck carp croak);
+use Cwd 'abs_path';
 use Data::Dumper;
 use Net::LDAP;
 use YAML::AppConfig;
@@ -18,7 +19,13 @@ use Mojo::JSON qw(decode_json encode_json);
 use Try::Tiny;
 use Net::EmptyPort;
 use Tie::Hash::Expire;
-use IPC::Run3::Shell;
+use IPC::Cmd qw(can_run run);
+use File::Path::Tiny;
+use FindBin;
+use lib $FindBin::Bin.'/../cge_cli_wrapper';
+
+no warnings 'recursion';
+use File::Basename;
 ## no critic qw(RegularExpressions::RequireExtendedFormatting)
 
 #========================================#
@@ -30,13 +37,7 @@ use IPC::Run3::Shell;
 # - Master:                              #
 #========================================#
 #   + [root_dir]                      :: Root application directory
-#      + log                          :: This is directory that logs are stored
 #      + templates                    :: This is the directory where Mojolicious HTML templates reside
-#      + databases                    :: This is a central repository for databases, especially those that will be shared
-#         + [database_name]           :: Each database is stored in its own directory
-#            + log                    :: CGE log directory
-#            + queries                :: stored queries specific to "this" database
-#            + keys                   :: stored keys for the purposes of sharing a database with other users
 #      + queries                      :: General purpose queries are stored here...not database dependent
 #      + public                       :: Directory for public files/folders for the Mojolicious app
 #         + js                        :: Javascript files
@@ -46,34 +47,42 @@ use IPC::Run3::Shell;
 #         + typescript                :: Typescript files/folders used by Kendo UI
 #         + fonts                     :: Font files used by the web application
 #   = analytics_ui_config.yaml        :: Master configuration file; will be superseded by the user's config file
-#   = blacklist.txt                   :: This file will be automatically created the first time it is used.  Blacklisted users who have failed 5 logins in a row
 #   = analytics_ui.pl                 :: This application
 
 #========================================#
 # - User:                                #
 #========================================#
-#   + [additional_database_directory] :: Additional database directory provided by the user in their config file
+#   + [database_directories]          :: Arbitrary directories housing CGE databases
 #      + [database_name]              :: Each database is stored in its own directory
+#         + .cge_web_ui               :: All web UI specific files and directories reside here
+#            + queries                :: stored queries specific to "this" database
+#            + authorized_users       :: stored keys for the purposes of sharing a database with other users
+#               + [username]          :: Each authorized user has a directory with their username
+#                  = id_rsa           :: Private key (RSA only for now)
+#                  = id_rsa.pub       :: Public key (RSA only for now)
+#                  = properties.yaml  :: User permissions and relevant timestamps for first access grant and last modified date/time
+#            + temp                   :: Temporary file directory.  All files should be purged each time the application starts
 #         + log                       :: CGE log directory
-#         + queries                   :: stored queries specific to "this" database
-#         + keys                      :: stored keys for the purposes of sharing a database with other users
+#         = authorized_keys           :: Public keys for users granted access to "this" database
 #   + [user_home_directory]           :: User's home directory
-#      = analytics_ui_config.yaml     :: User's personal configuration file; overrides master settings
+#      + .cge_web_ui                  :: Directory for holding web UI files and directories
+#         + log                       :: This is directory that web UI logs are stored
+#         = analytics_ui_config.yaml  :: User's personal configuration file; overrides master settings
 
 #========================================#
 # App setup                              #
 #========================================#
 #=+ Setting the root directory as the absolute path where the executable resides
-use Cwd 'abs_path';
-my $root_directory = abs_path().'/';
+my $root_directory = $FindBin::Bin.'/';
+
+#=+ Check the root directory and any other needed directories
+my $home_directory = (getpwuid $>)[7].'/';
+_checkDirectories($root_directory,$home_directory.'.cge_web_ui/log');
 
 #=+ Set up logging
 my $logLevel = 'debug';
 my $ts = strftime("%Y-%m-%d", localtime(time));
-my $log = Mojo::Log->new(path => $root_directory.'log/analytics_ui_log_'.$ts.'.log', level => $logLevel);
-
-#=+ Check the root directory and any other needed directories
-_checkDirectories($root_directory);
+my $log = Mojo::Log->new(path => $home_directory.'.cge_web_ui/log/analytics_ui_log_'.$ts.'.log', level => $logLevel);
 
 #=+ Need to initialize the application based on the configuration file
 my $config = _config_init();
@@ -85,8 +94,9 @@ app->secrets([md5_hex(irand)]);
 
 #=+ set up session(cookies) defaults
 app->sessions(Mojolicious::Sessions->new);
-app->sessions->cookie_name('Graph_Engine');
+app->sessions->cookie_name('Cray_Graph_Engine');
 app->sessions->default_expiration($config->config->{'session_timeout'});
+
 #=+ Force cookies to only be sent over SSL connection
 app->sessions->secure(1);
 
@@ -115,13 +125,13 @@ tie %blacklist, 'Tie::Hash::Expire', { 'expire_seconds' => 3600 };
 #=+ Automatically gzip responses if the user agent will accept gzip
 hook after_render => sub {
   my ($self, $output, $format) = @_;
-  
+
   #=+ Check if "gzip => 1" has been set in the stash
   return unless $self->stash->{gzip};
-  
+
   #=+ Check if user agent accepts GZip compression
   return unless ($self->req->headers->accept_encoding // '') =~ /gzip/i;
-  
+
   #=+ Compress content with GZip
   $self->res->headers->content_encoding('gzip');
   gzip $output, \my $compressed;
@@ -148,10 +158,10 @@ get '/' => sub {
 
 post '/bonafides' => sub {
   my $self = shift;
-  
+
   #=+ Grab the form elements from the POST form
   my $creds = $self->req->body_params->to_hash;
-  
+
   #=+ Weed out anyone on the blacklist
   if (exists $blacklist{$creds->{'user'}}) {
     $self->flash(message => 'User has been blocked due to excessive failed login attempts, try again in an hour or so!');
@@ -190,14 +200,14 @@ group {
     return 1 if $self->session('uid');
     $self->redirect_to('login');
   };
-  
+
   #=+ Get to the main page once logged in
   get '/main' => sub {
     my $self = shift;
     $self->stash(title => 'Cray Graph Engine (CGE) web-interface');
     $self->stash(gzip => 1);
   } => 'main';
-  
+
   #=+ A quick way to ensure we are grabbing the prefix file from a secure location with a current copy and
   #   also add our own prefixes
   get '/yasqe_prefixes/all.file.json' => sub {
@@ -217,24 +227,38 @@ group {
       $self->rendered(500);
     }
   };
-  
+
   #=+ Let the app see how many nodes are available
   websocket '/sinfo' => sub{
     my $self = shift;
     $self->stash('gzip' => 1);
-    
+
     #=+ Set retrieve interval for the loop
     my $interval = 5;
-    
+
     my $id = Mojo::IOLoop->recurring($interval => sub {
-      
-      $self->send('something');
+
+      my $sinfo_json = sinfo();
+      $self->send(json => $sinfo_json);
     });
-    
+
     $self->on(finish => sub {
       $log->info('[sinfo] websocket connection closed');
       Mojo::IOLoop->remove($id);
     });
+  };
+
+  get '/list' => sub {
+    my $self = shift;
+    my $qparams=$self->req->query_params->to_hash;
+    my $root;
+    if(exists $qparams->{search_root}) {
+      $root = $qparams->{search_root};
+    }
+
+    #my $dirlist = _list_directory($root);
+    my $stuff = scan('/mnt/lustre/bossert');
+    $self->render(json => $stuff);
   };
 };
 
@@ -315,11 +339,11 @@ sub _ldap_connect {
 #=+ Authenticate users against LDAP
 sub _authenticate {
   my ($user,$pass) = @_;
-  
+
   my $ldap = _ldap_connect();
   my $mesg = $ldap->bind;
   $mesg = $ldap->search(base => $config->config->{'search_base'},filter => '(&(uid='.$user.'))', attrs => ['dn']);
-  
+
   #=+ First, did we get a response?
   if (!$mesg) {
     $ldap->unbind;
@@ -330,7 +354,7 @@ sub _authenticate {
   elsif ($mesg->code == 0) {
     my $dn = $mesg->entry->dn;
     $mesg = $ldap->bind($dn, password => $pass);
-    
+
     #=+ Does the user's password match?
     if ($mesg->code == 0) {
       $ldap->unbind;
@@ -355,12 +379,12 @@ sub _user_lookup {
   my @results;
   my $ldap = _ldap_connect();
   my $mesg = $ldap->bind;
-  
+
   #=+ We are doing a wildcard search such that * represents zero or more characters on either end, which is really just
   #   the equivalent of CONTAINS.  Later, we may decide that a fuzzy/approximate match is desired...in which case, change
   #   (for example) uid=*searchterm* to uid~=*searchterm*
   $mesg = $ldap->search(base => $config->config->{'search_base'},filter => '(|(uid=*'.$value.'*)(cn=*'.$value.'*))');
-  
+
   #=+ Each LDAP record entry is returned with the attributes stored in an array of anonymous hashes, therefore,
   #   we have to iterate over each entry and the array of attributes to grab the values we are interested in
   foreach my $entry($mesg->entries) {
@@ -381,19 +405,75 @@ sub _checkDirectories {
   my @input = @_;
   foreach my $dir(@input) {
     unless(-d $dir) {
-      $log->fatal('Directory does not exist: '.$dir);
-      croak $dir.' : Directory does not exist.';
+      File::Path::Tiny::mk($dir);
+      chmod 0700, $dir;
     }
     unless(-r $dir) {
-      $log->fatal('Directory is not readable: '.$dir);
       croak $dir.' : Directory is not readable';
     }
     unless(-w $dir) {
-      $log->fatal('Directory is not writable: '.$dir);
       croak $dir.' : Directory is not writable.';
     }
   }
   return 1;
+}
+
+sub _list_directory {
+  my($root) = @_;
+
+  #=+ If no starting point is specified use '/'
+  $root = '/' unless defined $root;
+
+  opendir(my $DIR, $root);
+  my @dirlist;
+  while(my $item = readdir $DIR) {
+    my %temp;
+    if(-d $root.'/'.$item) {
+      #=+ For directories, we go one deeper to keep a balance of performance vs. fewer calls
+      opendir(my $SUB, $root.'/'.$item);
+      my @subdir;
+      while(my $subitem = readdir $SUB) {
+        my %tempsub;
+        if(-d $root.'/'.$item.'/'.$subitem) {
+          %tempsub = (
+            name     => $subitem,
+            path     => $root.'/'.$item.'/'.$subitem,
+            type     => 'directory',
+            contents => []
+          ) unless $subitem =~ /^\.+$/;
+        }
+        else {
+          %tempsub = (
+            name => $subitem,
+            path => $root.'/'.$item.'/'.$subitem,
+            type => 'file',
+            size => -s $root.'/'.$item.'/'.$subitem
+          ) if $subitem =~ /\.nt$|^dbQuads$|^graph.info$|^string_table_chars.index$|^string_table_chars$|\.rq$|\.ru$/;
+        }
+        push @subdir, \%tempsub if %tempsub;
+      }
+      closedir $SUB;
+
+
+      %temp = (
+        name     => $item,
+        path     => $root.'/'.$item,
+        type     => 'directory',
+        contents => \@subdir
+      ) unless $item =~ /^\.+$/;
+    }
+    else {
+      %temp = (
+        name => $item,
+        path => $root.'/'.$item,
+        type => 'file',
+        size => -s $root.'/'.$item
+      ) if $item =~ /\.nt$|^dbQuads$|^graph.info$|^string_table_chars.index$|^string_table_chars$|\.rq$|\.ru$/;
+    }
+    push @dirlist, \%temp if %temp;
+  }
+  closedir($DIR);
+  return \@dirlist;
 }
 
 #=+ Read in our configuration file
@@ -401,7 +481,7 @@ sub _config_init {
   #=+ no options to the init routine for now...may revisit later
   #=+ First, load up the master config file
   my $yaml_config;
-  my $config_file_name = $root_directory.'analytics_ui_config.yaml';
+  my $config_file_name = $root_directory.'cge-web-ui-config.yaml';
   if(-e $config_file_name && -r _) {
     $yaml_config = YAML::AppConfig->new(file => $config_file_name);
   }
@@ -409,14 +489,14 @@ sub _config_init {
     $log->fatal('Could not initialize application: config file does not exist or has permissions issues: '.$config_file_name);
     croak 'Could not initialize application: config file does not exist or has permissions issues: '.$config_file_name;
   }
-  
+
   #=+ Now, load the local/user's config file and merge it with the master if it exists
   #   The user's settings will take precedence over the master config.
   #   For now, the location and file name are hard-coded.  If anyone thinks this should be configurable, go for it
-  if(-e (getpwuid $>)[7].'/analytics_ui_config.yaml' && -r _) {
-    $yaml_config->merge(file => (getpwuid $>)[7].'/analytics_ui_config.yaml');
+  if(-e (getpwuid $>)[7].'/.cge_web_ui/analytics_ui_config.yaml' && -r _) {
+    $yaml_config->merge(file => (getpwuid $>)[7].'/.cge_web_ui/analytics_ui_config.yaml');
   }
-  
+
   #=+ Need to check if config file sets listen port explicitly and if it is available
   if (!exists $yaml_config->config->{'port'}) {
     #=+ Force the search for a free port to start at 3000.  This is completely arbitrary and was chosen because that
@@ -430,19 +510,19 @@ sub _config_init {
   elsif(check_port($yaml_config->config->{'port'})) {
     my $oldPort = $yaml_config->config->{'port'};
     my $freePort = $oldPort + 1;
-    
+
     #=+ Find the next available port
     while(check_port($freePort)) {
       $freePort++;
     }
-    
+
     #=+ Use next available port
     #say 'Port '.$oldPort.' is already in use, will use the next available port: '.$freePort;
     $yaml_config->config->{'port'} = $freePort;
   }
-  
-  
-  
+
+
+
   #=+ Need to alter the main javascript file to use the desired backend server name and port
   #my $javascript_file_name = $root_directory.'public/js/analytics_ui.js';
   #if(-e $javascript_file_name && -r _ && -w _) {
@@ -458,6 +538,47 @@ sub _config_init {
   #  croak 'Could not initialize application: javascript file does not exist or has permissions issues: '.$javascript_file_name;
   #}
   return $yaml_config;
+}
+
+sub scan { _scan($_[0], basename($_[0])) if %$_[0] }
+
+sub _scan {
+  my ($qfn, $fn) = @_;
+  say 'QFN: '.$qfn;
+  if(!-d $qfn && $qfn !~ /\.nt$|^dbQuads$|^graph.info$|^string_table_chars.index$|^string_table_chars$|\.rq$|\.ru$/) {
+    return;
+  }
+  my $node = { name => $fn };
+  lstat($qfn) or return;
+
+  my $size   = -s _;
+  my $is_dir = -d _;
+
+  if ($is_dir) {
+    my @child_fns = do {
+       opendir(my $dh, $qfn)
+          or die $!;
+
+       grep !/^\.\.?\z/, readdir($dh);
+    };
+
+    my @children;
+    for my $child_fn (@child_fns) {
+       my $child_node = _scan("$qfn/$child_fn", $child_fn);
+       $size += $child_node->{size};
+       push @children, $child_node;
+    }
+
+    $node->{contents} = \@children;
+  }
+
+  $node->{size} = $size;
+  if(%$node) {
+    return $node;
+  }
+  else {
+    return;
+  }
 }
 
 #=+ Finally, let's get started!
