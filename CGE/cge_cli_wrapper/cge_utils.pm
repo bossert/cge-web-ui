@@ -16,13 +16,13 @@ require Exporter;
 our $VERSION = 0.01;
 
 our @ISA = qw(Exporter);
-our @EXPORT_OK = qw(add_user modify_user sinfo);
-our %EXPORT_TAGS = (ALL => [ qw(add_user modify_user sinfo) ]);
+our @EXPORT_OK = qw(add_user modify_user sinfo squeue);
+our %EXPORT_TAGS = (ALL => [ qw(add_user modify_user sinfo squeue) ]);
 
 #=+ Need to be able to run ssh-keygen
 my $ssh_keygen = can_run('ssh-keygen');
 my $sinfo = can_run('sinfo');
-
+my $squeue = can_run('squeue');
 
 sub add_user {
   my($config_ref) = @_;
@@ -48,7 +48,7 @@ sub add_user {
 
   #=+ Make sure the database directory has a trailing slash
   $config{database} .= '/' unless $config{database} =~ /\/$/;
-  my $authorized_users_dir = $config{database}.'cge_web_ui/authorized_users/'.$config{username}.'/';
+  my $authorized_users_dir = $config{database}.'.cge_web_ui/authorized_users/'.$config{username}.'/';
 
   #=+ Make sure our directory for authorized users exists
   File::Path::Tiny::mk($authorized_users_dir);
@@ -109,14 +109,14 @@ sub modify_user {
 
   #=+ Make sure the database directory has a trailing slash
   $changes{database} .= '/' unless $changes{database} =~ /\/$/;
-  my $authorized_users_dir = $changes{database}.'cge_web_ui/authorized_users/'.$changes{username}.'/';
+  my $authorized_users_dir = $changes{database}.'.cge_web_ui/authorized_users/'.$changes{username}.'/';
 
   if($changes{action} eq 'revoke') {
     #=+ Remove the user from the authorized_keys file
     my $new_string;
     open(my $FH,'<',$changes{database}.'authorized_keys');
     while(my $line = <$FH>) {
-      $new_string .= $line unless $line =~ /$changes{username}/;
+      $new_string .= $line unless $line =~ /\Q$changes{username}\E/;
     }
     close($FH);
     open(my $FH,'>',$changes{database}.'authorized_keys');
@@ -144,7 +144,14 @@ sub sinfo {
   #=+ When executing sinfo -o %all, we dump the output for all fields in a pipe delimited format
   my($success,$error_message,$full_buf,$stdout_buf,$stderr_buf) = run(command => $sinfo.' -o %all', verbose => 0);
   if($success) {
-    my @sinfo_out;
+    my %output = (
+      sinfo  => [],
+      system => {
+        nodes                => 0,
+        min_memory_per_node  => 0,
+        cores_per_node       => undef
+      }
+    );
     #=+ Join the stdout buffer into one array and split on newlines so we have one line per element
     my @stdout_array = split(/\n/,join('',@$stdout_buf));
 
@@ -167,15 +174,69 @@ sub sinfo {
         $temp{$field} = $fields[$counter];
         $counter++;
       }
-      push @sinfo_out, \%temp;
+      #=+ increment the number of nodes available "now"
+      $output{system}->{nodes}++ if $temp{STATE} =~ /idle\~|idle$/;
+      $output{system}->{min_memory_per_node} = $temp{FREE_MEM} if ($output{system}->{min_memory_per_node} == 0 || $output{system}->{min_memory_per_node} > $temp{FREE_MEM});
+      $output{system}->{cores_per_node} = $temp{CPUS};
+      push @{$output{sinfo}}, \%temp;
     }
-    return \@sinfo_out;
+    return \%output;
   }
   else {
     return undef;
   }
 }
 
+sub squeue {
+  #=+ When executing sinfo -o %all, we dump the output for all fields in a pipe delimited format
+  my($success,$error_message,$full_buf,$stdout_buf,$stderr_buf) = run(command => $squeue.' -al --noheader', verbose => 0);
+  if($success) {
+    #=+ JOBID PARTITION     NAME     USER    STATE       TIME TIME_LIMI  NODES NODELIST(REASON)
+    #=+  1251   Elastic cge-serv  bossert  RUNNING      37:15 UNLIMITED     16 elastic-[1-16]
+    my @output;
+
+    #=+ Join the stdout buffer into one array and split on newlines so we have one line per element
+    my @stdout_array = split(/\n/,join('',@$stdout_buf));
+
+    foreach my $line(@stdout_array) {
+      $line =~ s/^\s+|\s+$//g;
+      my @fields = split(/\s+/,$line);
+
+      my @nodelist;
+      if($fields[8] =~ m/^elastic-\[([\d,-]+)\]$/) {
+        my $nodes = $1;
+        my @nodepieces = split(/,/,$nodes);
+        foreach my $piece(@nodepieces) {
+          if($piece =~ /(\d+)-(\d+)/) {
+            my $start = $1; my $end = $2;
+            for($start .. $end) {
+              push @nodelist, $_;
+            }
+          }
+        }
+      }
+
+      my %temp = (
+        JOBID => $fields[0],
+        PARTITION => $fields[1],
+        NAME => $fields[2],
+        USER => $fields[3],
+        STATE => $fields[4],
+        TIME => $fields[5],
+        TIME_LIMIT => $fields[6],
+        NODES => $fields[7],
+        NODELIST_STRING => $fields[8],
+        NODELIST => \@nodelist
+      );
+
+      push @output, \%temp;
+    }
+    return \@output;
+  }
+  else {
+    return undef;
+  }
+}
 1;
 
 __END__

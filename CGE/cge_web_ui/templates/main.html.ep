@@ -24,44 +24,535 @@
   </head>
   <body>
     <div id='navigation'>
-      <div id='database_management' class='ss_button'>Database Management</div>
-      <div class='ss_content'>
-        <div id='file_browser'></div>
-        <div id='start_db_container'>
-          <input id="startDB" type="button" value="Start" class="k-button">
+      <div id='menu_container'>
+        <div id='database_management' class='ss_button'>Database Management</div>
+        <div class='ss_content widecombobox'>
+          <table id='current_db' class='sysinfo_tables'>
+            <thead>
+              <tr><td>Current Database</td><td>Status</td></tr>
+            </thead>
+            <tbody>
+              <tr><td id='db_name'>None</td><td id='db_status'>STOPPED</td></tr>
+            </tbody>
+          </table>
+          <table id='db_config' class='sysinfo_tables'>
+            <tbody>
+              <tr><td><label for='instances'>Instances per node</label></td><td><label for='nodes'>Number of nodes</label></td><td><label for='timeout'>Build timeout</label></td></tr>
+              <tr><td><input id='instances' name='instances' type='number'></td><td><input id='nodes' name='nodes' type='number'></td><td><input id='timeout' name='timeout' type='number'></td></tr>
+              <tr><td><label for='nvps'>NVP's</label></td><td></td><td></td></tr>
+              <tr><td colspan="2"><input id='nvps' class='k-textbox' name='nvps' type='text'></td><td></td></tr>
+              <tr><td><label for='selectDB'>Available databases</label></td><td></td></tr>
+              <tr><td colspan="2"><input id='selectDB' name='selectDB' placeholder='Select Database' class='k-button'></td><td><input id="startDB" type="button" value="Start" class="k-button k-primary"></td></tr>
+            </tbody>
+          </table>
+          <table id='current_queue' class='sysinfo_tables'>
+            <thead>
+              <tr><td>Job ID</td><td>User</td><td>State</td><td>Time</td><td>Nodes</td></tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
         </div>
-        <!-- <table id='database_management_table' class='navigation_tables'>
-          <tbody>
+        <div id='available_data' class='ss_button'>Available Data</div>
+        <div class='ss_content'>
+          <div id='treeview_search' class='inner_menu_containers'>
+            <input id='new_db' name='new_db' type='button' class='k-button k-primary' value='New Database' />
+            <input id='treeViewSearchInput' class='k-textbox' placeholder='Search'/>
+          </div>
+          <div id='treeview_display' class='inner_menu_containers'>
+            <div id='file_browser'></div>
+          </div>
+        </div>
+        <div id='access_control' class='ss_button'>Access Control</div>
+        <div id='uac_container' class='ss_content'>
+          <div id='user_permissions_grid'></div>
+        </div>
+        <div id='query_update' class='ss_button'>Query/Update</div>
+        <div class='ss_content'>
+          <div id="dummyContainer1">
+            <input id="querySelector" placeholder="Preconfigured Queries" />
+            <input id="queryHistory"  placeholder="Query History" />
+            <input id="querySave" type="button" value="Save Query" class="k-button smallButton" />
+            <input id="clearHistory" type="button" value="Clear History" class="k-button smallButton" />
+          </div>
+          <div id="dummyContainer2">
+            <div id="query"></div>
+          </div>
+          <input id="querySubmitButton" type="button" value="Query" class="k-button k-primary" disabled />
+        </div>
+        <div id='graph_settings' class='ss_button'>Graph Settings</div>
+        <div class='ss_content'>
+          <div class="panelBarContent">
+            <table id="graphSettings">
+              <tr>
+                <td class="tableH3" colspan="3"><h3>General and Performance Settings</h3><hr /></td>
+              </tr>
+              <tr>
+                <td>Limit for retrieved associates</td><td><input id="limitAssociatesBox" class="numbox k-textbox limitAssociates" type="number" min="10" max="10000" value="100" data-cySetting="limitAssociates" /> </td><td><input id="limitAssociates" class="kslider" /> </td>
+              </tr>
+              <tr>
+                <td>Calculate centrality measures</td><td></td><td><input type='radio'  name="calculateCentrality" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="calculateCentrality" value="false" />false</td>
+              </tr>
+              <tr>
+                <td>Box selection enabled</td><td> </td><td><input class="cyOption" type='radio'  name="boxSelectionEnabled" value="true" checked />true &nbsp; &nbsp;<input class="cyOption" type='radio'  name="boxSelectionEnabled" value="false" />false</td>
+              </tr>
+              <tr>
+                <td>Selection type</td><td> </td><td><input class="cyOption" id="selectionType" /></td>
+              </tr>
+              <tr>
+                <td>Hide edges on move</td><td> </td><td><input class="cyOption" type='radio'  name="hideEdgesOnViewport" value="true" checked />true &nbsp; &nbsp;<input class="cyOption" type='radio'  name="hideEdgesOnViewport" value="false" />false</td>
+              </tr>
+              <tr>
+                <td>Hide labels on move</td><td> </td><td><input class="cyOption" type='radio'  name="hideLabelsOnViewport" value="true" checked />true &nbsp; &nbsp;<input class="cyOption" type='radio'  name="hideLabelsOnViewport" value="false" />false</td>
+              </tr>
+              <tr>
+                <td>Texture on move</td><td> </td><td><input class="cyOption" type='radio'  name="textureOnViewport" value="true" checked />true &nbsp; &nbsp;<input class="cyOption" type='radio'  name="textureOnViewport" value="false" />false</td>
+              </tr>
+              <tr>
+                <td>Motion blur</td><td> </td><td><input class="cyOption" type='radio'  name="motionBlur" value="true" checked />true &nbsp; &nbsp;<input class="cyOption" type='radio'  name="motionBlur" value="false" />false</td>
+              </tr>
+              <tr>
+                <td>Show node labels on hover only</td><td></td><td><input class="cyNodeStyle" type='radio'  name="showLabelOnHoverOnly" value="true" checked />true &nbsp; &nbsp;<input class="cyNodeStyle" type='radio'  name="showLabelOnHoverOnly" value="false" />false</td>
+              </tr>
+              <tr>
+                <td>Mouse wheel sensitivity</td><td><input id="wheelSensitivityBox" class="numbox k-textbox wheelSensitivity cyOption" type="number" min="0.1" max="1" value="1" data-cySetting="wheelSensitivity" /> </td><td><input id="wheelSensitivity" class="kslider cyOption" /> </td>
+              </tr>
+              <tr>
+                <td class="tableH3" colspan="3"><h3>Node Settings</h3><hr /></td>
+              </tr>
+              <tr>
+                <td>Node color</td><td> </td><td><input class="cyNodeStyle kcolorPicker" id="background-color" value="B84600"/> </td>
+              </tr>
+              <tr>
+                <td>Node shape</td><td> </td><td><input class="cyNodeStyle" id="shape" /> </td>
+              </tr>
+              <tr>
+                <td>Node label size</td><td><input class="numbox k-textbox cyNodeStyle" type="number" min="4" max="100" data-cySetting="font-size" value="12" id="font-sizeBox" /></td><td><input class="cyNodeStyle kslider" id="font-size" /> </td>
+              </tr>
+              <tr>
+                <td>Label visibility threshold</td><td><input class="numbox k-textbox cyNodeStyle" type="number" min="4" max="100" value="14" data-cySetting="min-zoomed-font-size" id="min-zoomed-font-sizeBox"/> </td><td><input class="cyNodeStyle kslider" id="min-zoomed-font-size" /> </td>
+              </tr>
+              <tr>
+                <td>minNodeSize</td><td><input class="numbox k-textbox nodeSize" type="number" min="1" max="100" value="10" data-cySetting="minNodeSize" id="minNodeSizeBox"/> </td><td><input id="minNodeSize" class="kslider" /> </td>
+              </tr>
+              <tr>
+                <td>maxNodeSize</td><td><input class="numbox k-textbox nodeSize" type="number" min="1" max="100" value="35" data-cySetting="maxNodeSize" id="maxNodeSizeBox"/> </td><td><input id="maxNodeSize" class="kslider" /> </td>
+              </tr>
+              <tr>
+                <td class="tableH3" colspan="3"><h3>Edge Settings</h3><hr /></td>
+              </tr>
+              <tr>
+                <td>Edge color</td><td> </td><td><input class="cyEdgeStyle kcolorPicker" id="line-color" value="B84600" /> </td>
+              </tr>
+              <tr>
+                <td>Arrow color</td><td> </td><td><input class="cyEdgeStyle kcolorPicker" id="target-arrow-color" value="B84600" /></td>
+              </tr>
+              <tr>
+                <td>Arrow shape</td><td> </td><td><input class="cyEdgeStyle kcomboBox" id="target-arrow-shape" /></td>
+              </tr>
+              <tr>
+                <td>Arrow fill</td><td> </td><td><input class="cyEdgeStyle kcomboBox" id="target-arrow-fill" /></td>
+              </tr>
+              <tr>
+                <td>Edge style</td><td> </td><td><input class="cyEdgeType kcomboBox" id="curve-style" /></td>
+              </tr>
+              <tr>
+                <td>Edge line style</td><td> </td><td><input class="cyEdgeStyle kcomboBox" id="line-style" /></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div id='graph_layouts' class='ss_button'>Graph Layouts</div>
+        <div class='ss_content'>
+          <table id="layoutSettings">
             <tr>
-              <td><input id="selectDB" placeholder="Select Database"></td>
-              <td><input id="startDB" type="button" value="Start" class="k-button"></td>
+              <td colspan="2"><select id="layoutSelector"> </select></td><td><input id="layoutSubmit" type="button" value="Run Layout" class="k-button" /></td>
             </tr>
-          </tbody>
-        </table> -->
-      </div>
-      <div id='access_control' class='ss_button'>Access Control</div>
-      <div class='ss_content'>
-        <p>hello</p>
-      </div>
-      <div id='query_update' class='ss_button'>Query/Update</div>
-      <div class='ss_content'>
-        <p>hello</p>
-      </div>
-      <div id='graph_settings' class='ss_button'>Graph Settings</div>
-      <div class='ss_content'>
-        <p>hello</p>
-      </div>
-      <div id='graph_layouts' class='ss_button'>Graph Layouts</div>
-      <div class='ss_content'>
-        <p>hello</p>
-      </div>
-      <div id='charting' class='ss_button'>Charting</div>
-      <div class='ss_content'>
-        <p>hello</p>
-      </div>
-      <div id='graph_algorithms' class='ss_button'>Graph Algorithms</div>
-      <div class='ss_content'>
-        <p>hello</p>
+            <tr id="arbor" class="hidden_layout_options lsettr">
+              <td colspan="3">
+                <table id="arborLayoutTable">
+                  <tr>
+                    <td>Continuous layout</td><td></td><td><input type='radio'  name="arborinfinite" data-layoutsetting="infinite" value="true" />true &nbsp; &nbsp;<input type='radio'  name="arborinfinite" data-layoutsetting="infinite" value="false" checked />false</td>
+                  </tr>
+                  <tr>
+                    <td>Animate</td><td></td><td><input type='radio'  name="arboranimate" data-layoutsetting="animate" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="arboranimate" data-layoutsetting="animate" value="false"/>false</td>
+                  </tr>
+                  <tr>
+                    <td>Maximum simulation time (ms)</td><td><input id="arbormaxSimulationTimeBox" class="numbox k-textbox" type="number" min="1000" max="120000" value="40000" /> </td><td><input id="arbormaxSimulationTime" data-layoutsetting="maxSimulationTime" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Fit to viewport</td><td></td><td><input type='radio'  name="arborfit" data-layoutsetting="fit" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="arborfit" data-layoutsetting="fit" value="false" />false</td>
+                  </tr>
+                  <tr>
+                    <td>Randomize initial node positions</td><td></td><td><input type='radio'  name="arborrandomize" data-layoutsetting="randomize" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="arborrandomize" data-layoutsetting="randomize" value="false" />false</td>
+                  </tr>
+                  <tr>
+                    <td>Repulsion</td><td><input class="numbox k-textbox" type="number" min="0" max="100000" value="2600" data-layoutsetting="repulsion" id="arborrepulsionBox" /> </td><td><input id="arborrepulsion" data-layoutsetting="repulsion" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Stiffness</td><td><input class="numbox k-textbox" type="number" min="0" max="15000" value="500" data-layoutsetting="stiffness" id="arborstiffnessBox" /> </td><td><input id="arborstiffness" data-layoutsetting="stiffness" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Friction</td><td><input class="numbox k-textbox" type="number" min="0" max="1" value="0.5" step='0.01' data-layoutsetting="friction" data-layoutsetting="friction" id="arborfrictionBox" /> </td><td><input id="arborfriction" data-layoutsetting="friction" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Gravity</td><td></td><td><input type='radio'  name="arborgravity" data-layoutsetting="gravity" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="arborgravity" data-layoutsetting="gravity" value="false"/>false</td>
+                  </tr>
+                  <tr>
+                    <td>Frames per second</td><td><input class="numbox k-textbox" type="number" min="10" max="240" value="30" data-layoutsetting="fps" id="arborfpsBox" /> </td><td><input id="arborfps" data-layoutsetting="fps" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Precision</td><td><input class="numbox k-textbox" type="number" min="0.1" max="1" value="0.5" step='0.01' data-layoutsetting="precision" id="arborprecisionBox" /> </td><td><input id="arborprecision" data-layoutsetting="precision" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Node mass</td><td></td><td><input id="arbornodeMass" data-layoutsetting="nodeMass" class="kcomboBox" /></td>
+                  </tr>
+                  <tr>
+                    <td>Step size</td><td><input class="numbox k-textbox" type="number" min="0.1" max="1" value="0.1" step="0.01" data-layoutsetting="stepSize" id="arborstepSizeBox" /> </td><td><input id="arborstepSize" data-layoutsetting="stepSize" class="kslider" /> </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr id="breadthfirst" class="hidden_layout_options lsettr">
+              <td colspan="3">
+                <table id="breadthfirstLayoutTable">
+                  <tr>
+                    <td>Fit to viewport</td><td></td><td><input type='radio'  name="breadthfirstfit" data-layoutsetting="fit" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="breadthfirstfit" data-layoutsetting="fit" value="false" />false</td>
+                  </tr>
+                  <tr>
+                    <td>Directed downward</td><td></td><td><input type='radio'  name="breadthfirstdirected" data-layoutsetting="directed" value="true" />true &nbsp; &nbsp;<input type='radio'  name="breadthfirstdirected" data-layoutsetting="directed" value="false" checked />false</td>
+                  </tr>
+                  <tr>
+                    <td>Layout in concentric circles</td><td></td><td><input type='radio'  name="breadthfirstcircle" data-layoutsetting="circle" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="breadthfirstcircle" data-layoutsetting="circle" value="false" />false</td>
+                  </tr>
+                  <tr>
+                    <td>Spacing factor</td><td><input class="numbox k-textbox" type="number" min="0.1" max="10" value="1.75" step="0.01" data-layoutsetting="spacingFactor" id="breadthfirstspacingFactorBox" /> </td><td><input id="breadthfirstspacingFactor" data-layoutsetting="spacingFactor" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Avoid overlap</td><td></td><td><input type='radio'  name="breadthfirstavoidOverlap" data-layoutsetting="avoidOverlap" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="breadthfirstavoidOverlap" data-layoutsetting="avoidOverlap" value="false" />false</td>
+                  </tr>
+                  <tr>
+                    <td>Maximal adjustments</td><td><input class="numbox k-textbox" type="number" min="0" max="10" value="0" data-layoutsetting="maximalAdjustments" id="breadthfirstmaximalAdjustmentsBox" /> </td><td><input id="breadthfirstmaximalAdjustments" data-layoutsetting="maximalAdjustments" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Animate</td><td></td><td><input type='radio'  name="breadthfirstanimate" data-layoutsetting="animate" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="breadthfirstanimate" data-layoutsetting="animate" value="false"/>false</td>
+                  </tr>
+                  <tr>
+                    <td>Animation duration</td><td><input class="numbox k-textbox" type="number" min="100" max="10000" value="4000" data-layoutsetting="animationDuration" id="breadthfirstanimationDurationBox" /> </td><td><input id="breadthfirstanimationDuration" data-layoutsetting="animationDuration" class="kslider" /> </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr id="circle" class="hidden_layout_options lsettr">
+              <td colspan="3">
+                <table id="cirleLayoutTable">
+                  <tr>
+                    <td>Fit to viewport</td><td></td><td><input type='radio'  name="circlefit" data-layoutsetting="fit" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="circlefit" data-layoutsetting="fit" value="false" />false</td>
+                  </tr>
+                  <tr>
+                    <td>Prevent overlap</td><td></td><td><input type='radio'  name="circleavoidOverlap" data-layoutsetting="avoidOverlap" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="circleavoidOverlap" data-layoutsetting="avoidOverlap" value="false" />false</td>
+                  </tr>
+                  <tr>
+                    <td>Clockwise layout</td><td></td><td><input type='radio'  name="circleclockwise" data-layoutsetting="clockwise" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="circleclockwise" data-layoutsetting="clockwise" value="false"/>false</td>
+                  </tr>
+                  <tr>
+                    <td>animate</td><td></td><td><input type='radio'  name="circleanimate" data-layoutsetting="animate" value="true" />true &nbsp; &nbsp;<input type='radio'  name="circleanimate" data-layoutsetting="animate" value="false" checked />false</td>
+                  </tr>
+                  <tr>
+                    <td>Animation Duration</td><td><input class="numbox k-textbox" type="number" min="100" max="10000" value="4000" data-layoutsetting="animationDuration" id="circleanimationDurationBox" /> </td><td><input id="circleanimationDuration" data-layoutsetting="animationDuration" class="kslider" /> </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr id="cola" class="hidden_layout_options lsettr">
+              <td colspan="3">
+                <table id="colaLayoutTable">
+                  <tr>
+                    <td>Fit to viewport</td><td></td><td><input type='radio'  name="colafit" data-layoutsetting="fit" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="colafit" data-layoutsetting="fit" value="false" />false</td>
+                  </tr>
+                  <tr>
+                    <td>Prevent overlap</td><td></td><td><input type='radio'  name="colaavoidOverlap" data-layoutsetting="avoidOverlap" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="colaavoidOverlap" data-layoutsetting="avoidOverlap" value="false" />false</td>
+                  </tr>
+                  <tr>
+                    <td>Refresh interval</td><td><input class="numbox k-textbox" type="number" min="1" max="50" value="1" data-layoutsetting="refresh" id="colarefreshBox" /> </td><td><input id="colarefresh" data-layoutsetting="refresh" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Maximum simulation time(ms)</td><td><input class="numbox k-textbox" type="number" min="1000" max="10000" value="4000" data-layoutsetting="maxSimulationTime" id="colamaxSimulationTimeBox" /> </td><td><input id="colamaxSimulationTime" data-layoutsetting="maxSimulationTime" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Ungrabify nodes while simulating</td><td></td><td><input type='radio'  name="colaungrabifyWhileSimulating" data-layoutsetting="ungrabifyWhileSimulating" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="colaungrabifyWhileSimulating" data-layoutsetting="ungrabifyWhileSimulating" value="false"/>false</td>
+                  </tr>
+                  <tr>
+                    <td>randomize before simulation</td><td></td><td><input type='radio'  name="colarandomize" data-layoutsetting="randomize" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="colarandomize" data-layoutsetting="randomize" value="false"/>false</td>
+                  </tr>
+                  <tr>
+                    <td>Avoid overlapping disconnected components</td><td></td><td><input type='radio'  name="colahandleDisconnected" data-layoutsetting="handleDisconnected" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="colahandleDisconnected" data-layoutsetting="handleDisconnected" value="false"/>false</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr id="cose" class="hidden_layout_options lsettr">
+              <td colspan="3">
+                <table id="coseLayoutTable">
+                  <tr>
+                    <td>Fit to viewport</td><td></td><td><input type='radio'  name="cosefit" data-layoutsetting="fit" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="cosefit" data-layoutsetting="fit" value="false" />false</td>
+                  </tr>
+                  <tr>
+                    <td>randomize before simulation</td><td></td><td><input type='radio'  name="coserandomize" data-layoutsetting="randomize" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="coserandomize" data-layoutsetting="randomize" value="false"/>false</td>
+                  </tr>
+                  <tr>
+                    <td>Component spacing</td><td><input id="cosecomponentSpacingBox" class="numbox k-textbox" type="number" min="10" max="500" value="100" data-layoutsetting="componentSpacing" /> </td><td><input id="cosecomponentSpacing" data-layoutsetting="componentSpacing" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Node overlap</td><td><input id="cosenodeOverlapBox" class="numbox k-textbox" type="number" min="1" max="50" value="10" data-layoutsetting="nodeOverlap" /> </td><td><input id="cosenodeOverlap" data-layoutsetting="nodeOverlap" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Node repulsion</td><td><input id="cosenodeRepulsionBox" class="numbox k-textbox" type="number" min="1" max="1000000" value="400000" data-layoutsetting="nodeRepulsion" /> </td><td><input id="cosenodeRepulsion" data-layoutsetting="nodeRepulsion" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Ideal edge length</td><td><input id="coseidealEdgeLengthBox" class="numbox k-textbox" type="number" min="10" max="100" value="10" data-layoutsetting="idealEdgeLength" /> </td><td><input id="coseidealEdgeLength" data-layoutsetting="idealEdgeLength" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Edge elasticity</td><td><input id="coseedgeElasticityBox" class="numbox k-textbox" type="number" min="10" max="1000" value="100" data-layoutsetting="edgeElasticity" /> </td><td><input id="coseedgeElasticity" data-layoutsetting="edgeElasticity" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Gravity</td><td><input id="cosegravityBox" class="numbox k-textbox" type="number" min="10" max="1000" value="80" data-layoutsetting="gravity" /> </td><td><input id="cosegravity" data-layoutsetting="gravity" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Number of iterations</td><td><input id="cosenumIterBox" class="numbox k-textbox" type="number" min="100" max="1000000" value="1000" data-layoutsetting="numIter" /> </td><td><input id="cosenumIter" data-layoutsetting="numIter" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Initial temperature</td><td><input id="coseinitialTempBox" class="numbox k-textbox" type="number" min="100" max="1000" value="200" data-layoutsetting="initialTemp" /> </td><td><input id="coseinitialTemp" data-layoutsetting="initialTemp" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Cooling factor</td><td><input id="cosecoolingFactorBox" class="numbox k-textbox" type="number" min="0.1" max="1" value="0.95" step="0.01" data-layoutsetting="coolingFactor" /> </td><td><input id="cosecoolingFactor" data-layoutsetting="coolingFactor" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Minimum temperature</td><td><input id="coseminTempBox" class="numbox k-textbox" type="number" min="1" max="900" value="1" data-layoutsetting="minTemp" /> </td><td><input id="coseminTemp" data-layoutsetting="minTemp" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Enable threading</td><td></td><td><input type='radio'  name="coseuseMultitasking" data-layoutsetting="useMultitasking" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="coseuseMultitasking" data-layoutsetting="useMultitasking" value="false" />false</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr id="cose-bilkent" class="hidden_layout_options lsettr">
+              <td colspan="3">
+                <table id="cose-bilkentLayoutTable">
+                  <tr>
+                    <td>Fit to viewport</td><td></td><td><input type='radio'  name="cose-bilkentfit" data-layoutsetting="fit" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="cose-bilkentfit" data-layoutsetting="fit" value="false" />false</td>
+                  </tr>
+                  <tr>
+                    <td>randomize before simulation</td><td></td><td><input type='radio'  name="cose-bilkentrandomize" data-layoutsetting="randomize" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="cose-bilkentrandomize" data-layoutsetting="randomize" value="false"/>false</td>
+                  </tr>
+                  <tr>
+                    <td>Node repulsion</td><td><input id="cose-bilkentnodeRepulsionBox" class="numbox k-textbox" type="number" min="1000" max="25000" value="4500" data-layoutsetting="nodeRepulsion" /> </td><td><input id="cose-bilkentnodeRepulsion" data-layoutsetting="nodeRepulsion" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Ideal edge length</td><td><input id="cose-bilkentidealEdgeLengthBox" class="numbox k-textbox" type="number" min="10" max="100" value="50" data-layoutsetting="idealEdgeLength" /> </td><td><input id="cose-bilkentidealEdgeLength" data-layoutsetting="idealEdgeLength" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Edge elasticity</td><td><input id="cose-bilkentedgeElasticityBox" class="numbox k-textbox" type="number" min="0.1" max="1" value="0.45" step="0.01" data-layoutsetting="edgeElasticity" /> </td><td><input id="cose-bilkentedgeElasticity" data-layoutsetting="edgeElasticity" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Gravity</td><td><input id="cose-bilkentgravityBox" class="numbox k-textbox" type="number" min="0.1" max="1" value="0.4" step="0.01" data-layoutsetting="gravity" /> </td><td><input id="cose-bilkentgravity" data-layoutsetting="gravity" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Number of iterations</td><td><input id="cose-bilkentnumIterBox" class="numbox k-textbox" type="number" min="1000" max="1000000" value="2500" data-layoutsetting="numIter" /> </td><td><input id="cose-bilkentnumIter" data-layoutsetting="numIter" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Enable tiling</td><td></td><td><input type='radio'  name="cose-bilkenttile" data-layoutsetting="tile" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="cose-bilkenttile" data-layoutsetting="tile" value="false" />false</td>
+                  </tr>
+                  <tr>
+                    <td>animate</td><td></td><td><input type='radio'  name="cose-bilkentanimate" data-layoutsetting="animate" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="cose-bilkentanimate" data-layoutsetting="animate" value="false" />false</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr id="dagre" class="hidden_layout_options lsettr">
+              <td colspan="3">
+                <table id="dagreLayoutTable">
+                  <tr>
+                    <td>Node separation</td><td><input id="dagrenodeSepBox" class="numbox k-textbox" type="number" min="10" max="100" value="20" data-layoutsetting="nodeSep" /> </td><td><input id="dagrenodeSep" data-layoutsetting="nodeSep" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Edge separation</td><td><input id="dagreedgeSepBox" class="numbox k-textbox" type="number" min="10" max="100" value="20" data-layoutsetting="edgeSep" /> </td><td><input id="dagreedgeSep" data-layoutsetting="edgeSep" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Rank separation</td><td><input id="dagrerankSepBox" class="numbox k-textbox" type="number" min="10" max="100" value="20" data-layoutsetting="rankSep" /> </td><td><input id="dagrerankSep" data-layoutsetting="rankSep" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Rank direction</td><td></td><td><input id="dagrerankDir" data-layoutsetting="rankDir" /></td>
+                  </tr>
+                  <tr>
+                    <td>Fit to viewport</td><td></td><td><input type='radio'  name="dagrefit" data-layoutsetting="fit" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="dagrefit" data-layoutsetting="fit" value="false" />false</td>
+                  </tr>
+                  <tr>
+                    <td>Animate</td><td></td><td><input type='radio'  name="dagreanimate" data-layoutsetting="animate" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="dagreanimate" data-layoutsetting="animate" value="false"/>false</td>
+                  </tr>
+                  <tr>
+                    <td>Animation duration</td><td><input id="dagreanimationDurationBox" class="numbox k-textbox" type="number" min="100" max="10000" value="4000" data-layoutsetting="animationDuration" /> </td><td><input id="dagreanimationDuration" data-layoutsetting="animationDuration" class="kslider" /> </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr id="grid" class="hidden_layout_options lsettr">
+              <td colspan="3">
+                <table id="gridLayoutTable">
+                  <tr>
+                    <td>Fit to viewport</td><td></td><td><input type='radio'  name="gridfit" data-layoutsetting="fit" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="gridfit" data-layoutsetting="fit" value="false" />false</td>
+                  </tr>
+                  <tr>
+                    <td>Prevent overlap</td><td></td><td><input type='radio'  name="gridavoidOverlap" data-layoutsetting="avoidOverlap" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="gridavoidOverlap" data-layoutsetting="avoidOverlap" value="false" />false</td>
+                  </tr>
+                  <tr>
+                    <td>animate</td><td></td><td><input type='radio'  name="gridanimate" data-layoutsetting="animate" value="true" />true &nbsp; &nbsp;<input type='radio'  name="gridanimate" data-layoutsetting="animate" value="false" checked />false</td>
+                  </tr>
+                  <tr>
+                    <td>Animation Duration</td><td><input id="gridanimationDurationBox" class="numbox k-textbox" type="number" min="100" max="10000" value="500" data-layoutsetting="animationDuration" /> </td><td><input id="gridanimationDuration" data-layoutsetting="animationDuration" class="kslider" /> </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <!-- <tr id="hiveplot" class="hidden_layout_options lsettr">
+              <td colspan="3">
+                <table id="hiveplotLayoutTable">
+                  <tr>
+                    <td>Fit to viewport</td><td></td><td><input type='radio'  name="hiveplotfit" data-layoutsetting="fit" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="hiveplotfit" data-layoutsetting="fit" value="false" />false</td>
+                  </tr>
+                  <tr>
+                    <td>Hive Plot Type</td><td></td><td><input id="hiveplothiveplotType" data-layoutsetting="hiveplotType" /></td>
+                  </tr>
+                  <tr>
+                    <td>Radius</td><td><input id="hiveplotradiusBox" class="numbox k-textbox" type="number" min="10" max="100" value="25" data-layoutsetting="radius" /> </td><td><input id="hiveplotradius" data-layoutsetting="radius" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Number Of Axes</td><td><input id="hiveplotnumberOfAxesBox" class="numbox k-textbox" type="number" min="3" max="24" value="3" data-layoutsetting="numberOfAxes" /> </td><td><input id="hiveplotnumberOfAxes" data-layoutsetting="numberOfAxes" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Axis Filter Type</td><td></td><td><input id="hiveplotaxisFilterType" data-layoutsetting="axisFilterType" /></td>
+                  </tr>
+                  <tr>
+                    <td>Axis Property</td><td></td><td><input id="hiveplotaxisProperty" data-layoutsetting="axisProperty" /></td>
+                  </tr>
+                  <tr>
+                    <td>Axis Sort Property</td><td></td><td><input id="hiveplotaxisSort" data-layoutsetting="axisSort" /></td>
+                  </tr>
+                  <tr>
+                    <td>Axis Sort Order</td><td></td><td><input id="hiveplotaxisSortDirection" data-layoutsetting="axisSortDirection" /></td>
+                  </tr>
+                </table>
+              </td>
+            </tr> -->
+            <tr id="random" class="lsettr">
+              <td colspan="3">
+                <table id="randomLayoutTable">
+                  <tr>
+                    <td>Fit to viewport</td><td></td><td><input type='radio'  name="randomfit" data-layoutsetting="fit" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="randomfit" data-layoutsetting="fit" value="false" />false</td>
+                  </tr>
+                  <tr>
+                    <td>animate</td><td></td><td><input type='radio'  name="randomanimate" data-layoutsetting="animate" value="true" />true &nbsp; &nbsp;<input type='radio'  name="randomanimate" data-layoutsetting="fit" value="false" checked />false</td>
+                  </tr>
+                  <tr>
+                    <td>Animation Duration</td><td><input id="randomanimationDurationBox" class="numbox k-textbox" type="number" min="100" max="1000" value="500" data-layoutsetting="animationDuration" /></td><td><input id="randomanimationDuration" data-layoutsetting="animationDuration" class="kslider" /> </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr id="spread" class="hidden_layout_options lsettr">
+              <td colspan="3">
+                <table id="spreadLayoutTable">
+                  <tr>
+                    <td>Animate</td><td></td><td><input type='radio'  name="spreadanimate" data-layoutsetting="animate" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="spreadanimate" data-layoutsetting="animate" value="false"/>false</td>
+                  </tr>
+                  <tr>
+                    <td>Fit to viewport</td><td></td><td><input type='radio'  name="spreadfit" data-layoutsetting="fit" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="spreadfit" data-layoutsetting="fit" value="false" />false</td>
+                  </tr>
+                  <tr>
+                    <td>Minimum distance</td><td><input id="spreadminDistBox" class="numbox k-textbox" type="number" min="10" max="50" value="20" data-layoutsetting="minDist" /> </td><td><input id="spreadminDist" data-layoutsetting="minDist" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Expanding factor</td><td><input id="spreadexpandingFactorBox" class="numbox k-textbox" type="number" min="-1" max="10" value="-1" data-layoutsetting="expandingFactor" /> </td><td><input id="spreadexpandingFactor" data-layoutsetting="expandingFactor" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Maximum Fruchterman-Reingold iterations</td><td><input id="spreadmaxFruchtermanReingoldIterationsBox" class="numbox k-textbox" type="number" min="10" max="250" value="50" data-layoutsetting="maxFruchtermanReingoldIterations" /> </td><td><input id="spreadmaxFruchtermanReingoldIterations" data-layoutsetting="maxFruchtermanReingoldIterations" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Maximum expand iterations</td><td><input id="spreadmaxExpandIterationsBox" class="numbox k-textbox" type="number" min="1" max="25" value="4" data-layoutsetting="maxExpandIterations" /> </td><td><input id="spreadmaxExpandIterations" data-layoutsetting="maxExpandIterations" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Randomize initial node positions</td><td></td><td><input type='radio'  name="spreadrandomize" data-layoutsetting="randomize" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="spreadrandomize" data-layoutsetting="randomize" value="false" />false</td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr id="springy" class="hidden_layout_options lsettr">
+              <td colspan="3">
+                <table id="springyLayoutTable">
+                  <tr>
+                    <td>Fit to viewport</td><td></td><td><input type='radio'  name="springyfit" data-layoutsetting="fit" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="springyfit" data-layoutsetting="fit" value="false" />false</td>
+                  </tr>
+                  <tr>
+                    <td>animate</td><td></td><td><input type='radio'  name="springyanimate" data-layoutsetting="animate" value="true" />true &nbsp; &nbsp;<input type='radio'  name="springyanimate" data-layoutsetting="fit" value="false" checked />false</td>
+                  </tr>
+                  <tr>
+                    <td>Continuous layout</td><td></td><td><input type='radio'  name="springyinfinite" data-layoutsetting="infinite" value="true" />true &nbsp; &nbsp;<input type='radio'  name="springyinfinite" data-layoutsetting="infinite" value="false" checked />false</td>
+                  </tr>
+                  <tr>
+                    <td>Maximum simulation time (ms)</td><td><input id="springymaxSimulationTimeBox" class="numbox k-textbox" type="number" min="1000" max="120000" value="4000" /> </td><td><input id="springymaxSimulationTime" data-layoutsetting="maxSimulationTime" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>randomize before simulation</td><td></td><td><input type='radio'  name="springyrandomize" data-layoutsetting="randomize" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="springyrandomize" data-layoutsetting="randomize" value="false"/>false</td>
+                  </tr>
+                  <tr>
+                    <td>Node repulsion</td><td><input id="springyrepulsionBox" class="numbox k-textbox" type="number" min="1" max="10000" value="400" data-layoutsetting="repulsion" /> </td><td><input id="springyrepulsion" data-layoutsetting="repulsion" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Edge stiffness</td><td><input id="springystiffnessBox" class="numbox k-textbox" type="number" min="1" max="10000" value="400" data-layoutsetting="stiffness" /> </td><td><input id="springystiffness" data-layoutsetting="stiffness" class="kslider" /> </td>
+                  </tr>
+                  <tr>
+                    <td>Damping factor</td><td><input id="springydampingBox" class="numbox k-textbox" type="number" min="0.1" max="1" value="0.5" step="0.01" data-layoutsetting="damping" /> </td><td><input id="springydamping" data-layoutsetting="damping" class="kslider" /> </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <!-- <tr id="jgraph" class="hidden_layout_options lsettr">
+              <td colspan="3">
+                <table id="jgraphLayoutTable">
+                  <tr>
+                    <td>Shader</td><td></td><td><input id="jgraphShader" data-layoutsetting="shader" /></td>
+                  </tr>
+                  <tr>
+                    <td>3d layout</td><td></td><td><input type='radio'  name="jgraphLayout" data-layoutsetting="runOptimization" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="jgraphLayout" data-layoutsetting="runOptimization" value="false" />false</td>
+                  </tr>
+                </table>
+              </td>
+            </tr> -->
+          </table>
+        </div>
+        <div id='charting' class='ss_button'>Charting</div>
+        <div class='ss_content'>
+          <table id="vizSettingsTable">
+            <tbody>
+              <tr class="hideRow">
+                <td>Show value distribution</td><td><input class="vizDistribution" type='radio'  name="distributionRadioButton" value="true" />yes &nbsp;&nbsp;<input class="vizDistribution" type='radio'  name="distributionRadioButton" value="false" checked />no</td>
+              </tr>
+              <tr>
+                <td>Log scale</td><td><input class="vizLogScale" type='radio'  name="logScale" value="true" />yes &nbsp;&nbsp;<input class="vizLogScale" type='radio'  name="logScale" value="false" checked />no</td>
+              </tr>
+              <tr>
+                <td>&nbsp;</td><td>&nbsp;</td>
+              </tr>
+              <tr>
+                <td>Chart type</td><td><input id="vizChartType" class="vizCombo" placeholder="Chart type" /> </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- <div id='graph_algorithms' class='ss_button'>Graph Algorithms</div>
+        <div class='ss_content'>
+          <p>hello</p>
+        </div> -->
       </div>
       <div id='logo_copyright'>
         <img id='cray_logo' alt="Cray logo" src="images/cray_logo.png" />
@@ -73,6 +564,128 @@
       <button class="c-hamburger c-hamburger--htx">
         <span>toggle menu</span>
       </button>
+    </div>
+    <span id="popupNotification"> </span>
+    <div id='alterNodesPopup'style='display: none;'></div>
+    <div id='new_database_popup'style='display: none;'>
+      <table id='new_db_config'>
+        <tbody>
+          <tr><td><label for='new_instances'>Instances per node</label></td><td><label for='new_nodes'>Number of nodes</label></td><td><label for='new_timeout'>Build timeout</label></td></tr>
+          <tr><td><input id='new_instances' name='new_instances' type='number'></td><td><input id='new_nodes' name='new_nodes' type='number'></td><td><input id='new_timeout' name='new_timeout' type='number'></td></tr>
+          <tr><td><label for='new_db_name'>Database Name</label></td><td><label for='new_nvps'>NVP's</label></td><td></td></tr>
+          <tr><td><input id='new_db_name' name='new_db_name' class='k-textbox'></td><td colspan="2"><input id='new_nvps' class='k-textbox' name='new_nvps' type='text'></td></tr>
+          <tr><td colspan='3'><input id="createDB" type="button" value="Build" class="k-button k-primary"></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div id="QuerySavePopup"style='display: none;'>
+      <form id="querySaveForm">
+        <table>
+          <tbody>
+            <tr>
+              <td><input id="queryName" class="querySaveFormWide k-textbox" type="text" name="queryName" placeholder="Query Name" /></td>
+            </tr>
+            <tr>
+              <td>Save Query to Shared Store?&nbsp;&nbsp;&nbsp;&nbsp;<input id="pqT" type="radio" name="privateQuery" value="true">true&nbsp;&nbsp;&nbsp;<input id="pqF" type="radio" name="privateQuery" value="false" checked>false</td>
+            </tr>
+            <tr>
+              <td><br /><input id="saveQ" class="querySaveFormWide k-button" type="submit" value="Save" /></td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+    </div>
+    <div id="websocketReconnect"style='display: none;'>
+      <p>Websocket connection has been closed due to inactivity.  Reconnect?</p>
+      <input id="websocketReconnectButtonYes" type="button" class="k-button" value="Yes"/>
+      <input id="websocketReconnectButtonNo" type="button" class="k-button" value="No" />
+    </div>
+    <div id="graphTooltip"style='display: none;'> </div>
+    <div id="graphHistogramsPopup"style='display: none;'>
+      <div id="histogramsWrapper"></div>
+    </div>
+    <div id="alterNodesPopup"style='display: none;'>
+      <div id="alterNodesContainer">
+        <table id="changeNodeSize">
+          <tbody>
+            <tr><td><h2>Change Node Size</h2></td></tr>
+            <tr><td><input type="radio" name="nodeSizeChange" value="attribute" checked /><label>&nbsp; Attribute &nbsp;&nbsp;</label><input type="radio" name="nodeSizeChange" value="constant" /><label>&nbsp; Constant</label></td></tr>
+            <tr id='changeNodeSizeComboBoxTr'><td><input id='changeNodeSizeCombobox' /></td></tr>
+            <tr id='changeNodeSizeNumboxTr'><td><input type='number' value='10' id='changeNodeSizeNumbox' class='k-textbox' /></td></tr>
+          </tbody>
+        </table>
+        <hr />
+        <table id="changeNodeColor">
+          <tbody>
+            <tr><td><h2>Change Node Color</h2></td></tr>
+            <tr><td><input type="radio"  name="nodeColorRange" value="numericAttribute" /><label>&nbsp; Numeric Attribute &nbsp;&nbsp;</label><input type="radio"  name="nodeColorRange" value="stringAttribute" /><label>&nbsp; String Attribute &nbsp;&nbsp;</label><input type="radio"  name="nodeColorRange" value="constant" checked /><label>&nbsp; Constant </label></td></tr>
+            <tr id="CNCNumericTr"><td>
+              <input id="CNCpropertyCombobox" />&nbsp;&nbsp;&nbsp;<input id="CNClowNumber" />&nbsp;&nbsp;&nbsp;<input id="CNChighNumber" />&nbsp;&nbsp;&nbsp;<input id='CNCnumericSubmit' type='button' class='k-button' value='Change' />
+            </td></tr>
+            <tr id="CNCStringTr"><td>
+              <table id='CNCstringPropertiesTable'>
+                <tbody>
+                  <tr><td><input id='CNCstringPropertyCombobox' /></td><td><input id='CNCstringPropertySubmit' type='button' class='k-button' value="change" /></td></tr>
+                </tbody>
+              </table>
+            </td></tr>
+            <tr id='CNCColorPickerTr'><td><input id="CNCColorPicker" /></td></tr>
+          </tbody>
+        </table>
+        <hr />
+        <table id="changeNodeShape">
+          <tbody>
+            <tr><td><h2>Change Node Shape</h2></td></tr>
+            <tr><td><input type="radio" name="nodeShapeChange" value="attribute" /><label>&nbsp;Attribute&nbsp;&nbsp;</label><input type="radio" name="nodeShapeChange" value="constant" checked /><label>&nbsp; Constant</label></td></tr>
+            <tr id="CNSStringTr"><td>
+              <table id='CNSstringPropertiesTable'>
+                <tbody>
+                  <tr><td><input id='CNSstringPropertyCombobox' /></td><td><input id='CNSstringPropertySubmit' type='button' class='k-button' value="change" /></td></tr>
+                </tbody>
+              </table>
+            </td></tr>
+            <tr id='CNSShapePickerTr'><td><input id="CNSShapePicker" /></td></tr>
+          </tbody>
+        </table>
+        <hr />
+        <table id="changeNodeImage">
+          <tr><td><h2>Change Node Image</h2></td></tr>
+          <tr id="CNIStringTr"><td>
+            <table id='CNIstringPropertiesTable'>
+              <tbody>
+                <tr><td><input id='CNIstringPropertyCombobox' /></td><td><input id='CNIstringPropertySubmit' type='button' class='k-button' value="change" /></td></tr>
+              </tbody>
+            </table>
+          </td></tr>
+        </table>
+        <!-- <hr />
+        <table id="changeEdgeColor">
+          <tbody>
+            <tr><td><h2>Change Edge Color</h2></td></tr>
+            <tr><td><input type="radio"  name="edgeColorRange" value="property" /><label>&nbsp; Edge property &nbsp;&nbsp;</label><input type="radio"  name="edgeColorRange" value="Constant" checked /><label>&nbsp; Constant</label></td></tr>
+            <tr></tr>
+            <tr></tr>
+          </tbody>
+        </table>
+        <hr />
+        <table id="changeEdgeWidth">
+          <tbody>
+            <tr><td><h2>Change Edge width</h2></td></tr>
+            <tr><td><input type="radio" name="edgeWidthChange" value="attribute" /><label>&nbsp; Attribute &nbsp;&nbsp;</label><input type="radio" name="edgeWidthChange" value="constant" checked /><label>&nbsp; Constant</label></td></tr>
+            <tr></tr>
+            <tr></tr>
+          </tbody>
+        </table>
+        <hr />
+        <table id="changeEdgeType">
+          <tbody>
+            <tr><td><h2>Change Edge type</h2></td></tr>
+            <tr><td><input type="radio" name="edgeTypeChange" value="attribute" /><label>&nbsp; Attribute &nbsp;&nbsp;</label><input type="radio" name="edgeTypeChange" value="constant" checked /><label>&nbsp; Constant</label></td></tr>
+            <tr></tr>
+            <tr></tr>
+          </tbody>
+        </table> -->
+      </div>
     </div>
   </body>
 </html>

@@ -21,10 +21,14 @@ use Net::EmptyPort;
 use Tie::Hash::Expire;
 use IPC::Cmd qw(can_run run);
 use File::Path::Tiny;
+use File::Find;
 use FindBin;
-use lib $FindBin::Bin.'/../cge_cli_wrapper';
+use Test::Deep::NoTest;
+use lib '/mnt/lustre/bossert/git';
+use CGE::cge_cli_wrapper::cge_utils qw(:ALL);
+use CGE::cge_cli_wrapper::cge_launch qw(:ALL);
 
-no warnings 'recursion';
+no warnings 'File::Find';
 use File::Basename;
 ## no critic qw(RegularExpressions::RequireExtendedFormatting)
 
@@ -164,13 +168,12 @@ post '/bonafides' => sub {
 
   #=+ Weed out anyone on the blacklist
   if (exists $blacklist{$creds->{'user'}}) {
-    $self->flash(message => 'User has been blocked due to excessive failed login attempts, try again in an hour or so!');
     $self->session(expires => 1);
-    $self->rendered(404);
+    $self->render(text => 'User has been blocked due to excessive failed login attempts, try again in an hour or so!', status => 403);
   }
   #=+ Now check credentials
   elsif (_authenticate($creds->{'user'},$creds->{'pass'}) == 1) {
-    $self->session('failcount' => 0, 'uid' => $creds->{'user'}, 'last_login' => time);
+    $self->session('failcount' => 0, 'username' => $creds->{'user'}, 'last_login' => time);
     $self->rendered(200);
   }
   else {
@@ -197,7 +200,7 @@ post '/bonafides' => sub {
 group {
   under sub {
     my $self = shift;
-    return 1 if $self->session('uid');
+    return 1 if $self->session('username');
     $self->redirect_to('login');
   };
 
@@ -228,27 +231,23 @@ group {
     }
   };
 
-  #=+ Let the app see how many nodes are available
-  websocket '/sinfo' => sub{
+  get 'graph_icon_list' => sub {
     my $self = shift;
-    $self->stash('gzip' => 1);
+    opendir(my $dir, $root_directory.'public/graph_icons');
+    my @imageFiles = grep { !/^\./ && /\.(jpg|jpeg|png|svg|gif)$/ } readdir $dir;
+    @imageFiles = sort {$a cmp $b} @imageFiles;
+    closedir($dir);
 
-    #=+ Set retrieve interval for the loop
-    my $interval = 5;
-
-    my $id = Mojo::IOLoop->recurring($interval => sub {
-
-      my $sinfo_json = sinfo();
-      $self->send(json => $sinfo_json);
-    });
-
-    $self->on(finish => sub {
-      $log->info('[sinfo] websocket connection closed');
-      Mojo::IOLoop->remove($id);
-    });
+    my @filesToSend = ();
+    foreach my $file(@imageFiles) {
+      my $name=$file; my $url='graph_icons/'.$file;
+      $name =~ s/\.[^\.]{3,5}$//;
+      push @filesToSend, { 'name' => $name, 'url' => $url };
+    }
+    $self->render(json => \@filesToSend);
   };
 
-  get '/list' => sub {
+  get '/list_databases' => sub {
     my $self = shift;
     my $qparams=$self->req->query_params->to_hash;
     my $root;
@@ -257,8 +256,306 @@ group {
     }
 
     #my $dirlist = _list_directory($root);
-    my $stuff = scan('/mnt/lustre/bossert');
+    my $stuff = _list_databases($root,$self->session('username'));
     $self->render(json => $stuff);
+  };
+
+  get '/list_NT_files' => sub {
+    my $self = shift;
+    my $qparams=$self->req->query_params->to_hash;
+    my $root;
+    if(exists $qparams->{search_root}) {
+      $root = $qparams->{search_root};
+    }
+
+    #my $dirlist = _list_directory($root);
+    my $stuff = _list_NT_files($root,$self->session('username'));
+    $self->render(json => $stuff);
+  };
+
+  get '/sinfo' => sub {
+    my $self = shift;
+    my $sinfo_json = sinfo();
+    $self->render(json => $sinfo_json);
+  };
+
+  get '/squeue' => sub {
+    my $self = shift;
+    $self->stash('gzip' => 1);
+    my $queue = squeue();
+    $self->render(json => $queue);
+  };
+
+  #=+ Let the app see how many nodes are available
+  websocket '/sinfo_ws' => sub {
+    my $self = shift;
+    $self->stash('gzip' => 1);
+
+    #=+ Set retrieve interval for the loop
+    my $interval = 5;
+
+    my $id = Mojo::IOLoop->recurring($interval => sub {
+
+      my $sinfo = sinfo();
+      my $sinfo_json = encode_json($sinfo);
+      $self->send($sinfo_json);
+    });
+
+    $self->on(finish => sub {
+      $log->info('[sinfo] websocket connection closed');
+      Mojo::IOLoop->remove($id);
+    });
+  };
+
+  websocket '/squeue_ws' => sub {
+    my $self = shift;
+    $self->stash('gzip' => 1);
+
+    #=+ Set retrieve interval for the loop
+    my $interval = 5;
+
+    my $id = Mojo::IOLoop->recurring($interval => sub {
+
+      my $queue = squeue();
+      my $queue_json = encode_json($queue);
+      $self->send($queue_json);
+    });
+
+    $self->on(finish => sub {
+      $log->info('[squeue] websocket connection closed');
+      Mojo::IOLoop->remove($id);
+    });
+  };
+
+  websocket '/filesystem_changes' => sub {
+    my $self = shift;
+    $self->stash('gzip' => 1);
+
+    my $old_nt_files = '';
+    my $old_databases = '';
+    my $interval = 5;
+    my $id = Mojo::IOLoop->recurring($interval => sub {
+      my $nt_files = _list_NT_files(undef,$self->session('username'));
+      my $databases = _list_databases(undef,$self->session('username'));
+
+      if(eq_deeply($nt_files,$old_nt_files)) {
+        $old_nt_files = $nt_files;
+        $self->send('no change');
+      }
+      else {
+        $old_nt_files = $nt_files;
+        $self->send('nt file changes');
+      }
+
+      if(eq_deeply($databases,$old_databases)) {
+        $old_databases = $databases;
+        $self->send('no change');
+      }
+      else {
+        $old_databases = $databases;
+        $self->send('database changes');
+      }
+    });
+
+    $self->on(finish => sub {
+      $log->info('[filesystem_changes] websocket connection closed');
+      Mojo::IOLoop->remove($id);
+    });
+  };
+
+  post 'start_db' => sub {
+    my $self = shift;
+    my $qparams = $self->req->body_params->to_hash;
+
+    if(exists $qparams->{dataDir} && exists $qparams->{imagesPerNode} && exists $qparams->{nodeCount}) {
+      #=+ If we have a startup timeout, go ahead and adjust the session timeout accordingly
+      if(exists $qparams->{startupTimeout} && $qparams->{startupTimeout} ne '') {
+        Mojo::IOLoop->stream($self->tx->connection)->timeout($qparams->{startupTimeout});
+      }
+
+      my($pid,$port) = cge_start($qparams);
+      if($pid && $port) {
+        $self->session(current_pid => $pid, current_port => $port, current_database => $qparams->{dataDir});
+        $self->render(json => {pid => $pid, port => $port});
+      }
+      else {
+        $log->error('[start_db] Failed to start database.');
+        $self->rendered(text => 'Failed to start database',status => 500);
+      }
+    }
+    else {
+      $log->error('[start_db] Missing required parameters to build database.');
+      $self->render(text => 'Missing required parameters to build database.', status => 500);
+    }
+  };
+
+  get 'stop_db' => sub {
+    my $self = shift;
+    if($self->session('current_database') && $self->session('current_port')) {
+      my $success = cge_stop_graceful($self->session('current_port'),$self->session('current_database'));
+      if($success) {
+        $self->rendered(200);
+      }
+      else {
+        $log->error('[stop_db] Failed to stop database: '.$self->session('current_database'));
+        $self->render(text => 'Failed to stop database',status => 500);
+      }
+    }
+    else {
+      $log->error('[stop_db] Failed to stop database');
+      $self->render(text => 'Failed to stop database',status => 500);
+    }
+  };
+
+  post 'build_db' => sub {
+    my $self = shift;
+    my $qparams = $self->req->body_params->to_hash;
+
+    if($self->session('username') eq (getpwuid($<))[0]) {
+
+      if(exists $qparams->{'name'} && exists $qparams->{'imagesPerNode'} && exists $qparams->{'nodeCount'}) {
+        #=+ Create the needed directories if they don't exist
+        mkdir '/mnt/lustre/'.$self->session('username') unless -d '/mnt/lustre/'.$self->session('username');
+        mkdir '/mnt/lustre/'.$self->session('username').'/'.$qparams->{name} unless -d '/mnt/lustre/'.$self->session('username').'/'.$qparams->{name};
+        $qparams->{dataDir} = '/mnt/lustre/'.$self->session('username').'/'.$qparams->{name};
+        open(my $FH,'>','/mnt/lustre/'.$self->session('username').'/'.$qparams->{name}.'/graph.info');
+
+        if(ref($qparams->{'files[]'}) eq 'ARRAY') {
+          foreach my $file(@{$qparams->{'files[]'}}) {
+            say {$FH} $file;
+          }
+        }
+        elsif($qparams->{'files[]'} ne '') {
+          say {$FH} $qparams->{'files[]'};
+        }
+        else {
+          $self->render(text => 'No input files provided to build database.',status => 500);
+        }
+        close($FH);
+
+        #=+ If we have a startup timeout, go ahead and adjust the session timeout accordingly
+        if(exists $qparams->{startupTimeout} && $qparams->{startupTimeout} ne '') {
+          Mojo::IOLoop->stream($self->tx->connection)->timeout($qparams->{startupTimeout});
+        }
+
+        my($pid,$port) = cge_start($qparams);
+        if($pid && $port) {
+          $self->session(current_pid => $pid, current_port => $port, current_database => $qparams->{dataDir});
+          $self->render(json => {pid => $pid, port => $port, current_database => $qparams->{dataDir}});
+        }
+        else {
+          $log->error('[build_db] Failed to start database.');
+          $self->rendered(text => 'Failed to start database',status => 500);
+        }
+      }
+      else {
+        $log->error('[build_db] Missing required parameters to build database.');
+        $self->render(text => 'Missing required parameters to build database.', status => 500);
+      }
+    }
+    else {
+      $log->error('[build_db] user '.$self->session('username').' was prevented from creating a database ('.$qparams->{'name'}.').  Only the the user who launched the web-application may build a new database.');
+      $self->render(text => 'Unauthorized:  Only the the user who launched the web-application may build a new database.', status => 403);
+    }
+  };
+
+  #=+ Later on the roadmap, we will revisit alowing users to admin databases in a session not started by them.
+  get 'UAC_CRUD_service' => sub {
+    my $self = shift;
+    my $qparams=$self->req->query_params->to_hash;
+    if($self->session('username') eq (getpwuid($<))[0]) {
+      my $output_ref = _list_database_permissions();
+      $self->render(json => $output_ref);
+    }
+    else {
+      $log->error('[UAC_CRUD_service] user '.$self->session('username').' was prevented from accessing database permissions.  Only the the user who launched the web-application may alter database permissions.');
+      $self->render(text => 'Unauthorized:  Only the the user who launched the web-application may alter database permissions.', status => 403);
+    }
+  };
+  post 'UAC_CRUD_service_create' => sub {
+    my $self = shift;
+    my $p = $self->req->body_params->to_hash;
+    my $json = decode_json($p->{models});
+    say Dumper($p);
+    my $qparams = $json->[0];
+    say Dumper($qparams);
+    if($self->session('username') eq (getpwuid($<))[0]) {
+      $qparams->{database} .= '/' unless $qparams->{database} =~ /\/$/;
+      my %newuser = (
+        username    => $qparams->{username},
+        database    => $qparams->{database},
+        permissions => $qparams->{permissions}->{permissions}
+      );
+      my $success = add_user(\%newuser);
+
+      if($success) {
+        $self->render(json => []);
+      }
+      else {
+        $self->render(text => 'Could not create new user.', status => 500);
+      }
+    }
+    else {
+      $log->error('[UAC_CRUD_service_create] user '.$self->session('username').' was prevented from accessing database permissions.  Only the the user who launched the web-application may alter database permissions.');
+      $self->render(text => 'Unauthorized:  Only the the user who launched the web-application may alter database permissions.', status => 403);
+    }
+  };
+  post 'UAC_CRUD_service_update' => sub {
+    my $self = shift;
+    my $p = $self->req->body_params->to_hash;
+    my $json = decode_json($p->{models});
+    say Dumper($p);
+    my $qparams = $json->[0];
+    say Dumper($qparams);
+    if($self->session('username') eq (getpwuid($<))[0]) {
+      $qparams->{database} .= '/' unless $qparams->{database} =~ /\/$/;
+      my %changes = (
+        action      => 'modify',
+        username    => $qparams->{username},
+        database    => $qparams->{database},
+        permissions => $qparams->{permissions}
+      );
+
+      my $success = modify_user(\%changes);
+      if($success) {
+        $self->render(json => []);
+      }
+      else {
+        $self->render(text => 'Could not modify user.', status => 500);
+      }
+    }
+    else {
+      $log->error('[UAC_CRUD_service_update] user '.$self->session('username').' was prevented from accessing database permissions.  Only the the user who launched the web-application may alter database permissions.');
+      $self->render(text => 'Unauthorized:  Only the the user who launched the web-application may alter database permissions.', status => 403);
+    }
+  };
+  post 'UAC_CRUD_service_destroy' => sub {
+    my $self = shift;
+    my $p = $self->req->body_params->to_hash;
+    my $json = decode_json($p->{models});
+    say Dumper($p);
+    my $qparams = $json->[0];
+    say Dumper($qparams);
+    if($self->session('username') eq (getpwuid($<))[0]) {
+      $qparams->{database} .= '/' unless $qparams->{database} =~ /\/$/;
+      my %delete = (
+        action   => 'revoke',
+        username => $qparams->{username},
+        database => $qparams->{database}
+      );
+
+      my $success = modify_user(\%delete);
+      if($success) {
+        $self->render(json => []);
+      }
+      else {
+        $self->render(text => 'Could not modify user.', status => 500);
+      }
+    }
+    else {
+      $log->error('[UAC_CRUD_service_destroy] user '.$self->session('username').' was prevented from accessing database permissions.  Only the the user who launched the web-application may alter database permissions.');
+      $self->render(text => 'Unauthorized:  Only the the user who launched the web-application may alter database permissions.', status => 403);
+    }
   };
 };
 
@@ -418,62 +715,157 @@ sub _checkDirectories {
   return 1;
 }
 
-sub _list_directory {
-  my($root) = @_;
+sub _list_database_permissions {
+  my $root = '/mnt/lustre';
+  my @userperms;
 
-  #=+ If no starting point is specified use '/'
-  $root = '/' unless defined $root;
-
-  opendir(my $DIR, $root);
-  my @dirlist;
-  while(my $item = readdir $DIR) {
-    my %temp;
-    if(-d $root.'/'.$item) {
-      #=+ For directories, we go one deeper to keep a balance of performance vs. fewer calls
-      opendir(my $SUB, $root.'/'.$item);
-      my @subdir;
-      while(my $subitem = readdir $SUB) {
-        my %tempsub;
-        if(-d $root.'/'.$item.'/'.$subitem) {
-          %tempsub = (
-            name     => $subitem,
-            path     => $root.'/'.$item.'/'.$subitem,
-            type     => 'directory',
-            contents => []
-          ) unless $subitem =~ /^\.+$/;
+  find(sub {
+    if($File::Find::name =~ /dbQuads$/ && -O $File::Find::name) {
+      my $authorized_users_dir = $File::Find::dir.'/.cge_web_ui/authorized_users/';
+      my $dbname = $1 if $File::Find::dir =~ /\/([^\/]+)$/;
+      my @auth_users;
+      if(-d $authorized_users_dir) {
+        opendir(my $directory, $authorized_users_dir);
+        while(my $f = readdir $directory) {
+          next unless -d $authorized_users_dir.$f;
+          if(-e $authorized_users_dir.$f.'/properties.yaml') {
+            my $perms_config = YAML::AppConfig->new(file => $authorized_users_dir.$f.'/properties.yaml');
+            my %temp_user = (
+              id            => $perms_config->config->{database}.$perms_config->config->{username},
+              username      => $perms_config->config->{username},
+              permissions   => $perms_config->config->{permissions},
+              created       => $perms_config->config->{created},
+              last_modified => $perms_config->config->{last_modified},
+              database      => $perms_config->config->{database}
+            );
+            push @userperms, \%temp_user;
+          }
         }
-        else {
-          %tempsub = (
-            name => $subitem,
-            path => $root.'/'.$item.'/'.$subitem,
-            type => 'file',
-            size => -s $root.'/'.$item.'/'.$subitem
-          ) if $subitem =~ /\.nt$|^dbQuads$|^graph.info$|^string_table_chars.index$|^string_table_chars$|\.rq$|\.ru$/;
-        }
-        push @subdir, \%tempsub if %tempsub;
+        closedir($directory);
       }
-      closedir $SUB;
-
-
-      %temp = (
-        name     => $item,
-        path     => $root.'/'.$item,
-        type     => 'directory',
-        contents => \@subdir
-      ) unless $item =~ /^\.+$/;
     }
-    else {
-      %temp = (
-        name => $item,
-        path => $root.'/'.$item,
-        type => 'file',
-        size => -s $root.'/'.$item
-      ) if $item =~ /\.nt$|^dbQuads$|^graph.info$|^string_table_chars.index$|^string_table_chars$|\.rq$|\.ru$/;
+  },$root);
+  return \@userperms;
+}
+
+sub _list_NT_files {
+  my($root,$current_user) = @_;
+  $root = '/mnt/lustre' unless defined $root;
+
+  my @output;
+  find(sub {
+    if($File::Find::name =~ /\.nt$/) {
+      return unless defined ((stat $File::Find::name)[4]);
+      my $user = (getpwuid ((stat $File::Find::name)[4]))[0];
+      my $name = $1 if $File::Find::name =~ /\/([^\/]+)$/;
+      my $size = -s $File::Find::name;
+
+      my $index = 0;
+      my $found;
+      foreach my $match(@output) {
+        if($match->{name} eq $File::Find::dir) {
+          $found = 1;
+          last;
+        }
+        $index++;
+      }
+
+      if($found) {
+        my %temp = (
+          owner         => $user,
+          size          => _file_size($size),
+          bytes         => $size,
+          name          => $name,
+          directory     => $File::Find::dir,
+          path          => $File::Find::name,
+          hasFiles      => 0,
+          last_modified => strftime("%Y-%m-%d %H:%M:%S",localtime((stat $File::Find::name)[9]))
+        );
+        push @{$output[$index]->{files}}, \%temp;
+      }
+      else {
+        my %temp = (
+          name      => $File::Find::dir,
+          directory => $File::Find::dir,
+          hasFiles  => 1,
+          files     => [
+            {
+              owner         => $user,
+              size          => _file_size($size),
+              bytes         => $size,
+              name          => $name,
+              directory     => $File::Find::dir,
+              path          => $File::Find::name,
+              last_modified => strftime("%Y-%m-%d %H:%M:%S",localtime((stat $File::Find::name)[9]))
+            }
+          ],
+        );
+        push @output, \%temp;
+      }
     }
-    push @dirlist, \%temp if %temp;
-  }
-  closedir($DIR);
-  return \@dirlist;
+  },$root);
+  return \@output;
+}
+
+sub _list_databases {
+  my($root,$current_user) = @_;
+  $root = '/mnt/lustre' unless defined $root;
+
+  my @output;
+  find(sub {
+    if($File::Find::name =~ /dbQuads$/) {
+      return unless defined ((stat $File::Find::dir)[4]);
+      my $user = (getpwuid ((stat $File::Find::dir)[4]))[0];
+      my $name = $1 if $File::Find::dir =~ /\/([^\/]+)$/;
+
+      #=+ Apart from just having UNIX permissions to read the database, if the database is owned by another user,
+      #   then the current user must also have SSH keys set up to allow them to actually run the database.
+      return if ($current_user ne $user && !-e $File::Find::dir.'/.cge_web_ui/authorized_users/'.$current_user.'/id_rsa');
+
+      #=+ Would like to know how big the directory contents are
+      my $size = 0;
+      find(sub {
+        if(-f $_ && $_ =~ /^dbQuads$|^string_table_chars.index$|^string_table_chars$/) {
+          $size += -s $_;
+        }
+      },$File::Find::dir);
+
+      #=+ If any authorized uses have been added, then capture that information here
+      my $authorized_users_dir = $File::Find::dir.'/.cge_web_ui/authorized_users/';
+      my @auth_users;
+      if(-d $authorized_users_dir) {
+        opendir(my $directory, $authorized_users_dir);
+        while(my $f = readdir $directory) {
+          next unless -d $authorized_users_dir.$f;
+          if(-e $authorized_users_dir.$f.'/properties.yaml') {
+            my $perms_config = YAML::AppConfig->new(file => $authorized_users_dir.$f.'/properties.yaml');
+            my %temp_user = (
+              username      => $perms_config->config->{username},
+              permissions   => $perms_config->config->{permissions},
+              created       => $perms_config->config->{created},
+              last_modified => $perms_config->config->{last_modified},
+              database      => $perms_config->config->{database}
+            );
+            push @auth_users, \%temp_user;
+          }
+        }
+        closedir($directory);
+      }
+
+      my %temp = (
+        owner            => $user,
+        size             => _file_size($size),
+        bytes            => $size,
+        name             => $name,
+        path             => $File::Find::dir,
+        hasFiles         => undef,
+        authorized_users => \@auth_users,
+        last_modified    => strftime("%Y-%m-%d %H:%M:%S",localtime((stat $File::Find::dir)[9]))
+      );
+      push @output, \%temp;
+    }
+  },$root);
+  return \@output;
 }
 
 #=+ Read in our configuration file
@@ -517,68 +909,21 @@ sub _config_init {
     }
 
     #=+ Use next available port
-    #say 'Port '.$oldPort.' is already in use, will use the next available port: '.$freePort;
     $yaml_config->config->{'port'} = $freePort;
   }
-
-
-
-  #=+ Need to alter the main javascript file to use the desired backend server name and port
-  #my $javascript_file_name = $root_directory.'public/js/analytics_ui.js';
-  #if(-e $javascript_file_name && -r _ && -w _) {
-  #  my $javascript_file = read_file($javascript_file_name);
-  #  my $host_port = $yaml_config->config->{'host'}.':'.$yaml_config->config->{'port'};
-  #  $javascript_file =~ s/var backend \= \"[^"]+\"/var backend \= \"$host_port\"/;
-  #  open(my $JS_FILE,'>',$javascript_file_name);
-  #  say {$JS_FILE} $javascript_file;
-  #  close($JS_FILE);
-  #}
-  #else {
-  #  $log->fatal('Could not initialize application: javascript file does not exist or has permissions issues: '.$javascript_file_name);
-  #  croak 'Could not initialize application: javascript file does not exist or has permissions issues: '.$javascript_file_name;
-  #}
   return $yaml_config;
 }
 
-sub scan { _scan($_[0], basename($_[0])) if %$_[0] }
+sub _file_size {
+  my($num) = @_;
+  my $string;
 
-sub _scan {
-  my ($qfn, $fn) = @_;
-  say 'QFN: '.$qfn;
-  if(!-d $qfn && $qfn !~ /\.nt$|^dbQuads$|^graph.info$|^string_table_chars.index$|^string_table_chars$|\.rq$|\.ru$/) {
-    return;
-  }
-  my $node = { name => $fn };
-  lstat($qfn) or return;
-
-  my $size   = -s _;
-  my $is_dir = -d _;
-
-  if ($is_dir) {
-    my @child_fns = do {
-       opendir(my $dh, $qfn)
-          or die $!;
-
-       grep !/^\.\.?\z/, readdir($dh);
-    };
-
-    my @children;
-    for my $child_fn (@child_fns) {
-       my $child_node = _scan("$qfn/$child_fn", $child_fn);
-       $size += $child_node->{size};
-       push @children, $child_node;
-    }
-
-    $node->{contents} = \@children;
-  }
-
-  $node->{size} = $size;
-  if(%$node) {
-    return $node;
-  }
-  else {
-    return;
-  }
+  if   ($num >= 1000**5) { $string = sprintf('%.3f',($num / 1000**5)).' PB'; return $string; }
+  elsif($num >= 1000**4) { $string = sprintf('%.3f',($num / 1000**4)).' TB'; return $string; }
+  elsif($num >= 1000**3) { $string = sprintf('%.3f',($num / 1000**3)).' GB'; return $string; }
+  elsif($num >= 1000**2) { $string = sprintf('%.3f',($num / 1000**2)).' MB'; return $string; }
+  elsif($num >= 1000)    { $string = sprintf('%.3f',($num / 1000)).' KB'; return $string; }
+  else                   { $string .= ' B'; return $num; }
 }
 
 #=+ Finally, let's get started!

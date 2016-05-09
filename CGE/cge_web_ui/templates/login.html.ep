@@ -18,7 +18,7 @@
         <img id='cray_logo' alt="Cray logo" src="images/Cray_logo.svg" />
         <h1 id='form_title'>Graph Engine (CGE)<sup>&reg;</sup></h1>
         <form id='form_login' method='post'>
-          <input id='form_user' name='user' class='k-textbox' type='text' placeholder='Username' required >
+          <input id='form_user' name='user' class='k-textbox' type='text' placeholder='Username' required autofocus="autofocus">
           <input id='form_pass' name='pass' class='k-textbox' type='password' placeholder='Password' required >
           <input id='form_submit' class='k-button' type='submit' value='Log In'>
         </form>

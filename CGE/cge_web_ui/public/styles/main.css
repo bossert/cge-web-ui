@@ -27,6 +27,14 @@ body {
   transition: left 1s;
 }
 
+#menu_container {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  max-height: 80vh;
+  overflow-y: scroll;
+}
+
 #content_area {
   position: fixed;
   left: 0;
@@ -139,21 +147,43 @@ body {
 }
 
 /* Accordion Menu */
-.ss_button { 
+.ss_button {
 	background-color: #005696;
 	border-bottom: 1px solid #EFEFEF;
 	cursor: pointer;
-	padding: 15px;
+	padding: 10px;
 	color: #FFFFFF;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: bold;
 }
-	
+
 .ss_content {
 	background-color: #EFEFEF;
 	display: none;
 	padding: 10px;
+  margin: 0;
   box-shadow: inset -3px 3px 10px -5px rgba(0,0,0,0.8);
+  max-height: 400px;
+  overflow-y: scroll;
+  width: calc(100% - 20px);
+  font-size: 0.85em;
+  margin: 0;
+}
+
+#uac_container {
+  margin: 0;
+}
+
+#user_permissions_grid {
+  /*margin-left: -10px;*/
+  /*margin-top: -10px;
+  margin-bottom: -10px;*/
+  width: 100%;
+}
+
+#treeview_display {
+  height: 320px;
+  overflow-y: scroll;
 }
 
 /* Footer with Cray logo at bottom of slide out menu */
@@ -195,4 +225,150 @@ body {
 
 #copyright {
   margin-left: 10px;
+}
+
+.sysinfo_tables {
+  width: calc(100% - 10px);
+  margin-top: 5px;
+  margin-bottom: 30px;
+}
+
+#queue_title {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+#current_db thead {
+  font-size: 1em;
+  font-weight: bold;
+  text-align: left;
+}
+
+#current_queue thead {
+  font-size: 1em;
+  font-weight: bold;
+  text-align: left;
+}
+
+#current_db td:first {
+  width: 85%;
+}
+
+#current_db td:last {
+  width: 15%;
+}
+
+.widecombobox .k-widget.k-combobox {
+  width: 100%;
+  padding: 0;
+}
+
+#db_config input {
+  width: 100%;
+}
+
+#treeViewSearchInput {
+  width: 40%;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+span.k-in > span.highlight {
+    background: #A19FA1;
+    color: #FFFFFF;
+    padding: 1px;
+}
+
+.hidden_popups {
+  display: none;
+}
+
+.inner_menu_containers {
+  width: 100%;
+}
+
+.tableH3 {
+	padding: 0;
+	margin: 0;
+}
+
+.tableH3 h3 {
+	font-family: 'fira';
+	font-size: 1.1em;
+}
+
+#new_db_config input {
+  width: 100%;
+}
+
+#createDB {
+  margin-top: 20px;
+}
+
+#new_db {
+  width: 100%;
+}
+
+.hidden_layout_options {
+	display: none;
+}
+
+#graphTooltip td {
+	word-break: break-all;
+	word-wrap: break-word;
+}
+
+/* Well, it's a little hacky right now, but need to force the pan-zoom widget to the bottom-right corner */
+.cy-panzoom {
+	position: fixed !important;
+	bottom: 230px !important;
+	right: 55px !important;
+}
+
+.k-tooltip {
+	background: rgba(0,0,0,0.7) !important;
+}
+
+.yasqe_buttons {
+  display: none;
+}
+
+.CodeMirror-line {
+  left: 30px;
+}
+
+#dummyContainer1 .k-combobox {
+	width: calc(50% - 2px);
+	margin: 10px 0 0 0;
+}
+
+#dummyContainer1 .k-button {
+  width: 25%;
+  margin: 5px 0 5px 0;
+}
+
+#querySubmitButton {
+  width: 100%;
+  margin-top: 5px;
+}
+
+#resultsGrid {
+	font-size: 0.8em !important;
+}
+
+#clearHistory {
+	float: right;
+	margin-right: 12px;
+}
+
+.graphHistograms {
+	height: 200px;
+}
+
+.graphHistogramCharts {
+	height: 200px;
+}
+
+.numbox {
+	width: 70px;
 }

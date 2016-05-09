@@ -10,7 +10,7 @@ use Net::EmptyPort qw(check_port);
 use File::Tail;
 use POSIX;
 require Exporter;
-
+use Data::Dumper;
 our $VERSION = 0.01;
 
 our @ISA = qw(Exporter);
@@ -28,8 +28,8 @@ sub cge_start {
   #=+ We need to put all our command-line arguments in a hash and we are defining the known keys
   my %arguments = (
     dataDir        => '', #=+ mandatory
-    resultDir      => '',
-    logFile        => '',
+    resultDir      => '', #=+ mandatory
+    logFile        => '', #=+ mandatory
     queryPort      => '',
     configFile     => '',
     inRPNmsg       => '',
@@ -42,7 +42,7 @@ sub cge_start {
     imagesPerNode  => '', #=+ mandatory
     nodeCount      => '', #=+ mandatory
     runOpts        => '',
-    startupTimeout => '',
+    startupTimeout => '3600',
     cleanupScript  => '',
     partition      => ''
   );
@@ -57,7 +57,7 @@ sub cge_start {
   #=+ iterate over provided config and replace defaults
   while(my($k,$v) = each %$arg_ref) {
     #=+ Replace each default value if the key exists.  Perhaps paranoid, but prevent arbitrary/unexpected settings
-    $arguments{$k} = $v if exists $arguments{$k};
+    $arguments{$k} = $v if (exists $arguments{$k} && $v ne '' && defined $v);
   }
 
   #=+ Make sure we have a bare minimum of settings
@@ -66,6 +66,9 @@ sub cge_start {
   #=+ Create the results directory
   #   make sure that our directory has a trailing slash "/"
   $arguments{dataDir} .= '/' unless $arguments{dataDir} =~ m/\/$/;
+
+  #=+ Create the CGE subdirectory
+  mkdir $arguments{dataDir}.'.cge_web_ui', 0744 unless -d $arguments{dataDir}.'.cge_web_ui';
 
   #=+ Create the results directory if it does not exist
   mkdir $arguments{dataDir}.'.cge_web_ui/results', 0744 unless -d $arguments{dataDir}.'.cge_web_ui/results';
@@ -113,26 +116,25 @@ sub cge_start {
     last if $line =~ /Starting port forwarding/;
   }
 
-  open(my $CU,'<',$arguments{cleanupScript}) or croak $!;
-  my $text = <$CU>;
-  close($CU);
-
   my $pid;
-  if($text =~ /scancel (\d+)/m) {
-    $pid = $1;
+  open(my $CU,'<',$arguments{cleanupScript}) or croak $!;
+  while(my $l = <$CU>) {
+    if($l =~ /scancel (\d+)/) {
+      $pid = $1;
+    }
   }
   return ($pid,$port);
 }
 
 sub cge_stop_graceful {
   #=+ For the most part, we would want to attempt a graceful shutdown
-  my($port) = @_;
-  my $success = run(command => $cge_cli.' shutdown --dbport '.$port.' > '.$arguments{dataDir}.'.cge_web_ui/temp/'.$stop_stdout_file.' 2>&1 &', verbose => 0);
+  my($port,$dir) = @_;
+  my $success = run(command => $cge_cli.' shutdown --dbport '.$port.' > '.$dir.'/.cge_web_ui/temp/graceful_stop.txt 2>&1 &', verbose => 0);
 
   #=+ Something went wrong, so just return undef;
   return undef unless $success;
 
-  my $file = File::Tail->new($arguments{dataDir}.'.cge_web_ui/temp/'.$stop_stdout_file);
+  my $file = File::Tail->new($dir.'/.cge_web_ui/temp/graceful_stop.txt');
   while(my $line = $file->read) {
     last if $line =~ /Server shutdown as requested/;
   }
