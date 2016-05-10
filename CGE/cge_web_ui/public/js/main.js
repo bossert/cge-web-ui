@@ -676,7 +676,6 @@ $(function() {
   // Graph (cytoscape.js) settings
   // Iterate over sliders
   $('.kslider').each(function(index,obj) {
-    console.log(this);
   	var value = Number($('#'+$(this).attr('id')+'Box').attr('value'));
   	var min = Number($('#'+$(this).attr('id')+'Box').attr('min'));
   	var max = Number($('#'+$(this).attr('id')+'Box').attr('max'));

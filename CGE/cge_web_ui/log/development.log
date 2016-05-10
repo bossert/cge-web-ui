@@ -10484,3 +10484,1605 @@
 [Mon May  9 01:54:43 2016] [debug] Routing to a callback
 [Mon May  9 01:54:43 2016] [debug] Routing to a callback
 [Mon May  9 01:54:44 2016] [debug] 200 OK (1.455149s, 0.687/s)
+[Mon May  9 11:52:48 2016] [debug] GET "/"
+[Mon May  9 11:52:48 2016] [debug] Routing to a callback
+[Mon May  9 11:52:48 2016] [debug] 302 Found (0.002254s, 443.656/s)
+[Mon May  9 11:52:48 2016] [debug] GET "/login"
+[Mon May  9 11:52:48 2016] [debug] Routing to a callback
+[Mon May  9 11:52:48 2016] [debug] Rendering template "login.html.ep"
+[Mon May  9 11:52:48 2016] [debug] 200 OK (0.018255s, 54.780/s)
+[Mon May  9 11:52:59 2016] [debug] POST "/bonafides"
+[Mon May  9 11:52:59 2016] [debug] Routing to a callback
+[Mon May  9 11:52:59 2016] [debug] 401 Unauthorized (0.055284s, 18.088/s)
+[Mon May  9 11:53:03 2016] [debug] POST "/bonafides"
+[Mon May  9 11:53:03 2016] [debug] Routing to a callback
+[Mon May  9 11:53:03 2016] [debug] 200 OK (0.006413s, 155.933/s)
+[Mon May  9 11:53:05 2016] [debug] GET "/main"
+[Mon May  9 11:53:05 2016] [debug] Routing to a callback
+[Mon May  9 11:53:05 2016] [debug] Routing to a callback
+[Mon May  9 11:53:05 2016] [debug] Rendering template "main.html.ep"
+[Mon May  9 11:53:05 2016] [debug] 200 OK (0.031856s, 31.391/s)
+[Mon May  9 11:53:09 2016] [debug] GET "/squeue"
+[Mon May  9 11:53:09 2016] [debug] Routing to a callback
+[Mon May  9 11:53:09 2016] [debug] Routing to a callback
+[Mon May  9 11:53:09 2016] [debug] 200 OK (0.026903s, 37.171/s)
+[Mon May  9 11:53:09 2016] [debug] GET "/list_databases"
+[Mon May  9 11:53:09 2016] [debug] Routing to a callback
+[Mon May  9 11:53:09 2016] [debug] Routing to a callback
+[Mon May  9 11:53:54 2016] [debug] 200 OK (44.612281s, 0.022/s)
+[Mon May  9 11:53:54 2016] [debug] GET "/list_NT_files"
+[Mon May  9 11:53:54 2016] [debug] Routing to a callback
+[Mon May  9 11:53:54 2016] [debug] Routing to a callback
+[Mon May  9 11:53:58 2016] [debug] 200 OK (3.809053s, 0.263/s)
+[Mon May  9 11:53:58 2016] [debug] GET "/UAC_CRUD_service"
+[Mon May  9 11:53:58 2016] [debug] Routing to a callback
+[Mon May  9 11:53:58 2016] [debug] Routing to a callback
+[Mon May  9 11:54:01 2016] [debug] 200 OK (3.749327s, 0.267/s)
+[Mon May  9 11:54:01 2016] [debug] GET "/sinfo"
+[Mon May  9 11:54:01 2016] [debug] Routing to a callback
+[Mon May  9 11:54:01 2016] [debug] Routing to a callback
+[Mon May  9 11:54:01 2016] [debug] 200 OK (0.033694s, 29.679/s)
+[Mon May  9 11:54:02 2016] [debug] GET "/filesystem_changes"
+[Mon May  9 11:54:02 2016] [debug] Routing to a callback
+[Mon May  9 11:54:02 2016] [debug] Routing to a callback
+[Mon May  9 11:54:02 2016] [debug] 101 Switching Protocols (0.001975s, 506.329/s)
+[Mon May  9 11:54:02 2016] [debug] GET "/squeue_ws"
+[Mon May  9 11:54:02 2016] [debug] Routing to a callback
+[Mon May  9 11:54:02 2016] [debug] Routing to a callback
+[Mon May  9 11:54:02 2016] [debug] 101 Switching Protocols (0.001215s, 823.045/s)
+[Mon May  9 11:54:22 2016] [debug] GET "/list_NT_files"
+[Mon May  9 11:54:22 2016] [debug] Routing to a callback
+[Mon May  9 11:54:22 2016] [debug] Routing to a callback
+[Mon May  9 11:54:26 2016] [debug] 200 OK (3.663959s, 0.273/s)
+[Mon May  9 11:54:26 2016] [debug] GET "/list_databases"
+[Mon May  9 11:54:26 2016] [debug] Routing to a callback
+[Mon May  9 11:54:26 2016] [debug] Routing to a callback
+[Mon May  9 11:54:29 2016] [debug] 200 OK (3.608335s, 0.277/s)
+[Mon May  9 11:56:42 2016] [debug] GET "/"
+[Mon May  9 11:56:42 2016] [debug] Routing to a callback
+[Mon May  9 11:56:42 2016] [debug] 302 Found (0.000864s, 1157.407/s)
+[Mon May  9 11:56:49 2016] [debug] GET "/login"
+[Mon May  9 11:56:49 2016] [debug] Routing to a callback
+[Mon May  9 11:56:49 2016] [debug] Rendering cached template "login.html.ep"
+[Mon May  9 11:56:49 2016] [debug] 200 OK (0.002127s, 470.146/s)
+[Mon May  9 11:57:38 2016] [debug] GET "/login"
+[Mon May  9 11:57:38 2016] [debug] Routing to a callback
+[Mon May  9 11:57:38 2016] [debug] Rendering cached template "login.html.ep"
+[Mon May  9 11:57:38 2016] [debug] 200 OK (0.002015s, 496.278/s)
+[Mon May  9 11:58:40 2016] [debug] GET "/"
+[Mon May  9 11:58:40 2016] [debug] Routing to a callback
+[Mon May  9 11:58:40 2016] [debug] 302 Found (0.001088s, 919.118/s)
+[Mon May  9 11:58:54 2016] [debug] GET "/login"
+[Mon May  9 11:58:54 2016] [debug] Routing to a callback
+[Mon May  9 11:58:54 2016] [debug] Rendering cached template "login.html.ep"
+[Mon May  9 11:58:54 2016] [debug] 200 OK (0.002039s, 490.436/s)
+[Mon May  9 12:00:03 2016] [debug] GET "/"
+[Mon May  9 12:00:03 2016] [debug] Routing to a callback
+[Mon May  9 12:00:03 2016] [debug] 302 Found (0.000825s, 1212.121/s)
+[Mon May  9 12:00:10 2016] [debug] GET "/login"
+[Mon May  9 12:00:10 2016] [debug] Routing to a callback
+[Mon May  9 12:00:10 2016] [debug] Rendering cached template "login.html.ep"
+[Mon May  9 12:00:10 2016] [debug] 200 OK (0.002037s, 490.918/s)
+[Mon May  9 12:09:31 2016] [debug] POST "/bonafides"
+[Mon May  9 12:09:31 2016] [debug] Routing to a callback
+[Mon May  9 12:09:31 2016] [debug] 200 OK (0.036349s, 27.511/s)
+[Mon May  9 12:09:38 2016] [debug] POST "/bonafides"
+[Mon May  9 12:09:38 2016] [debug] Routing to a callback
+[Mon May  9 12:09:38 2016] [debug] 200 OK (0.033667s, 29.703/s)
+[Mon May  9 12:09:38 2016] [debug] POST "/bonafides"
+[Mon May  9 12:09:38 2016] [debug] Routing to a callback
+[Mon May  9 12:09:38 2016] [debug] 200 OK (0.032966s, 30.334/s)
+[Mon May  9 12:09:45 2016] [debug] GET "/main"
+[Mon May  9 12:09:45 2016] [debug] Routing to a callback
+[Mon May  9 12:09:45 2016] [debug] Routing to a callback
+[Mon May  9 12:09:45 2016] [debug] Rendering cached template "main.html.ep"
+[Mon May  9 12:09:45 2016] [debug] 200 OK (0.003641s, 274.650/s)
+[Mon May  9 12:09:45 2016] [debug] POST "/bonafides"
+[Mon May  9 12:09:45 2016] [debug] Routing to a callback
+[Mon May  9 12:09:45 2016] [debug] 200 OK (0.035474s, 28.190/s)
+[Mon May  9 12:09:45 2016] [debug] GET "/main"
+[Mon May  9 12:09:45 2016] [debug] Routing to a callback
+[Mon May  9 12:09:45 2016] [debug] Routing to a callback
+[Mon May  9 12:09:45 2016] [debug] Rendering cached template "main.html.ep"
+[Mon May  9 12:09:45 2016] [debug] 200 OK (0.005958s, 167.842/s)
+[Mon May  9 12:09:51 2016] [debug] GET "/main"
+[Mon May  9 12:09:51 2016] [debug] Routing to a callback
+[Mon May  9 12:09:51 2016] [debug] Routing to a callback
+[Mon May  9 12:09:51 2016] [debug] Rendering cached template "main.html.ep"
+[Mon May  9 12:09:51 2016] [debug] 200 OK (0.00372s, 268.817/s)
+[Mon May  9 12:09:51 2016] [debug] GET "/main"
+[Mon May  9 12:09:51 2016] [debug] Routing to a callback
+[Mon May  9 12:09:51 2016] [debug] Routing to a callback
+[Mon May  9 12:09:51 2016] [debug] Rendering cached template "main.html.ep"
+[Mon May  9 12:09:51 2016] [debug] 200 OK (0.002639s, 378.931/s)
+[Mon May  9 12:10:19 2016] [debug] GET "/list_databases"
+[Mon May  9 12:10:19 2016] [debug] Routing to a callback
+[Mon May  9 12:10:19 2016] [debug] Routing to a callback
+[Mon May  9 12:10:22 2016] [debug] 200 OK (3.322462s, 0.301/s)
+[Mon May  9 12:10:50 2016] [debug] GET "/main"
+[Mon May  9 12:10:50 2016] [debug] Routing to a callback
+[Mon May  9 12:10:50 2016] [debug] Routing to a callback
+[Mon May  9 12:10:50 2016] [debug] Rendering cached template "main.html.ep"
+[Mon May  9 12:10:50 2016] [debug] 200 OK (0.003865s, 258.732/s)
+[Mon May  9 12:10:58 2016] [debug] GET "/squeue"
+[Mon May  9 12:10:58 2016] [debug] Routing to a callback
+[Mon May  9 12:10:58 2016] [debug] Routing to a callback
+[Mon May  9 12:10:58 2016] [debug] 200 OK (0.024619s, 40.619/s)
+[Mon May  9 12:10:58 2016] [debug] GET "/list_databases"
+[Mon May  9 12:10:58 2016] [debug] Routing to a callback
+[Mon May  9 12:10:58 2016] [debug] Routing to a callback
+[Mon May  9 12:11:02 2016] [debug] 200 OK (3.621505s, 0.276/s)
+[Mon May  9 12:11:02 2016] [debug] GET "/list_NT_files"
+[Mon May  9 12:11:02 2016] [debug] Routing to a callback
+[Mon May  9 12:11:02 2016] [debug] Routing to a callback
+[Mon May  9 12:11:06 2016] [debug] 200 OK (3.868594s, 0.258/s)
+[Mon May  9 12:11:06 2016] [debug] GET "/sinfo"
+[Mon May  9 12:11:06 2016] [debug] Routing to a callback
+[Mon May  9 12:11:06 2016] [debug] Routing to a callback
+[Mon May  9 12:11:06 2016] [debug] 200 OK (0.036074s, 27.721/s)
+[Mon May  9 12:11:06 2016] [debug] GET "/UAC_CRUD_service"
+[Mon May  9 12:11:06 2016] [debug] Routing to a callback
+[Mon May  9 12:11:06 2016] [debug] Routing to a callback
+[Mon May  9 12:11:09 2016] [debug] 200 OK (3.659491s, 0.273/s)
+[Mon May  9 12:11:09 2016] [debug] GET "/filesystem_changes"
+[Mon May  9 12:11:09 2016] [debug] Routing to a callback
+[Mon May  9 12:11:09 2016] [debug] Routing to a callback
+[Mon May  9 12:11:09 2016] [debug] 101 Switching Protocols (0.001835s, 544.959/s)
+[Mon May  9 12:11:09 2016] [debug] GET "/squeue_ws"
+[Mon May  9 12:11:09 2016] [debug] Routing to a callback
+[Mon May  9 12:11:09 2016] [debug] Routing to a callback
+[Mon May  9 12:11:09 2016] [debug] 101 Switching Protocols (0.001304s, 766.871/s)
+[Mon May  9 12:11:13 2016] [debug] GET "/squeue"
+[Mon May  9 12:11:13 2016] [debug] Routing to a callback
+[Mon May  9 12:11:13 2016] [debug] Routing to a callback
+[Mon May  9 12:11:13 2016] [debug] 200 OK (0.024978s, 40.035/s)
+[Mon May  9 12:11:13 2016] [debug] GET "/UAC_CRUD_service"
+[Mon May  9 12:11:13 2016] [debug] Routing to a callback
+[Mon May  9 12:11:13 2016] [debug] Routing to a callback
+[Mon May  9 12:11:17 2016] [debug] 200 OK (3.867614s, 0.259/s)
+[Mon May  9 12:11:17 2016] [debug] GET "/list_NT_files"
+[Mon May  9 12:11:17 2016] [debug] Routing to a callback
+[Mon May  9 12:11:17 2016] [debug] Routing to a callback
+[Mon May  9 12:11:21 2016] [debug] 200 OK (3.950026s, 0.253/s)
+[Mon May  9 12:11:21 2016] [debug] GET "/list_databases"
+[Mon May  9 12:11:21 2016] [debug] Routing to a callback
+[Mon May  9 12:11:21 2016] [debug] Routing to a callback
+[Mon May  9 12:11:25 2016] [debug] 200 OK (3.864665s, 0.259/s)
+[Mon May  9 12:11:25 2016] [debug] GET "/sinfo"
+[Mon May  9 12:11:25 2016] [debug] Routing to a callback
+[Mon May  9 12:11:25 2016] [debug] Routing to a callback
+[Mon May  9 12:11:25 2016] [debug] 200 OK (0.032677s, 30.603/s)
+[Mon May  9 12:11:31 2016] [debug] GET "/list_NT_files"
+[Mon May  9 12:11:31 2016] [debug] Routing to a callback
+[Mon May  9 12:11:31 2016] [debug] Routing to a callback
+[Mon May  9 12:11:35 2016] [debug] 200 OK (3.36904s, 0.297/s)
+[Mon May  9 12:11:35 2016] [debug] GET "/squeue"
+[Mon May  9 12:11:35 2016] [debug] Routing to a callback
+[Mon May  9 12:11:35 2016] [debug] Routing to a callback
+[Mon May  9 12:11:35 2016] [debug] 200 OK (0.019855s, 50.365/s)
+[Mon May  9 12:11:35 2016] [debug] GET "/UAC_CRUD_service"
+[Mon May  9 12:11:35 2016] [debug] Routing to a callback
+[Mon May  9 12:11:35 2016] [debug] Routing to a callback
+[Mon May  9 12:11:38 2016] [debug] 200 OK (3.611062s, 0.277/s)
+[Mon May  9 12:11:38 2016] [debug] GET "/sinfo"
+[Mon May  9 12:11:38 2016] [debug] Routing to a callback
+[Mon May  9 12:11:38 2016] [debug] Routing to a callback
+[Mon May  9 12:11:38 2016] [debug] 200 OK (0.02346s, 42.626/s)
+[Mon May  9 12:11:39 2016] [debug] GET "/list_databases"
+[Mon May  9 12:11:39 2016] [debug] Routing to a callback
+[Mon May  9 12:11:39 2016] [debug] Routing to a callback
+[Mon May  9 12:11:42 2016] [debug] 200 OK (3.349052s, 0.299/s)
+[Mon May  9 12:11:49 2016] [debug] GET "/filesystem_changes"
+[Mon May  9 12:11:49 2016] [debug] Routing to a callback
+[Mon May  9 12:11:49 2016] [debug] Routing to a callback
+[Mon May  9 12:11:49 2016] [debug] 101 Switching Protocols (0.001084s, 922.509/s)
+[Mon May  9 12:11:49 2016] [debug] GET "/list_NT_files"
+[Mon May  9 12:11:49 2016] [debug] Routing to a callback
+[Mon May  9 12:11:49 2016] [debug] Routing to a callback
+[Mon May  9 12:11:52 2016] [debug] 200 OK (3.408956s, 0.293/s)
+[Mon May  9 12:11:52 2016] [debug] GET "/list_databases"
+[Mon May  9 12:11:52 2016] [debug] Routing to a callback
+[Mon May  9 12:11:52 2016] [debug] Routing to a callback
+[Mon May  9 12:11:56 2016] [debug] 200 OK (3.352443s, 0.298/s)
+[Mon May  9 12:12:16 2016] [debug] GET "/list_databases"
+[Mon May  9 12:12:16 2016] [debug] Routing to a callback
+[Mon May  9 12:12:16 2016] [debug] Routing to a callback
+[Mon May  9 12:12:19 2016] [debug] 200 OK (3.363812s, 0.297/s)
+[Mon May  9 12:12:19 2016] [debug] GET "/squeue_ws"
+[Mon May  9 12:12:19 2016] [debug] Routing to a callback
+[Mon May  9 12:12:19 2016] [debug] Routing to a callback
+[Mon May  9 12:12:19 2016] [debug] 101 Switching Protocols (0.001054s, 948.767/s)
+[Mon May  9 12:12:26 2016] [debug] GET "/main"
+[Mon May  9 12:12:26 2016] [debug] Routing to a callback
+[Mon May  9 12:12:26 2016] [debug] Routing to a callback
+[Mon May  9 12:12:26 2016] [debug] Rendering cached template "main.html.ep"
+[Mon May  9 12:12:26 2016] [debug] 200 OK (0.003706s, 269.833/s)
+[Mon May  9 12:12:33 2016] [debug] GET "/list_databases"
+[Mon May  9 12:12:33 2016] [debug] Routing to a callback
+[Mon May  9 12:12:33 2016] [debug] Routing to a callback
+[Mon May  9 12:12:37 2016] [debug] 200 OK (3.625084s, 0.276/s)
+[Mon May  9 12:12:51 2016] [debug] GET "/list_databases"
+[Mon May  9 12:12:51 2016] [debug] Routing to a callback
+[Mon May  9 12:12:51 2016] [debug] Routing to a callback
+[Mon May  9 12:12:54 2016] [debug] 200 OK (3.637834s, 0.275/s)
+[Mon May  9 12:13:09 2016] [debug] GET "/list_databases"
+[Mon May  9 12:13:09 2016] [debug] Routing to a callback
+[Mon May  9 12:13:09 2016] [debug] Routing to a callback
+[Mon May  9 12:13:13 2016] [debug] 200 OK (3.614694s, 0.277/s)
+[Mon May  9 12:13:13 2016] [debug] GET "/filesystem_changes"
+[Mon May  9 12:13:13 2016] [debug] Routing to a callback
+[Mon May  9 12:13:13 2016] [debug] Routing to a callback
+[Mon May  9 12:13:13 2016] [debug] 101 Switching Protocols (0.001022s, 978.474/s)
+[Mon May  9 12:13:28 2016] [debug] GET "/list_databases"
+[Mon May  9 12:13:28 2016] [debug] Routing to a callback
+[Mon May  9 12:13:28 2016] [debug] Routing to a callback
+[Mon May  9 12:13:31 2016] [debug] 200 OK (3.606432s, 0.277/s)
+[Mon May  9 12:13:31 2016] [debug] GET "/squeue_ws"
+[Mon May  9 12:13:31 2016] [debug] Routing to a callback
+[Mon May  9 12:13:31 2016] [debug] Routing to a callback
+[Mon May  9 12:13:31 2016] [debug] 101 Switching Protocols (0.000995s, 1005.025/s)
+[Mon May  9 12:13:46 2016] [debug] GET "/list_databases"
+[Mon May  9 12:13:46 2016] [debug] Routing to a callback
+[Mon May  9 12:13:46 2016] [debug] Routing to a callback
+[Mon May  9 12:13:49 2016] [debug] 200 OK (3.351455s, 0.298/s)
+[Mon May  9 12:13:56 2016] [debug] GET "/filesystem_changes"
+[Mon May  9 12:13:56 2016] [debug] Routing to a callback
+[Mon May  9 12:13:56 2016] [debug] Routing to a callback
+[Mon May  9 12:13:56 2016] [debug] 101 Switching Protocols (0.001934s, 517.063/s)
+[Mon May  9 12:14:03 2016] [debug] GET "/list_databases"
+[Mon May  9 12:14:03 2016] [debug] Routing to a callback
+[Mon May  9 12:14:03 2016] [debug] Routing to a callback
+[Mon May  9 12:14:06 2016] [debug] 200 OK (3.315991s, 0.302/s)
+[Mon May  9 12:14:25 2016] [debug] GET "/filesystem_changes"
+[Mon May  9 12:14:25 2016] [debug] Routing to a callback
+[Mon May  9 12:14:25 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:14:25 2016] [debug] 302 Found (0.001753s, 570.451/s)
+[Mon May  9 12:14:25 2016] [debug] Routing to a callback
+[Mon May  9 12:14:25 2016] [debug] GET "/squeue_ws"
+[Mon May  9 12:14:25 2016] [debug] Routing to a callback
+[Mon May  9 12:14:25 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:14:25 2016] [debug] 302 Found (0.001017s, 983.284/s)
+[Mon May  9 12:14:25 2016] [debug] Routing to a callback
+[Mon May  9 12:14:25 2016] [debug] GET "/filesystem_changes"
+[Mon May  9 12:14:25 2016] [debug] Routing to a callback
+[Mon May  9 12:14:25 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:14:25 2016] [debug] 302 Found (0.000817s, 1223.990/s)
+[Mon May  9 12:14:25 2016] [debug] Routing to a callback
+[Mon May  9 12:14:25 2016] [debug] GET "/squeue_ws"
+[Mon May  9 12:14:25 2016] [debug] Routing to a callback
+[Mon May  9 12:14:25 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:14:25 2016] [debug] 302 Found (0.001406s, 711.238/s)
+[Mon May  9 12:14:25 2016] [debug] Routing to a callback
+[Mon May  9 12:14:26 2016] [debug] GET "/main"
+[Mon May  9 12:14:26 2016] [debug] Routing to a callback
+[Mon May  9 12:14:26 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:14:26 2016] [debug] 302 Found (0.001317s, 759.301/s)
+[Mon May  9 12:14:26 2016] [debug] Routing to a callback
+[Mon May  9 12:14:26 2016] [debug] GET "/login"
+[Mon May  9 12:14:26 2016] [debug] Routing to a callback
+[Mon May  9 12:14:26 2016] [debug] Rendering template "login.html.ep"
+[Mon May  9 12:14:26 2016] [debug] 200 OK (0.009265s, 107.933/s)
+[Mon May  9 12:14:30 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:14:34 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:14:38 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:14:41 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:14:45 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:14:49 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:14:52 2016] [debug] POST "/bonafides"
+[Mon May  9 12:14:52 2016] [debug] Routing to a callback
+[Mon May  9 12:14:52 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:14:52 2016] [debug] 200 OK (0.038566s, 25.930/s)
+[Mon May  9 12:14:52 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:14:56 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:15:00 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:15:04 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:15:07 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:15:10 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:15:14 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:15:18 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:15:22 2016] [debug] GET "/main"
+[Mon May  9 12:15:22 2016] [debug] Routing to a callback
+[Mon May  9 12:15:22 2016] [debug] Routing to a callback
+[Mon May  9 12:15:22 2016] [debug] Rendering template "main.html.ep"
+[Mon May  9 12:15:22 2016] [debug] 200 OK (0.026265s, 38.073/s)
+[Mon May  9 12:15:22 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:15:26 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:15:30 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:15:33 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:15:37 2016] [debug] GET "/list_NT_files"
+[Mon May  9 12:15:37 2016] [debug] Routing to a callback
+[Mon May  9 12:15:37 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:15:37 2016] [debug] 302 Found (0.002118s, 472.144/s)
+[Mon May  9 12:15:37 2016] [debug] Routing to a callback
+[Mon May  9 12:15:37 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:15:41 2016] [debug] GET "/list_databases"
+[Mon May  9 12:15:41 2016] [debug] Routing to a callback
+[Mon May  9 12:15:41 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:15:41 2016] [debug] 302 Found (0.001848s, 541.126/s)
+[Mon May  9 12:15:41 2016] [debug] Routing to a callback
+[Mon May  9 12:15:41 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:15:45 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:15:49 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:15:53 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:15:57 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:16:01 2016] [debug] GET "/login"
+[Mon May  9 12:16:01 2016] [debug] Routing to a callback
+[Mon May  9 12:16:01 2016] [debug] Rendering cached template "login.html.ep"
+[Mon May  9 12:16:01 2016] [debug] 200 OK (0.003337s, 299.670/s)
+[Mon May  9 12:16:01 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:16:05 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:16:08 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:16:12 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:16:16 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:16:20 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:16:24 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:16:28 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:16:32 2016] [debug] GET "/list_databases"
+[Mon May  9 12:16:32 2016] [debug] Routing to a callback
+[Mon May  9 12:16:32 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:16:32 2016] [debug] 302 Found (0.00164s, 609.756/s)
+[Mon May  9 12:16:32 2016] [debug] Routing to a callback
+[Mon May  9 12:16:32 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:16:36 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:16:39 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:16:43 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:16:47 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:16:51 2016] [debug] GET "/login"
+[Mon May  9 12:16:51 2016] [debug] Routing to a callback
+[Mon May  9 12:16:51 2016] [debug] Rendering cached template "login.html.ep"
+[Mon May  9 12:16:51 2016] [debug] 200 OK (0.003382s, 295.683/s)
+[Mon May  9 12:16:51 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:16:55 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:16:59 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:17:03 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:17:07 2016] [debug] GET "/list_NT_files"
+[Mon May  9 12:17:07 2016] [debug] Routing to a callback
+[Mon May  9 12:17:07 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:17:07 2016] [debug] 302 Found (0.001008s, 992.063/s)
+[Mon May  9 12:17:07 2016] [debug] Routing to a callback
+[Mon May  9 12:17:07 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:17:11 2016] [debug] GET "/squeue"
+[Mon May  9 12:17:11 2016] [debug] Routing to a callback
+[Mon May  9 12:17:11 2016] [debug] Routing to a callback
+[Mon May  9 12:17:11 2016] [debug] 200 OK (0.022952s, 43.569/s)
+[Mon May  9 12:17:11 2016] [debug] GET "/login"
+[Mon May  9 12:17:11 2016] [debug] Routing to a callback
+[Mon May  9 12:17:11 2016] [debug] Rendering cached template "login.html.ep"
+[Mon May  9 12:17:11 2016] [debug] 200 OK (0.002886s, 346.500/s)
+[Mon May  9 12:17:11 2016] [debug] GET "/list_NT_files"
+[Mon May  9 12:17:11 2016] [debug] Routing to a callback
+[Mon May  9 12:17:11 2016] [debug] Routing to a callback
+[Mon May  9 12:17:15 2016] [debug] 200 OK (3.882516s, 0.258/s)
+[Mon May  9 12:17:15 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:17:19 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:17:23 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:17:27 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:17:30 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:17:34 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:17:38 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:17:42 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:17:46 2016] [debug] GET "/login"
+[Mon May  9 12:17:46 2016] [debug] Routing to a callback
+[Mon May  9 12:17:46 2016] [debug] Rendering cached template "login.html.ep"
+[Mon May  9 12:17:46 2016] [debug] 200 OK (0.001961s, 509.944/s)
+[Mon May  9 12:17:46 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:17:50 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:17:54 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:17:58 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:18:02 2016] [debug] GET "/list_databases"
+[Mon May  9 12:18:02 2016] [debug] Routing to a callback
+[Mon May  9 12:18:02 2016] [debug] Routing to a callback
+[Mon May  9 12:18:05 2016] [debug] 200 OK (3.805504s, 0.263/s)
+[Mon May  9 12:18:05 2016] [debug] GET "/squeue_ws"
+[Mon May  9 12:18:05 2016] [debug] Routing to a callback
+[Mon May  9 12:18:05 2016] [debug] Routing to a callback
+[Mon May  9 12:18:05 2016] [debug] 101 Switching Protocols (0.001794s, 557.414/s)
+[Mon May  9 12:18:05 2016] [debug] GET "/UAC_CRUD_service"
+[Mon May  9 12:18:05 2016] [debug] Routing to a callback
+[Mon May  9 12:18:05 2016] [debug] Routing to a callback
+[Mon May  9 12:18:09 2016] [debug] 200 OK (3.787687s, 0.264/s)
+[Mon May  9 12:18:09 2016] [debug] GET "/filesystem_changes"
+[Mon May  9 12:18:09 2016] [debug] Routing to a callback
+[Mon May  9 12:18:09 2016] [debug] Routing to a callback
+[Mon May  9 12:18:09 2016] [debug] 101 Switching Protocols (0.000886s, 1128.668/s)
+[Mon May  9 12:18:09 2016] [debug] GET "/sinfo"
+[Mon May  9 12:18:09 2016] [debug] Routing to a callback
+[Mon May  9 12:18:09 2016] [debug] Routing to a callback
+[Mon May  9 12:18:09 2016] [debug] 200 OK (0.029903s, 33.441/s)
+[Mon May  9 12:18:09 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:18:13 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:18:17 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:18:21 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:18:25 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:18:29 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:18:33 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:18:37 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:18:48 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:18:52 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:18:56 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:19:00 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:19:12 2016] [debug] GET "/list_databases"
+[Mon May  9 12:19:12 2016] [debug] Routing to a callback
+[Mon May  9 12:19:12 2016] [debug] Routing to a callback
+[Mon May  9 12:19:15 2016] [debug] 200 OK (3.801049s, 0.263/s)
+[Mon May  9 12:19:15 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:19:19 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:19:23 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:19:27 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:19:39 2016] [debug] GET "/list_NT_files"
+[Mon May  9 12:19:39 2016] [debug] Routing to a callback
+[Mon May  9 12:19:39 2016] [debug] Routing to a callback
+[Mon May  9 12:19:43 2016] [debug] 200 OK (3.851399s, 0.260/s)
+[Mon May  9 12:19:43 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:19:47 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:19:51 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:19:55 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:20:06 2016] [debug] GET "/list_databases"
+[Mon May  9 12:20:06 2016] [debug] Routing to a callback
+[Mon May  9 12:20:06 2016] [debug] Routing to a callback
+[Mon May  9 12:20:10 2016] [debug] 200 OK (3.746763s, 0.267/s)
+[Mon May  9 12:20:10 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:20:14 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:20:18 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:20:21 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:20:32 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:20:36 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:20:40 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:20:44 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:20:56 2016] [debug] GET "/list_databases"
+[Mon May  9 12:20:56 2016] [debug] Routing to a callback
+[Mon May  9 12:20:56 2016] [debug] Routing to a callback
+[Mon May  9 12:21:00 2016] [debug] 200 OK (3.852672s, 0.260/s)
+[Mon May  9 12:21:00 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:21:04 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:21:08 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:21:11 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:21:23 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:21:27 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:21:31 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:21:35 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:21:46 2016] [debug] GET "/list_databases"
+[Mon May  9 12:21:46 2016] [debug] Routing to a callback
+[Mon May  9 12:21:46 2016] [debug] Routing to a callback
+[Mon May  9 12:21:50 2016] [debug] 200 OK (3.815046s, 0.262/s)
+[Mon May  9 12:21:50 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:21:54 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:21:58 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:22:02 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:22:14 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:22:18 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:22:21 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:22:25 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:22:37 2016] [debug] GET "/list_databases"
+[Mon May  9 12:22:37 2016] [debug] Routing to a callback
+[Mon May  9 12:22:37 2016] [debug] Routing to a callback
+[Mon May  9 12:22:41 2016] [debug] 200 OK (3.771514s, 0.265/s)
+[Mon May  9 12:22:41 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:22:45 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:22:49 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:22:53 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:23:04 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:23:08 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:23:12 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:23:16 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:23:28 2016] [debug] GET "/list_databases"
+[Mon May  9 12:23:28 2016] [debug] Routing to a callback
+[Mon May  9 12:23:28 2016] [debug] Routing to a callback
+[Mon May  9 12:23:32 2016] [debug] 200 OK (3.69127s, 0.271/s)
+[Mon May  9 12:23:32 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:23:35 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:23:39 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:23:43 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:23:54 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:23:58 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:24:02 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:24:06 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:24:17 2016] [debug] GET "/list_databases"
+[Mon May  9 12:24:17 2016] [debug] Routing to a callback
+[Mon May  9 12:24:17 2016] [debug] Routing to a callback
+[Mon May  9 12:24:21 2016] [debug] 200 OK (3.82291s, 0.262/s)
+[Mon May  9 12:24:21 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:24:25 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:24:29 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:24:33 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:24:45 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:24:48 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:24:52 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:24:56 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:25:08 2016] [debug] GET "/list_databases"
+[Mon May  9 12:25:08 2016] [debug] Routing to a callback
+[Mon May  9 12:25:08 2016] [debug] Routing to a callback
+[Mon May  9 12:25:12 2016] [debug] 200 OK (3.769077s, 0.265/s)
+[Mon May  9 12:25:12 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:25:16 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:25:20 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:25:24 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:25:35 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:25:39 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:25:43 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:25:47 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:25:59 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:26:03 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:26:07 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:26:10 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:26:22 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:26:26 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:26:30 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:26:34 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:26:46 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:26:49 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:26:53 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:26:57 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:27:09 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:27:13 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:27:17 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:27:21 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:27:32 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:27:36 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:27:40 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:27:44 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:27:56 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:28:00 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:28:04 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:28:07 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:28:19 2016] [debug] GET "/list_databases"
+[Mon May  9 12:28:19 2016] [debug] Routing to a callback
+[Mon May  9 12:28:19 2016] [debug] Routing to a callback
+[Mon May  9 12:28:23 2016] [debug] 200 OK (3.839231s, 0.260/s)
+[Mon May  9 12:28:23 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:28:27 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:28:31 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:28:35 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:28:46 2016] [debug] GET "/list_databases"
+[Mon May  9 12:28:46 2016] [debug] Routing to a callback
+[Mon May  9 12:28:46 2016] [debug] Routing to a callback
+[Mon May  9 12:28:50 2016] [debug] 200 OK (3.877797s, 0.258/s)
+[Mon May  9 12:28:50 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:28:54 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:28:58 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:29:02 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:29:13 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:29:17 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:29:21 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:29:25 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:29:37 2016] [debug] GET "/list_databases"
+[Mon May  9 12:29:37 2016] [debug] Routing to a callback
+[Mon May  9 12:29:37 2016] [debug] Routing to a callback
+[Mon May  9 12:29:41 2016] [debug] 200 OK (3.804323s, 0.263/s)
+[Mon May  9 12:29:41 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:29:44 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:29:48 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:29:52 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:30:04 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:30:08 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:30:12 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:30:16 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:30:27 2016] [debug] GET "/list_databases"
+[Mon May  9 12:30:27 2016] [debug] Routing to a callback
+[Mon May  9 12:30:27 2016] [debug] Routing to a callback
+[Mon May  9 12:30:31 2016] [debug] 200 OK (3.804971s, 0.263/s)
+[Mon May  9 12:30:31 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:30:35 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:30:39 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:30:43 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:30:55 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:30:59 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:31:03 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:31:07 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:31:29 2016] [debug] GET "/list_databases"
+[Mon May  9 12:31:29 2016] [debug] Routing to a callback
+[Mon May  9 12:31:29 2016] [debug] Routing to a callback
+[Mon May  9 12:31:33 2016] [debug] 200 OK (3.80729s, 0.263/s)
+[Mon May  9 12:31:33 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:31:37 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:31:41 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:31:45 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:31:57 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:32:00 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:32:04 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:32:08 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:32:20 2016] [debug] GET "/list_databases"
+[Mon May  9 12:32:20 2016] [debug] Routing to a callback
+[Mon May  9 12:32:20 2016] [debug] Routing to a callback
+[Mon May  9 12:32:24 2016] [debug] 200 OK (3.823709s, 0.262/s)
+[Mon May  9 12:32:24 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:32:28 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:32:32 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:32:36 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:32:47 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:32:51 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:32:55 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:32:58 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:33:10 2016] [debug] GET "/list_databases"
+[Mon May  9 12:33:10 2016] [debug] Routing to a callback
+[Mon May  9 12:33:10 2016] [debug] Routing to a callback
+[Mon May  9 12:33:14 2016] [debug] 200 OK (3.832521s, 0.261/s)
+[Mon May  9 12:33:14 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:33:18 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:33:22 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:33:26 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:33:37 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:33:41 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:33:45 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:33:49 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:34:00 2016] [debug] GET "/list_databases"
+[Mon May  9 12:34:00 2016] [debug] Routing to a callback
+[Mon May  9 12:34:00 2016] [debug] Routing to a callback
+[Mon May  9 12:34:04 2016] [debug] 200 OK (3.600061s, 0.278/s)
+[Mon May  9 12:34:04 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:34:08 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:34:12 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:34:16 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:34:27 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:34:31 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:34:35 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:34:39 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:34:51 2016] [debug] GET "/list_databases"
+[Mon May  9 12:34:51 2016] [debug] Routing to a callback
+[Mon May  9 12:34:51 2016] [debug] Routing to a callback
+[Mon May  9 12:34:55 2016] [debug] 200 OK (3.816786s, 0.262/s)
+[Mon May  9 12:34:55 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:34:58 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:35:02 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:35:06 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:35:19 2016] [debug] GET "/main"
+[Mon May  9 12:35:19 2016] [debug] Routing to a callback
+[Mon May  9 12:35:19 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:35:19 2016] [debug] 302 Found (0.002956s, 338.295/s)
+[Mon May  9 12:35:19 2016] [debug] Routing to a callback
+[Mon May  9 12:35:19 2016] [debug] GET "/login"
+[Mon May  9 12:35:19 2016] [debug] Routing to a callback
+[Mon May  9 12:35:19 2016] [debug] Rendering template "login.html.ep"
+[Mon May  9 12:35:19 2016] [debug] 200 OK (0.008529s, 117.247/s)
+[Mon May  9 12:35:28 2016] [debug] POST "/bonafides"
+[Mon May  9 12:35:28 2016] [debug] Routing to a callback
+[Mon May  9 12:35:28 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:35:28 2016] [debug] 200 OK (0.027969s, 35.754/s)
+[Mon May  9 12:35:29 2016] [debug] GET "/main"
+[Mon May  9 12:35:29 2016] [debug] Routing to a callback
+[Mon May  9 12:35:29 2016] [debug] Routing to a callback
+[Mon May  9 12:35:29 2016] [debug] Rendering template "main.html.ep"
+[Mon May  9 12:35:29 2016] [debug] 200 OK (0.031169s, 32.083/s)
+[Mon May  9 12:35:29 2016] [debug] GET "/squeue"
+[Mon May  9 12:35:29 2016] [debug] Routing to a callback
+[Mon May  9 12:35:29 2016] [debug] Routing to a callback
+[Mon May  9 12:35:29 2016] [debug] 200 OK (0.030941s, 32.320/s)
+[Mon May  9 12:35:29 2016] [debug] GET "/list_NT_files"
+[Mon May  9 12:35:29 2016] [debug] Routing to a callback
+[Mon May  9 12:35:29 2016] [debug] Routing to a callback
+[Mon May  9 12:35:33 2016] [debug] 200 OK (3.881229s, 0.258/s)
+[Mon May  9 12:35:33 2016] [debug] GET "/list_databases"
+[Mon May  9 12:35:33 2016] [debug] Routing to a callback
+[Mon May  9 12:35:33 2016] [debug] Routing to a callback
+[Mon May  9 12:35:37 2016] [debug] 200 OK (3.782103s, 0.264/s)
+[Mon May  9 12:35:37 2016] [debug] GET "/sinfo"
+[Mon May  9 12:35:37 2016] [debug] Routing to a callback
+[Mon May  9 12:35:37 2016] [debug] Routing to a callback
+[Mon May  9 12:35:37 2016] [debug] 200 OK (0.031118s, 32.136/s)
+[Mon May  9 12:35:37 2016] [debug] GET "/UAC_CRUD_service"
+[Mon May  9 12:35:37 2016] [debug] Routing to a callback
+[Mon May  9 12:35:37 2016] [debug] Routing to a callback
+[Mon May  9 12:35:41 2016] [debug] 200 OK (3.796155s, 0.263/s)
+[Mon May  9 12:35:41 2016] [debug] GET "/squeue_ws"
+[Mon May  9 12:35:41 2016] [debug] Routing to a callback
+[Mon May  9 12:35:41 2016] [debug] Routing to a callback
+[Mon May  9 12:35:41 2016] [debug] 101 Switching Protocols (0.001157s, 864.304/s)
+[Mon May  9 12:35:41 2016] [debug] GET "/filesystem_changes"
+[Mon May  9 12:35:41 2016] [debug] Routing to a callback
+[Mon May  9 12:35:41 2016] [debug] Routing to a callback
+[Mon May  9 12:35:41 2016] [debug] 101 Switching Protocols (0.00088s, 1136.364/s)
+[Mon May  9 12:36:01 2016] [debug] GET "/list_databases"
+[Mon May  9 12:36:01 2016] [debug] Routing to a callback
+[Mon May  9 12:36:01 2016] [debug] Routing to a callback
+[Mon May  9 12:36:05 2016] [debug] 200 OK (3.753648s, 0.266/s)
+[Mon May  9 12:36:05 2016] [debug] GET "/list_NT_files"
+[Mon May  9 12:36:05 2016] [debug] Routing to a callback
+[Mon May  9 12:36:05 2016] [debug] Routing to a callback
+[Mon May  9 12:36:09 2016] [debug] 200 OK (3.772854s, 0.265/s)
+[Mon May  9 12:36:24 2016] [debug] GET "/list_databases"
+[Mon May  9 12:36:24 2016] [debug] Routing to a callback
+[Mon May  9 12:36:24 2016] [debug] Routing to a callback
+[Mon May  9 12:36:28 2016] [debug] 200 OK (3.772751s, 0.265/s)
+[Mon May  9 12:36:43 2016] [debug] GET "/list_databases"
+[Mon May  9 12:36:43 2016] [debug] Routing to a callback
+[Mon May  9 12:36:43 2016] [debug] Routing to a callback
+[Mon May  9 12:36:47 2016] [debug] 200 OK (3.665625s, 0.273/s)
+[Mon May  9 12:37:03 2016] [debug] GET "/list_databases"
+[Mon May  9 12:37:03 2016] [debug] Routing to a callback
+[Mon May  9 12:37:03 2016] [debug] Routing to a callback
+[Mon May  9 12:37:06 2016] [debug] 200 OK (3.795553s, 0.263/s)
+[Mon May  9 12:38:02 2016] [debug] GET "/main"
+[Mon May  9 12:38:02 2016] [debug] Routing to a callback
+[Mon May  9 12:38:02 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:38:02 2016] [debug] 302 Found (0.003606s, 277.316/s)
+[Mon May  9 12:38:02 2016] [debug] Routing to a callback
+[Mon May  9 12:38:02 2016] [debug] GET "/login"
+[Mon May  9 12:38:02 2016] [debug] Routing to a callback
+[Mon May  9 12:38:02 2016] [debug] Rendering template "login.html.ep"
+[Mon May  9 12:38:02 2016] [debug] 200 OK (0.008499s, 117.661/s)
+[Mon May  9 12:38:09 2016] [debug] POST "/bonafides"
+[Mon May  9 12:38:09 2016] [debug] Routing to a callback
+[Mon May  9 12:38:09 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:38:09 2016] [debug] 200 OK (0.038266s, 26.133/s)
+[Mon May  9 12:38:10 2016] [debug] GET "/main"
+[Mon May  9 12:38:10 2016] [debug] Routing to a callback
+[Mon May  9 12:38:10 2016] [debug] Routing to a callback
+[Mon May  9 12:38:10 2016] [debug] Rendering template "main.html.ep"
+[Mon May  9 12:38:10 2016] [debug] 200 OK (0.035987s, 27.788/s)
+[Mon May  9 12:38:10 2016] [debug] GET "/squeue"
+[Mon May  9 12:38:10 2016] [debug] Routing to a callback
+[Mon May  9 12:38:10 2016] [debug] Routing to a callback
+[Mon May  9 12:38:10 2016] [debug] 200 OK (0.029849s, 33.502/s)
+[Mon May  9 12:38:10 2016] [debug] GET "/UAC_CRUD_service"
+[Mon May  9 12:38:10 2016] [debug] Routing to a callback
+[Mon May  9 12:38:10 2016] [debug] Routing to a callback
+[Mon May  9 12:38:14 2016] [debug] 200 OK (3.806507s, 0.263/s)
+[Mon May  9 12:38:14 2016] [debug] GET "/list_databases"
+[Mon May  9 12:38:14 2016] [debug] Routing to a callback
+[Mon May  9 12:38:14 2016] [debug] Routing to a callback
+[Mon May  9 12:38:17 2016] [debug] 200 OK (3.790485s, 0.264/s)
+[Mon May  9 12:38:17 2016] [debug] GET "/sinfo"
+[Mon May  9 12:38:17 2016] [debug] Routing to a callback
+[Mon May  9 12:38:17 2016] [debug] Routing to a callback
+[Mon May  9 12:38:18 2016] [debug] 200 OK (0.030284s, 33.021/s)
+[Mon May  9 12:38:18 2016] [debug] GET "/list_NT_files"
+[Mon May  9 12:38:18 2016] [debug] Routing to a callback
+[Mon May  9 12:38:18 2016] [debug] Routing to a callback
+[Mon May  9 12:38:21 2016] [debug] 200 OK (3.906103s, 0.256/s)
+[Mon May  9 12:38:22 2016] [debug] GET "/list_databases"
+[Mon May  9 12:38:22 2016] [debug] Routing to a callback
+[Mon May  9 12:38:22 2016] [debug] Routing to a callback
+[Mon May  9 12:38:25 2016] [debug] 200 OK (3.720125s, 0.269/s)
+[Mon May  9 12:38:25 2016] [debug] GET "/squeue_ws"
+[Mon May  9 12:38:25 2016] [debug] Routing to a callback
+[Mon May  9 12:38:25 2016] [debug] Routing to a callback
+[Mon May  9 12:38:25 2016] [debug] 101 Switching Protocols (0.002044s, 489.237/s)
+[Mon May  9 12:38:25 2016] [debug] GET "/filesystem_changes"
+[Mon May  9 12:38:25 2016] [debug] Routing to a callback
+[Mon May  9 12:38:25 2016] [debug] Routing to a callback
+[Mon May  9 12:38:25 2016] [debug] 101 Switching Protocols (0.001682s, 594.530/s)
+[Mon May  9 12:38:46 2016] [debug] GET "/list_NT_files"
+[Mon May  9 12:38:46 2016] [debug] Routing to a callback
+[Mon May  9 12:38:46 2016] [debug] Routing to a callback
+[Mon May  9 12:38:50 2016] [debug] 200 OK (3.922388s, 0.255/s)
+[Mon May  9 12:38:50 2016] [debug] GET "/list_databases"
+[Mon May  9 12:38:50 2016] [debug] Routing to a callback
+[Mon May  9 12:38:50 2016] [debug] Routing to a callback
+[Mon May  9 12:38:53 2016] [debug] 200 OK (3.867366s, 0.259/s)
+[Mon May  9 12:39:32 2016] [debug] GET "/list_databases"
+[Mon May  9 12:39:32 2016] [debug] Routing to a callback
+[Mon May  9 12:39:32 2016] [debug] Routing to a callback
+[Mon May  9 12:39:36 2016] [debug] 200 OK (3.826486s, 0.261/s)
+[Mon May  9 12:39:52 2016] [debug] GET "/list_databases"
+[Mon May  9 12:39:52 2016] [debug] Routing to a callback
+[Mon May  9 12:39:52 2016] [debug] Routing to a callback
+[Mon May  9 12:39:55 2016] [debug] 200 OK (3.719429s, 0.269/s)
+[Mon May  9 12:40:11 2016] [debug] GET "/list_databases"
+[Mon May  9 12:40:11 2016] [debug] Routing to a callback
+[Mon May  9 12:40:11 2016] [debug] Routing to a callback
+[Mon May  9 12:40:15 2016] [debug] 200 OK (3.752703s, 0.266/s)
+[Mon May  9 12:40:30 2016] [debug] GET "/list_databases"
+[Mon May  9 12:40:30 2016] [debug] Routing to a callback
+[Mon May  9 12:40:30 2016] [debug] Routing to a callback
+[Mon May  9 12:40:34 2016] [debug] 200 OK (3.828533s, 0.261/s)
+[Mon May  9 12:40:50 2016] [debug] GET "/list_databases"
+[Mon May  9 12:40:50 2016] [debug] Routing to a callback
+[Mon May  9 12:40:50 2016] [debug] Routing to a callback
+[Mon May  9 12:40:53 2016] [debug] 200 OK (3.838403s, 0.261/s)
+[Mon May  9 12:41:09 2016] [debug] GET "/list_databases"
+[Mon May  9 12:41:09 2016] [debug] Routing to a callback
+[Mon May  9 12:41:09 2016] [debug] Routing to a callback
+[Mon May  9 12:41:13 2016] [debug] 200 OK (3.819532s, 0.262/s)
+[Mon May  9 12:41:28 2016] [debug] GET "/list_databases"
+[Mon May  9 12:41:28 2016] [debug] Routing to a callback
+[Mon May  9 12:41:28 2016] [debug] Routing to a callback
+[Mon May  9 12:41:32 2016] [debug] 200 OK (3.81013s, 0.262/s)
+[Mon May  9 12:41:48 2016] [debug] GET "/main"
+[Mon May  9 12:41:48 2016] [debug] Routing to a callback
+[Mon May  9 12:41:48 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Mon May  9 12:41:48 2016] [debug] 302 Found (0.001264s, 791.139/s)
+[Mon May  9 12:41:48 2016] [debug] Routing to a callback
+[Mon May  9 12:41:48 2016] [debug] GET "/list_databases"
+[Mon May  9 12:41:48 2016] [debug] Routing to a callback
+[Mon May  9 12:41:48 2016] [debug] Routing to a callback
+[Mon May  9 12:41:52 2016] [debug] 200 OK (3.866729s, 0.259/s)
+[Mon May  9 12:42:00 2016] [debug] GET "/login"
+[Mon May  9 12:42:00 2016] [debug] Routing to a callback
+[Mon May  9 12:42:00 2016] [debug] Rendering cached template "login.html.ep"
+[Mon May  9 12:42:00 2016] [debug] 200 OK (0.003649s, 274.048/s)
+[Mon May  9 12:42:07 2016] [debug] GET "/list_databases"
+[Mon May  9 12:42:07 2016] [debug] Routing to a callback
+[Mon May  9 12:42:07 2016] [debug] Routing to a callback
+[Mon May  9 12:42:11 2016] [debug] 200 OK (3.79178s, 0.264/s)
+[Mon May  9 12:42:27 2016] [debug] GET "/list_databases"
+[Mon May  9 12:42:27 2016] [debug] Routing to a callback
+[Mon May  9 12:42:27 2016] [debug] Routing to a callback
+[Mon May  9 12:42:31 2016] [debug] 200 OK (3.829283s, 0.261/s)
+[Mon May  9 12:42:46 2016] [debug] GET "/list_databases"
+[Mon May  9 12:42:46 2016] [debug] Routing to a callback
+[Mon May  9 12:42:46 2016] [debug] Routing to a callback
+[Mon May  9 12:42:50 2016] [debug] 200 OK (3.864573s, 0.259/s)
+[Mon May  9 12:43:05 2016] [debug] GET "/list_databases"
+[Mon May  9 12:43:05 2016] [debug] Routing to a callback
+[Mon May  9 12:43:05 2016] [debug] Routing to a callback
+[Mon May  9 12:43:09 2016] [debug] 200 OK (3.791928s, 0.264/s)
+[Mon May  9 12:43:25 2016] [debug] GET "/list_databases"
+[Mon May  9 12:43:25 2016] [debug] Routing to a callback
+[Mon May  9 12:43:25 2016] [debug] Routing to a callback
+[Mon May  9 12:43:29 2016] [debug] 200 OK (3.799302s, 0.263/s)
+[Mon May  9 12:43:44 2016] [debug] GET "/list_databases"
+[Mon May  9 12:43:44 2016] [debug] Routing to a callback
+[Mon May  9 12:43:44 2016] [debug] Routing to a callback
+[Mon May  9 12:43:48 2016] [debug] 200 OK (3.838545s, 0.261/s)
+[Mon May  9 12:44:03 2016] [debug] GET "/list_databases"
+[Mon May  9 12:44:03 2016] [debug] Routing to a callback
+[Mon May  9 12:44:03 2016] [debug] Routing to a callback
+[Mon May  9 12:44:06 2016] [debug] 200 OK (3.84616s, 0.260/s)
+[Mon May  9 12:44:22 2016] [debug] GET "/list_databases"
+[Mon May  9 12:44:22 2016] [debug] Routing to a callback
+[Mon May  9 12:44:22 2016] [debug] Routing to a callback
+[Mon May  9 12:44:26 2016] [debug] 200 OK (3.860446s, 0.259/s)
+[Mon May  9 12:44:41 2016] [debug] GET "/list_databases"
+[Mon May  9 12:44:41 2016] [debug] Routing to a callback
+[Mon May  9 12:44:41 2016] [debug] Routing to a callback
+[Mon May  9 12:44:45 2016] [debug] 200 OK (3.832616s, 0.261/s)
+[Mon May  9 12:45:01 2016] [debug] GET "/list_databases"
+[Mon May  9 12:45:01 2016] [debug] Routing to a callback
+[Mon May  9 12:45:01 2016] [debug] Routing to a callback
+[Mon May  9 12:45:05 2016] [debug] 200 OK (3.83037s, 0.261/s)
+[Mon May  9 12:45:20 2016] [debug] GET "/list_databases"
+[Mon May  9 12:45:20 2016] [debug] Routing to a callback
+[Mon May  9 12:45:20 2016] [debug] Routing to a callback
+[Mon May  9 12:45:24 2016] [debug] 200 OK (3.869294s, 0.258/s)
+[Mon May  9 12:45:40 2016] [debug] GET "/list_databases"
+[Mon May  9 12:45:40 2016] [debug] Routing to a callback
+[Mon May  9 12:45:40 2016] [debug] Routing to a callback
+[Mon May  9 12:45:44 2016] [debug] 200 OK (3.854428s, 0.259/s)
+[Mon May  9 12:45:59 2016] [debug] GET "/list_databases"
+[Mon May  9 12:45:59 2016] [debug] Routing to a callback
+[Mon May  9 12:45:59 2016] [debug] Routing to a callback
+[Mon May  9 12:46:03 2016] [debug] 200 OK (3.879935s, 0.258/s)
+[Mon May  9 12:46:19 2016] [debug] GET "/list_databases"
+[Mon May  9 12:46:19 2016] [debug] Routing to a callback
+[Mon May  9 12:46:19 2016] [debug] Routing to a callback
+[Mon May  9 12:46:23 2016] [debug] 200 OK (3.837721s, 0.261/s)
+[Mon May  9 12:46:39 2016] [debug] GET "/list_databases"
+[Mon May  9 12:46:39 2016] [debug] Routing to a callback
+[Mon May  9 12:46:39 2016] [debug] Routing to a callback
+[Mon May  9 12:46:42 2016] [debug] 200 OK (3.807725s, 0.263/s)
+[Mon May  9 12:46:58 2016] [debug] GET "/list_databases"
+[Mon May  9 12:46:58 2016] [debug] Routing to a callback
+[Mon May  9 12:46:58 2016] [debug] Routing to a callback
+[Mon May  9 12:47:02 2016] [debug] 200 OK (3.816237s, 0.262/s)
+[Mon May  9 12:47:17 2016] [debug] GET "/list_databases"
+[Mon May  9 12:47:17 2016] [debug] Routing to a callback
+[Mon May  9 12:47:17 2016] [debug] Routing to a callback
+[Mon May  9 12:47:21 2016] [debug] 200 OK (3.813885s, 0.262/s)
+[Mon May  9 12:47:37 2016] [debug] GET "/list_databases"
+[Mon May  9 12:47:37 2016] [debug] Routing to a callback
+[Mon May  9 12:47:37 2016] [debug] Routing to a callback
+[Mon May  9 12:47:41 2016] [debug] 200 OK (3.826118s, 0.261/s)
+[Mon May  9 12:47:56 2016] [debug] GET "/list_databases"
+[Mon May  9 12:47:56 2016] [debug] Routing to a callback
+[Mon May  9 12:47:56 2016] [debug] Routing to a callback
+[Mon May  9 12:48:00 2016] [debug] 200 OK (3.813711s, 0.262/s)
+[Mon May  9 12:48:16 2016] [debug] GET "/list_databases"
+[Mon May  9 12:48:16 2016] [debug] Routing to a callback
+[Mon May  9 12:48:16 2016] [debug] Routing to a callback
+[Mon May  9 12:48:19 2016] [debug] 200 OK (3.772389s, 0.265/s)
+[Mon May  9 12:48:35 2016] [debug] GET "/list_databases"
+[Mon May  9 12:48:35 2016] [debug] Routing to a callback
+[Mon May  9 12:48:35 2016] [debug] Routing to a callback
+[Mon May  9 12:48:39 2016] [debug] 200 OK (3.815692s, 0.262/s)
+[Mon May  9 12:48:54 2016] [debug] GET "/list_databases"
+[Mon May  9 12:48:54 2016] [debug] Routing to a callback
+[Mon May  9 12:48:54 2016] [debug] Routing to a callback
+[Mon May  9 12:48:58 2016] [debug] 200 OK (3.744278s, 0.267/s)
+[Mon May  9 12:49:13 2016] [debug] GET "/list_databases"
+[Mon May  9 12:49:13 2016] [debug] Routing to a callback
+[Mon May  9 12:49:13 2016] [debug] Routing to a callback
+[Mon May  9 12:49:16 2016] [debug] 200 OK (3.475805s, 0.288/s)
+[Mon May  9 12:49:31 2016] [debug] GET "/list_databases"
+[Mon May  9 12:49:31 2016] [debug] Routing to a callback
+[Mon May  9 12:49:31 2016] [debug] Routing to a callback
+[Mon May  9 12:49:35 2016] [debug] 200 OK (3.84373s, 0.260/s)
+[Mon May  9 12:49:50 2016] [debug] GET "/list_databases"
+[Mon May  9 12:49:50 2016] [debug] Routing to a callback
+[Mon May  9 12:49:50 2016] [debug] Routing to a callback
+[Mon May  9 12:49:54 2016] [debug] 200 OK (3.838428s, 0.261/s)
+[Mon May  9 12:50:10 2016] [debug] GET "/list_databases"
+[Mon May  9 12:50:10 2016] [debug] Routing to a callback
+[Mon May  9 12:50:10 2016] [debug] Routing to a callback
+[Mon May  9 12:50:14 2016] [debug] 200 OK (3.846073s, 0.260/s)
+[Mon May  9 12:50:29 2016] [debug] GET "/list_databases"
+[Mon May  9 12:50:29 2016] [debug] Routing to a callback
+[Mon May  9 12:50:29 2016] [debug] Routing to a callback
+[Mon May  9 12:50:33 2016] [debug] 200 OK (3.838293s, 0.261/s)
+[Mon May  9 12:50:49 2016] [debug] GET "/list_databases"
+[Mon May  9 12:50:49 2016] [debug] Routing to a callback
+[Mon May  9 12:50:49 2016] [debug] Routing to a callback
+[Mon May  9 12:50:53 2016] [debug] 200 OK (3.855454s, 0.259/s)
+[Mon May  9 12:51:08 2016] [debug] GET "/list_databases"
+[Mon May  9 12:51:08 2016] [debug] Routing to a callback
+[Mon May  9 12:51:08 2016] [debug] Routing to a callback
+[Mon May  9 12:51:12 2016] [debug] 200 OK (3.824602s, 0.261/s)
+[Mon May  9 12:51:28 2016] [debug] GET "/list_databases"
+[Mon May  9 12:51:28 2016] [debug] Routing to a callback
+[Mon May  9 12:51:28 2016] [debug] Routing to a callback
+[Mon May  9 12:51:32 2016] [debug] 200 OK (3.840786s, 0.260/s)
+[Mon May  9 12:51:47 2016] [debug] GET "/list_databases"
+[Mon May  9 12:51:47 2016] [debug] Routing to a callback
+[Mon May  9 12:51:47 2016] [debug] Routing to a callback
+[Mon May  9 12:51:51 2016] [debug] 200 OK (3.813375s, 0.262/s)
+[Mon May  9 12:52:07 2016] [debug] GET "/list_databases"
+[Mon May  9 12:52:07 2016] [debug] Routing to a callback
+[Mon May  9 12:52:07 2016] [debug] Routing to a callback
+[Mon May  9 12:52:11 2016] [debug] 200 OK (3.779763s, 0.265/s)
+[Mon May  9 12:54:17 2016] [debug] GET "/list_databases"
+[Mon May  9 12:54:17 2016] [debug] Routing to a callback
+[Mon May  9 12:54:17 2016] [debug] Routing to a callback
+[Mon May  9 12:54:21 2016] [debug] 200 OK (3.840969s, 0.260/s)
+[Mon May  9 12:54:29 2016] [debug] GET "/list_databases"
+[Mon May  9 12:54:29 2016] [debug] Routing to a callback
+[Mon May  9 12:54:29 2016] [debug] Routing to a callback
+[Mon May  9 12:54:33 2016] [debug] 200 OK (3.856769s, 0.259/s)
+[Mon May  9 12:54:49 2016] [debug] GET "/list_databases"
+[Mon May  9 12:54:49 2016] [debug] Routing to a callback
+[Mon May  9 12:54:49 2016] [debug] Routing to a callback
+[Mon May  9 12:54:52 2016] [debug] 200 OK (3.866963s, 0.259/s)
+[Mon May  9 12:55:08 2016] [debug] GET "/list_databases"
+[Mon May  9 12:55:08 2016] [debug] Routing to a callback
+[Mon May  9 12:55:08 2016] [debug] Routing to a callback
+[Mon May  9 12:55:12 2016] [debug] 200 OK (3.795545s, 0.263/s)
+[Mon May  9 12:55:28 2016] [debug] GET "/list_databases"
+[Mon May  9 12:55:28 2016] [debug] Routing to a callback
+[Mon May  9 12:55:28 2016] [debug] Routing to a callback
+[Mon May  9 12:55:31 2016] [debug] 200 OK (3.825226s, 0.261/s)
+[Mon May  9 12:55:47 2016] [debug] GET "/list_databases"
+[Mon May  9 12:55:47 2016] [debug] Routing to a callback
+[Mon May  9 12:55:47 2016] [debug] Routing to a callback
+[Mon May  9 12:55:51 2016] [debug] 200 OK (3.842123s, 0.260/s)
+[Mon May  9 12:56:06 2016] [debug] GET "/list_databases"
+[Mon May  9 12:56:07 2016] [debug] Routing to a callback
+[Mon May  9 12:56:07 2016] [debug] Routing to a callback
+[Mon May  9 12:56:10 2016] [debug] 200 OK (3.788554s, 0.264/s)
+[Mon May  9 12:56:26 2016] [debug] GET "/list_databases"
+[Mon May  9 12:56:26 2016] [debug] Routing to a callback
+[Mon May  9 12:56:26 2016] [debug] Routing to a callback
+[Mon May  9 12:56:30 2016] [debug] 200 OK (3.802146s, 0.263/s)
+[Mon May  9 12:56:45 2016] [debug] GET "/list_databases"
+[Mon May  9 12:56:45 2016] [debug] Routing to a callback
+[Mon May  9 12:56:45 2016] [debug] Routing to a callback
+[Mon May  9 12:56:49 2016] [debug] 200 OK (3.85818s, 0.259/s)
+[Mon May  9 12:57:05 2016] [debug] GET "/list_databases"
+[Mon May  9 12:57:05 2016] [debug] Routing to a callback
+[Mon May  9 12:57:05 2016] [debug] Routing to a callback
+[Mon May  9 12:57:09 2016] [debug] 200 OK (3.804487s, 0.263/s)
+[Mon May  9 12:57:24 2016] [debug] GET "/list_databases"
+[Mon May  9 12:57:24 2016] [debug] Routing to a callback
+[Mon May  9 12:57:24 2016] [debug] Routing to a callback
+[Mon May  9 12:57:28 2016] [debug] 200 OK (3.874052s, 0.258/s)
+[Mon May  9 12:57:43 2016] [debug] GET "/list_databases"
+[Mon May  9 12:57:43 2016] [debug] Routing to a callback
+[Mon May  9 12:57:43 2016] [debug] Routing to a callback
+[Mon May  9 12:57:47 2016] [debug] 200 OK (3.847432s, 0.260/s)
+[Mon May  9 12:58:03 2016] [debug] GET "/list_databases"
+[Mon May  9 12:58:03 2016] [debug] Routing to a callback
+[Mon May  9 12:58:03 2016] [debug] Routing to a callback
+[Mon May  9 12:58:06 2016] [debug] 200 OK (3.773811s, 0.265/s)
+[Mon May  9 12:58:22 2016] [debug] GET "/list_databases"
+[Mon May  9 12:58:22 2016] [debug] Routing to a callback
+[Mon May  9 12:58:22 2016] [debug] Routing to a callback
+[Mon May  9 12:58:26 2016] [debug] 200 OK (3.841416s, 0.260/s)
+[Mon May  9 12:58:42 2016] [debug] GET "/list_databases"
+[Mon May  9 12:58:42 2016] [debug] Routing to a callback
+[Mon May  9 12:58:42 2016] [debug] Routing to a callback
+[Mon May  9 12:58:45 2016] [debug] 200 OK (3.856595s, 0.259/s)
+[Mon May  9 12:59:01 2016] [debug] GET "/list_databases"
+[Mon May  9 12:59:01 2016] [debug] Routing to a callback
+[Mon May  9 12:59:01 2016] [debug] Routing to a callback
+[Mon May  9 12:59:04 2016] [debug] 200 OK (3.842384s, 0.260/s)
+[Mon May  9 12:59:19 2016] [debug] GET "/list_databases"
+[Mon May  9 12:59:19 2016] [debug] Routing to a callback
+[Mon May  9 12:59:19 2016] [debug] Routing to a callback
+[Mon May  9 12:59:23 2016] [debug] 200 OK (3.836363s, 0.261/s)
+[Mon May  9 12:59:38 2016] [debug] GET "/list_databases"
+[Mon May  9 12:59:38 2016] [debug] Routing to a callback
+[Mon May  9 12:59:38 2016] [debug] Routing to a callback
+[Mon May  9 12:59:42 2016] [debug] 200 OK (3.789817s, 0.264/s)
+[Mon May  9 12:59:58 2016] [debug] GET "/list_databases"
+[Mon May  9 12:59:58 2016] [debug] Routing to a callback
+[Mon May  9 12:59:58 2016] [debug] Routing to a callback
+[Mon May  9 13:00:02 2016] [debug] 200 OK (3.823449s, 0.262/s)
+[Mon May  9 13:00:17 2016] [debug] GET "/list_databases"
+[Mon May  9 13:00:17 2016] [debug] Routing to a callback
+[Mon May  9 13:00:17 2016] [debug] Routing to a callback
+[Mon May  9 13:00:21 2016] [debug] 200 OK (3.830749s, 0.261/s)
+[Mon May  9 13:00:37 2016] [debug] GET "/list_databases"
+[Mon May  9 13:00:37 2016] [debug] Routing to a callback
+[Mon May  9 13:00:37 2016] [debug] Routing to a callback
+[Mon May  9 13:00:41 2016] [debug] 200 OK (3.829973s, 0.261/s)
+[Mon May  9 13:00:56 2016] [debug] GET "/list_databases"
+[Mon May  9 13:00:56 2016] [debug] Routing to a callback
+[Mon May  9 13:00:56 2016] [debug] Routing to a callback
+[Mon May  9 13:01:00 2016] [debug] 200 OK (3.799331s, 0.263/s)
+[Mon May  9 13:01:16 2016] [debug] GET "/list_databases"
+[Mon May  9 13:01:16 2016] [debug] Routing to a callback
+[Mon May  9 13:01:16 2016] [debug] Routing to a callback
+[Mon May  9 13:01:20 2016] [debug] 200 OK (3.834318s, 0.261/s)
+[Mon May  9 13:01:35 2016] [debug] GET "/list_databases"
+[Mon May  9 13:01:35 2016] [debug] Routing to a callback
+[Mon May  9 13:01:35 2016] [debug] Routing to a callback
+[Mon May  9 13:01:39 2016] [debug] 200 OK (3.809553s, 0.262/s)
+[Mon May  9 13:01:55 2016] [debug] GET "/list_databases"
+[Mon May  9 13:01:55 2016] [debug] Routing to a callback
+[Mon May  9 13:01:55 2016] [debug] Routing to a callback
+[Mon May  9 13:01:58 2016] [debug] 200 OK (3.817223s, 0.262/s)
+[Mon May  9 13:02:14 2016] [debug] GET "/list_databases"
+[Mon May  9 13:02:14 2016] [debug] Routing to a callback
+[Mon May  9 13:02:14 2016] [debug] Routing to a callback
+[Mon May  9 13:02:18 2016] [debug] 200 OK (3.807886s, 0.263/s)
+[Mon May  9 13:02:57 2016] [debug] GET "/list_databases"
+[Mon May  9 13:02:57 2016] [debug] Routing to a callback
+[Mon May  9 13:02:57 2016] [debug] Routing to a callback
+[Mon May  9 13:03:01 2016] [debug] 200 OK (3.833405s, 0.261/s)
+[Mon May  9 13:03:17 2016] [debug] GET "/list_databases"
+[Mon May  9 13:03:17 2016] [debug] Routing to a callback
+[Mon May  9 13:03:17 2016] [debug] Routing to a callback
+[Mon May  9 13:03:20 2016] [debug] 200 OK (3.816412s, 0.262/s)
+[Mon May  9 13:03:36 2016] [debug] GET "/list_databases"
+[Mon May  9 13:03:36 2016] [debug] Routing to a callback
+[Mon May  9 13:03:36 2016] [debug] Routing to a callback
+[Mon May  9 13:03:40 2016] [debug] 200 OK (3.817209s, 0.262/s)
+[Mon May  9 13:03:55 2016] [debug] GET "/list_databases"
+[Mon May  9 13:03:55 2016] [debug] Routing to a callback
+[Mon May  9 13:03:55 2016] [debug] Routing to a callback
+[Mon May  9 13:03:59 2016] [debug] 200 OK (3.853706s, 0.259/s)
+[Mon May  9 13:04:14 2016] [debug] GET "/list_databases"
+[Mon May  9 13:04:14 2016] [debug] Routing to a callback
+[Mon May  9 13:04:14 2016] [debug] Routing to a callback
+[Mon May  9 13:04:18 2016] [debug] 200 OK (3.698872s, 0.270/s)
+[Mon May  9 13:04:33 2016] [debug] GET "/list_databases"
+[Mon May  9 13:04:33 2016] [debug] Routing to a callback
+[Mon May  9 13:04:33 2016] [debug] Routing to a callback
+[Mon May  9 13:04:37 2016] [debug] 200 OK (3.838424s, 0.261/s)
+[Mon May  9 13:04:52 2016] [debug] GET "/list_databases"
+[Mon May  9 13:04:52 2016] [debug] Routing to a callback
+[Mon May  9 13:04:52 2016] [debug] Routing to a callback
+[Mon May  9 13:04:56 2016] [debug] 200 OK (3.859526s, 0.259/s)
+[Mon May  9 13:05:12 2016] [debug] GET "/list_databases"
+[Mon May  9 13:05:12 2016] [debug] Routing to a callback
+[Mon May  9 13:05:12 2016] [debug] Routing to a callback
+[Mon May  9 13:05:15 2016] [debug] 200 OK (3.866906s, 0.259/s)
+[Mon May  9 13:05:31 2016] [debug] GET "/list_databases"
+[Mon May  9 13:05:31 2016] [debug] Routing to a callback
+[Mon May  9 13:05:31 2016] [debug] Routing to a callback
+[Mon May  9 13:05:35 2016] [debug] 200 OK (3.901663s, 0.256/s)
+[Mon May  9 13:05:51 2016] [debug] GET "/list_databases"
+[Mon May  9 13:05:51 2016] [debug] Routing to a callback
+[Mon May  9 13:05:51 2016] [debug] Routing to a callback
+[Mon May  9 13:05:55 2016] [debug] 200 OK (3.818544s, 0.262/s)
+[Mon May  9 13:06:10 2016] [debug] GET "/list_databases"
+[Mon May  9 13:06:10 2016] [debug] Routing to a callback
+[Mon May  9 13:06:10 2016] [debug] Routing to a callback
+[Mon May  9 13:06:14 2016] [debug] 200 OK (3.839027s, 0.260/s)
+[Mon May  9 13:07:01 2016] [debug] GET "/list_databases"
+[Mon May  9 13:07:01 2016] [debug] Routing to a callback
+[Mon May  9 13:07:01 2016] [debug] Routing to a callback
+[Mon May  9 13:07:05 2016] [debug] 200 OK (3.845895s, 0.260/s)
+[Mon May  9 13:07:20 2016] [debug] GET "/list_databases"
+[Mon May  9 13:07:20 2016] [debug] Routing to a callback
+[Mon May  9 13:07:20 2016] [debug] Routing to a callback
+[Mon May  9 13:07:24 2016] [debug] 200 OK (3.884867s, 0.257/s)
+[Mon May  9 13:07:40 2016] [debug] GET "/list_databases"
+[Mon May  9 13:07:40 2016] [debug] Routing to a callback
+[Mon May  9 13:07:40 2016] [debug] Routing to a callback
+[Mon May  9 13:07:44 2016] [debug] 200 OK (3.84878s, 0.260/s)
+[Mon May  9 13:08:00 2016] [debug] GET "/list_databases"
+[Mon May  9 13:08:00 2016] [debug] Routing to a callback
+[Mon May  9 13:08:00 2016] [debug] Routing to a callback
+[Mon May  9 13:08:03 2016] [debug] 200 OK (3.786836s, 0.264/s)
+[Mon May  9 13:08:19 2016] [debug] GET "/list_databases"
+[Mon May  9 13:08:19 2016] [debug] Routing to a callback
+[Mon May  9 13:08:19 2016] [debug] Routing to a callback
+[Mon May  9 13:08:23 2016] [debug] 200 OK (3.858715s, 0.259/s)
+[Mon May  9 13:08:39 2016] [debug] GET "/list_databases"
+[Mon May  9 13:08:39 2016] [debug] Routing to a callback
+[Mon May  9 13:08:39 2016] [debug] Routing to a callback
+[Mon May  9 13:08:43 2016] [debug] 200 OK (3.810917s, 0.262/s)
+[Mon May  9 13:08:58 2016] [debug] GET "/list_databases"
+[Mon May  9 13:08:58 2016] [debug] Routing to a callback
+[Mon May  9 13:08:58 2016] [debug] Routing to a callback
+[Mon May  9 13:09:02 2016] [debug] 200 OK (3.878003s, 0.258/s)
+[Mon May  9 13:09:18 2016] [debug] GET "/list_databases"
+[Mon May  9 13:09:18 2016] [debug] Routing to a callback
+[Mon May  9 13:09:18 2016] [debug] Routing to a callback
+[Mon May  9 13:09:21 2016] [debug] 200 OK (3.83933s, 0.260/s)
+[Mon May  9 13:09:37 2016] [debug] GET "/list_databases"
+[Mon May  9 13:09:37 2016] [debug] Routing to a callback
+[Mon May  9 13:09:37 2016] [debug] Routing to a callback
+[Mon May  9 13:09:41 2016] [debug] 200 OK (3.821296s, 0.262/s)
+[Mon May  9 13:09:57 2016] [debug] GET "/list_databases"
+[Mon May  9 13:09:57 2016] [debug] Routing to a callback
+[Mon May  9 13:09:57 2016] [debug] Routing to a callback
+[Mon May  9 13:10:00 2016] [debug] 200 OK (3.814365s, 0.262/s)
+[Mon May  9 13:10:16 2016] [debug] GET "/list_databases"
+[Mon May  9 13:10:16 2016] [debug] Routing to a callback
+[Mon May  9 13:10:16 2016] [debug] Routing to a callback
+[Mon May  9 13:10:20 2016] [debug] 200 OK (3.829604s, 0.261/s)
+[Mon May  9 13:10:35 2016] [debug] GET "/list_databases"
+[Mon May  9 13:10:35 2016] [debug] Routing to a callback
+[Mon May  9 13:10:35 2016] [debug] Routing to a callback
+[Mon May  9 13:10:39 2016] [debug] 200 OK (3.811437s, 0.262/s)
+[Mon May  9 13:10:55 2016] [debug] GET "/list_databases"
+[Mon May  9 13:10:55 2016] [debug] Routing to a callback
+[Mon May  9 13:10:55 2016] [debug] Routing to a callback
+[Mon May  9 13:10:59 2016] [debug] 200 OK (3.825517s, 0.261/s)
+[Mon May  9 13:11:15 2016] [debug] GET "/list_databases"
+[Mon May  9 13:11:15 2016] [debug] Routing to a callback
+[Mon May  9 13:11:15 2016] [debug] Routing to a callback
+[Mon May  9 13:11:18 2016] [debug] 200 OK (3.844475s, 0.260/s)
+[Mon May  9 13:11:34 2016] [debug] GET "/list_databases"
+[Mon May  9 13:11:34 2016] [debug] Routing to a callback
+[Mon May  9 13:11:34 2016] [debug] Routing to a callback
+[Mon May  9 13:11:38 2016] [debug] 200 OK (3.877226s, 0.258/s)
+[Mon May  9 13:11:54 2016] [debug] GET "/list_databases"
+[Mon May  9 13:11:54 2016] [debug] Routing to a callback
+[Mon May  9 13:11:54 2016] [debug] Routing to a callback
+[Mon May  9 13:11:57 2016] [debug] 200 OK (3.827156s, 0.261/s)
+[Mon May  9 13:12:13 2016] [debug] GET "/list_databases"
+[Mon May  9 13:12:13 2016] [debug] Routing to a callback
+[Mon May  9 13:12:13 2016] [debug] Routing to a callback
+[Mon May  9 13:12:17 2016] [debug] 200 OK (3.828625s, 0.261/s)
+[Mon May  9 13:12:25 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:12:25 2016] [debug] Routing to a callback
+[Mon May  9 13:12:25 2016] [debug] Routing to a callback
+[Mon May  9 13:12:29 2016] [debug] 200 OK (3.874884s, 0.258/s)
+[Mon May  9 13:13:15 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:13:15 2016] [debug] Routing to a callback
+[Mon May  9 13:13:15 2016] [debug] Routing to a callback
+[Mon May  9 13:13:19 2016] [debug] 200 OK (3.896205s, 0.257/s)
+[Mon May  9 13:14:14 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:14:14 2016] [debug] Routing to a callback
+[Mon May  9 13:14:14 2016] [debug] Routing to a callback
+[Mon May  9 13:14:18 2016] [debug] 200 OK (3.867106s, 0.259/s)
+[Mon May  9 13:15:12 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:15:12 2016] [debug] Routing to a callback
+[Mon May  9 13:15:12 2016] [debug] Routing to a callback
+[Mon May  9 13:15:16 2016] [debug] 200 OK (3.881188s, 0.258/s)
+[Mon May  9 13:16:11 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:16:11 2016] [debug] Routing to a callback
+[Mon May  9 13:16:11 2016] [debug] Routing to a callback
+[Mon May  9 13:16:15 2016] [debug] 200 OK (3.902375s, 0.256/s)
+[Mon May  9 13:17:18 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:17:18 2016] [debug] Routing to a callback
+[Mon May  9 13:17:18 2016] [debug] Routing to a callback
+[Mon May  9 13:17:22 2016] [debug] 200 OK (3.740258s, 0.267/s)
+[Mon May  9 13:18:14 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:18:14 2016] [debug] Routing to a callback
+[Mon May  9 13:18:14 2016] [debug] Routing to a callback
+[Mon May  9 13:18:17 2016] [debug] 200 OK (3.731146s, 0.268/s)
+[Mon May  9 13:19:09 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:19:09 2016] [debug] Routing to a callback
+[Mon May  9 13:19:09 2016] [debug] Routing to a callback
+[Mon May  9 13:19:13 2016] [debug] 200 OK (3.781919s, 0.264/s)
+[Mon May  9 13:20:08 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:20:08 2016] [debug] Routing to a callback
+[Mon May  9 13:20:08 2016] [debug] Routing to a callback
+[Mon May  9 13:20:11 2016] [debug] 200 OK (3.92386s, 0.255/s)
+[Mon May  9 13:21:06 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:21:06 2016] [debug] Routing to a callback
+[Mon May  9 13:21:06 2016] [debug] Routing to a callback
+[Mon May  9 13:21:10 2016] [debug] 200 OK (3.869157s, 0.258/s)
+[Mon May  9 13:22:05 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:22:05 2016] [debug] Routing to a callback
+[Mon May  9 13:22:05 2016] [debug] Routing to a callback
+[Mon May  9 13:22:09 2016] [debug] 200 OK (3.923901s, 0.255/s)
+[Mon May  9 13:23:02 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:23:02 2016] [debug] Routing to a callback
+[Mon May  9 13:23:02 2016] [debug] Routing to a callback
+[Mon May  9 13:23:06 2016] [debug] 200 OK (3.932705s, 0.254/s)
+[Mon May  9 13:24:01 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:24:01 2016] [debug] Routing to a callback
+[Mon May  9 13:24:01 2016] [debug] Routing to a callback
+[Mon May  9 13:24:04 2016] [debug] 200 OK (3.902167s, 0.256/s)
+[Mon May  9 13:24:57 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:24:57 2016] [debug] Routing to a callback
+[Mon May  9 13:24:57 2016] [debug] Routing to a callback
+[Mon May  9 13:25:01 2016] [debug] 200 OK (3.95966s, 0.253/s)
+[Mon May  9 13:25:55 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:25:55 2016] [debug] Routing to a callback
+[Mon May  9 13:25:55 2016] [debug] Routing to a callback
+[Mon May  9 13:25:59 2016] [debug] 200 OK (3.894008s, 0.257/s)
+[Mon May  9 13:26:53 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:26:53 2016] [debug] Routing to a callback
+[Mon May  9 13:26:53 2016] [debug] Routing to a callback
+[Mon May  9 13:26:57 2016] [debug] 200 OK (3.952336s, 0.253/s)
+[Mon May  9 13:27:52 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:27:52 2016] [debug] Routing to a callback
+[Mon May  9 13:27:52 2016] [debug] Routing to a callback
+[Mon May  9 13:27:56 2016] [debug] 200 OK (3.916569s, 0.255/s)
+[Mon May  9 13:28:50 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:28:50 2016] [debug] Routing to a callback
+[Mon May  9 13:28:50 2016] [debug] Routing to a callback
+[Mon May  9 13:28:54 2016] [debug] 200 OK (3.91939s, 0.255/s)
+[Mon May  9 13:29:47 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:29:47 2016] [debug] Routing to a callback
+[Mon May  9 13:29:47 2016] [debug] Routing to a callback
+[Mon May  9 13:29:51 2016] [debug] 200 OK (3.955931s, 0.253/s)
+[Mon May  9 13:30:45 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:30:45 2016] [debug] Routing to a callback
+[Mon May  9 13:30:45 2016] [debug] Routing to a callback
+[Mon May  9 13:30:49 2016] [debug] 200 OK (3.952064s, 0.253/s)
+[Mon May  9 13:31:44 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:31:44 2016] [debug] Routing to a callback
+[Mon May  9 13:31:44 2016] [debug] Routing to a callback
+[Mon May  9 13:31:47 2016] [debug] 200 OK (3.899089s, 0.256/s)
+[Mon May  9 13:32:42 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:32:42 2016] [debug] Routing to a callback
+[Mon May  9 13:32:42 2016] [debug] Routing to a callback
+[Mon May  9 13:32:46 2016] [debug] 200 OK (3.900547s, 0.256/s)
+[Mon May  9 13:33:40 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:33:40 2016] [debug] Routing to a callback
+[Mon May  9 13:33:40 2016] [debug] Routing to a callback
+[Mon May  9 13:33:44 2016] [debug] 200 OK (3.934422s, 0.254/s)
+[Mon May  9 13:34:37 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:34:37 2016] [debug] Routing to a callback
+[Mon May  9 13:34:37 2016] [debug] Routing to a callback
+[Mon May  9 13:34:41 2016] [debug] 200 OK (3.883962s, 0.257/s)
+[Mon May  9 13:35:35 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:35:35 2016] [debug] Routing to a callback
+[Mon May  9 13:35:35 2016] [debug] Routing to a callback
+[Mon May  9 13:35:39 2016] [debug] 200 OK (3.881325s, 0.258/s)
+[Mon May  9 13:36:34 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:36:34 2016] [debug] Routing to a callback
+[Mon May  9 13:36:34 2016] [debug] Routing to a callback
+[Mon May  9 13:36:38 2016] [debug] 200 OK (3.921789s, 0.255/s)
+[Mon May  9 13:37:33 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:37:33 2016] [debug] Routing to a callback
+[Mon May  9 13:37:33 2016] [debug] Routing to a callback
+[Mon May  9 13:37:36 2016] [debug] 200 OK (3.786328s, 0.264/s)
+[Mon May  9 13:38:38 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:38:38 2016] [debug] Routing to a callback
+[Mon May  9 13:38:38 2016] [debug] Routing to a callback
+[Mon May  9 13:38:42 2016] [debug] 200 OK (3.658847s, 0.273/s)
+[Mon May  9 13:39:33 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:39:33 2016] [debug] Routing to a callback
+[Mon May  9 13:39:33 2016] [debug] Routing to a callback
+[Mon May  9 13:39:37 2016] [debug] 200 OK (3.666741s, 0.273/s)
+[Mon May  9 13:40:29 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:40:29 2016] [debug] Routing to a callback
+[Mon May  9 13:40:29 2016] [debug] Routing to a callback
+[Mon May  9 13:40:33 2016] [debug] 200 OK (3.648467s, 0.274/s)
+[Mon May  9 13:41:24 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:41:24 2016] [debug] Routing to a callback
+[Mon May  9 13:41:24 2016] [debug] Routing to a callback
+[Mon May  9 13:41:28 2016] [debug] 200 OK (3.690964s, 0.271/s)
+[Mon May  9 13:42:19 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:42:19 2016] [debug] Routing to a callback
+[Mon May  9 13:42:19 2016] [debug] Routing to a callback
+[Mon May  9 13:42:23 2016] [debug] 200 OK (3.668357s, 0.273/s)
+[Mon May  9 13:43:14 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:43:14 2016] [debug] Routing to a callback
+[Mon May  9 13:43:14 2016] [debug] Routing to a callback
+[Mon May  9 13:43:18 2016] [debug] 200 OK (3.66849s, 0.273/s)
+[Mon May  9 13:44:09 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:44:09 2016] [debug] Routing to a callback
+[Mon May  9 13:44:09 2016] [debug] Routing to a callback
+[Mon May  9 13:44:13 2016] [debug] 200 OK (3.732556s, 0.268/s)
+[Mon May  9 13:45:04 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:45:04 2016] [debug] Routing to a callback
+[Mon May  9 13:45:04 2016] [debug] Routing to a callback
+[Mon May  9 13:45:07 2016] [debug] 200 OK (3.683618s, 0.271/s)
+[Mon May  9 13:45:59 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:45:59 2016] [debug] Routing to a callback
+[Mon May  9 13:45:59 2016] [debug] Routing to a callback
+[Mon May  9 13:46:02 2016] [debug] 200 OK (3.706108s, 0.270/s)
+[Mon May  9 13:46:54 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:46:54 2016] [debug] Routing to a callback
+[Mon May  9 13:46:54 2016] [debug] Routing to a callback
+[Mon May  9 13:46:58 2016] [debug] 200 OK (3.684935s, 0.271/s)
+[Mon May  9 13:47:49 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:47:49 2016] [debug] Routing to a callback
+[Mon May  9 13:47:49 2016] [debug] Routing to a callback
+[Mon May  9 13:47:53 2016] [debug] 200 OK (3.768621s, 0.265/s)
+[Mon May  9 13:48:44 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:48:44 2016] [debug] Routing to a callback
+[Mon May  9 13:48:44 2016] [debug] Routing to a callback
+[Mon May  9 13:48:48 2016] [debug] 200 OK (3.64694s, 0.274/s)
+[Mon May  9 13:49:39 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:49:39 2016] [debug] Routing to a callback
+[Mon May  9 13:49:39 2016] [debug] Routing to a callback
+[Mon May  9 13:49:43 2016] [debug] 200 OK (3.68212s, 0.272/s)
+[Mon May  9 13:50:27 2016] [debug] GET "/main"
+[Mon May  9 13:50:27 2016] [debug] Routing to a callback
+[Mon May  9 13:50:27 2016] [debug] Routing to a callback
+[Mon May  9 13:50:27 2016] [debug] Rendering cached template "main.html.ep"
+[Mon May  9 13:50:27 2016] [debug] 200 OK (0.007312s, 136.761/s)
+[Mon May  9 13:50:35 2016] [debug] GET "/squeue"
+[Mon May  9 13:50:35 2016] [debug] Routing to a callback
+[Mon May  9 13:50:35 2016] [debug] Routing to a callback
+[Mon May  9 13:50:35 2016] [debug] 200 OK (0.023461s, 42.624/s)
+[Mon May  9 13:50:35 2016] [debug] GET "/list_databases"
+[Mon May  9 13:50:35 2016] [debug] Routing to a callback
+[Mon May  9 13:50:35 2016] [debug] Routing to a callback
+[Mon May  9 13:50:38 2016] [debug] 200 OK (3.635541s, 0.275/s)
+[Mon May  9 13:50:38 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:50:38 2016] [debug] Routing to a callback
+[Mon May  9 13:50:38 2016] [debug] Routing to a callback
+[Mon May  9 13:50:42 2016] [debug] 200 OK (3.69406s, 0.271/s)
+[Mon May  9 13:50:42 2016] [debug] GET "/sinfo"
+[Mon May  9 13:50:42 2016] [debug] Routing to a callback
+[Mon May  9 13:50:42 2016] [debug] Routing to a callback
+[Mon May  9 13:50:42 2016] [debug] 200 OK (0.029739s, 33.626/s)
+[Mon May  9 13:50:42 2016] [debug] GET "/UAC_CRUD_service"
+[Mon May  9 13:50:42 2016] [debug] Routing to a callback
+[Mon May  9 13:50:42 2016] [debug] Routing to a callback
+[Mon May  9 13:50:46 2016] [debug] 200 OK (3.612285s, 0.277/s)
+[Mon May  9 13:50:46 2016] [debug] GET "/squeue_ws"
+[Mon May  9 13:50:46 2016] [debug] Routing to a callback
+[Mon May  9 13:50:46 2016] [debug] Routing to a callback
+[Mon May  9 13:50:46 2016] [debug] 101 Switching Protocols (0.0016s, 625.000/s)
+[Mon May  9 13:50:46 2016] [debug] GET "/filesystem_changes"
+[Mon May  9 13:50:46 2016] [debug] Routing to a callback
+[Mon May  9 13:50:46 2016] [debug] Routing to a callback
+[Mon May  9 13:50:46 2016] [debug] 101 Switching Protocols (0.001334s, 749.625/s)
+[Mon May  9 13:51:06 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:51:06 2016] [debug] Routing to a callback
+[Mon May  9 13:51:06 2016] [debug] Routing to a callback
+[Mon May  9 13:51:09 2016] [debug] 200 OK (3.719792s, 0.269/s)
+[Mon May  9 13:51:09 2016] [debug] GET "/list_databases"
+[Mon May  9 13:51:09 2016] [debug] Routing to a callback
+[Mon May  9 13:51:09 2016] [debug] Routing to a callback
+[Mon May  9 13:51:13 2016] [debug] 200 OK (3.596236s, 0.278/s)
+[Mon May  9 13:52:04 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:52:04 2016] [debug] Routing to a callback
+[Mon May  9 13:52:04 2016] [debug] Routing to a callback
+[Mon May  9 13:52:08 2016] [debug] 200 OK (3.722336s, 0.269/s)
+[Mon May  9 13:53:00 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:53:00 2016] [debug] Routing to a callback
+[Mon May  9 13:53:00 2016] [debug] Routing to a callback
+[Mon May  9 13:53:04 2016] [debug] 200 OK (3.700012s, 0.270/s)
+[Mon May  9 13:53:55 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:53:55 2016] [debug] Routing to a callback
+[Mon May  9 13:53:55 2016] [debug] Routing to a callback
+[Mon May  9 13:53:59 2016] [debug] 200 OK (3.679975s, 0.272/s)
+[Mon May  9 13:54:50 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:54:50 2016] [debug] Routing to a callback
+[Mon May  9 13:54:50 2016] [debug] Routing to a callback
+[Mon May  9 13:54:54 2016] [debug] 200 OK (3.639046s, 0.275/s)
+[Mon May  9 13:55:45 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:55:45 2016] [debug] Routing to a callback
+[Mon May  9 13:55:45 2016] [debug] Routing to a callback
+[Mon May  9 13:55:49 2016] [debug] 200 OK (3.682991s, 0.272/s)
+[Mon May  9 13:56:41 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:56:41 2016] [debug] Routing to a callback
+[Mon May  9 13:56:41 2016] [debug] Routing to a callback
+[Mon May  9 13:56:44 2016] [debug] 200 OK (3.668324s, 0.273/s)
+[Mon May  9 13:57:36 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:57:36 2016] [debug] Routing to a callback
+[Mon May  9 13:57:36 2016] [debug] Routing to a callback
+[Mon May  9 13:57:39 2016] [debug] 200 OK (3.686048s, 0.271/s)
+[Mon May  9 13:58:30 2016] [debug] GET "/list_NT_files"
+[Mon May  9 13:58:30 2016] [debug] Routing to a callback
+[Mon May  9 13:58:30 2016] [debug] Routing to a callback
+[Mon May  9 13:58:34 2016] [debug] 200 OK (3.647079s, 0.274/s)
+[Mon May  9 13:58:42 2016] [debug] GET "/list_databases"
+[Mon May  9 13:58:42 2016] [debug] Routing to a callback
+[Mon May  9 13:58:42 2016] [debug] Routing to a callback
+[Mon May  9 13:58:45 2016] [debug] 200 OK (3.606306s, 0.277/s)
+[Mon May  9 13:58:53 2016] [debug] GET "/list_databases"
+[Mon May  9 13:58:53 2016] [debug] Routing to a callback
+[Mon May  9 13:58:53 2016] [debug] Routing to a callback
+[Mon May  9 13:58:56 2016] [debug] 200 OK (3.667661s, 0.273/s)
+[Mon May  9 13:59:11 2016] [debug] GET "/list_databases"
+[Mon May  9 13:59:11 2016] [debug] Routing to a callback
+[Mon May  9 13:59:11 2016] [debug] Routing to a callback
+[Mon May  9 13:59:15 2016] [debug] 200 OK (3.594276s, 0.278/s)
+[Mon May  9 13:59:30 2016] [debug] GET "/list_databases"
+[Mon May  9 13:59:30 2016] [debug] Routing to a callback
+[Mon May  9 13:59:30 2016] [debug] Routing to a callback
+[Mon May  9 13:59:33 2016] [debug] 200 OK (3.660595s, 0.273/s)
+[Mon May  9 13:59:48 2016] [debug] GET "/list_databases"
+[Mon May  9 13:59:48 2016] [debug] Routing to a callback
+[Mon May  9 13:59:48 2016] [debug] Routing to a callback
+[Mon May  9 13:59:52 2016] [debug] 200 OK (3.404901s, 0.294/s)
+[Mon May  9 14:00:06 2016] [debug] GET "/list_databases"
+[Mon May  9 14:00:06 2016] [debug] Routing to a callback
+[Mon May  9 14:00:06 2016] [debug] Routing to a callback
+[Mon May  9 14:00:10 2016] [debug] 200 OK (3.421096s, 0.292/s)
+[Mon May  9 14:00:24 2016] [debug] GET "/list_databases"
+[Mon May  9 14:00:24 2016] [debug] Routing to a callback
+[Mon May  9 14:00:24 2016] [debug] Routing to a callback
+[Mon May  9 14:00:28 2016] [debug] 200 OK (3.628535s, 0.276/s)
+[Mon May  9 18:32:11 2016] [debug] GET "/list_NT_files"
+[Mon May  9 18:32:11 2016] [debug] Routing to a callback
+[Mon May  9 18:32:11 2016] [debug] 302 Found (0.004164s, 240.154/s)
+[Mon May  9 18:32:11 2016] [debug] Routing to a callback
+[Mon May  9 18:32:46 2016] [debug] GET "/login"
+[Mon May  9 18:32:46 2016] [debug] Routing to a callback
+[Mon May  9 18:32:46 2016] [debug] Rendering cached template "login.html.ep"
+[Mon May  9 18:32:46 2016] [debug] 200 OK (0.053885s, 18.558/s)
+[Mon May  9 18:45:50 2016] [debug] GET "/list_NT_files"
+[Mon May  9 18:45:50 2016] [debug] Routing to a callback
+[Mon May  9 18:45:50 2016] [debug] 302 Found (0.001364s, 733.138/s)
+[Mon May  9 18:45:50 2016] [debug] Routing to a callback
+[Mon May  9 18:46:18 2016] [debug] GET "/list_databases"
+[Mon May  9 18:46:18 2016] [debug] Routing to a callback
+[Mon May  9 18:46:18 2016] [debug] 302 Found (0.00148s, 675.676/s)
+[Mon May  9 18:46:18 2016] [debug] Routing to a callback
+[Mon May  9 18:46:30 2016] [debug] GET "/login"
+[Mon May  9 18:46:30 2016] [debug] Routing to a callback
+[Mon May  9 18:46:30 2016] [debug] Rendering cached template "login.html.ep"
+[Mon May  9 18:46:30 2016] [debug] 200 OK (0.004327s, 231.107/s)
+[Mon May  9 18:46:30 2016] [debug] GET "/login"
+[Mon May  9 18:46:30 2016] [debug] Routing to a callback
+[Mon May  9 18:46:30 2016] [debug] Rendering cached template "login.html.ep"
+[Mon May  9 18:46:30 2016] [debug] 200 OK (0.002598s, 384.911/s)
+[Mon May  9 18:46:37 2016] [debug] GET "/list_NT_files"
+[Mon May  9 18:46:37 2016] [debug] Routing to a callback
+[Mon May  9 18:46:37 2016] [debug] 302 Found (0.001335s, 749.064/s)
+[Mon May  9 18:46:37 2016] [debug] Routing to a callback
+[Mon May  9 18:46:57 2016] [debug] GET "/login"
+[Mon May  9 18:46:57 2016] [debug] Routing to a callback
+[Mon May  9 18:46:57 2016] [debug] Rendering cached template "login.html.ep"
+[Mon May  9 18:46:57 2016] [debug] 200 OK (0.004076s, 245.339/s)
+[Mon May  9 18:47:13 2016] [debug] GET "/list_NT_files"
+[Mon May  9 18:47:13 2016] [debug] Routing to a callback
+[Mon May  9 18:47:13 2016] [debug] 302 Found (0.001573s, 635.728/s)
+[Mon May  9 18:47:13 2016] [debug] Routing to a callback
+[Mon May  9 18:47:57 2016] [debug] GET "/login"
+[Mon May  9 18:47:57 2016] [debug] Routing to a callback
+[Mon May  9 18:47:57 2016] [debug] Rendering cached template "login.html.ep"
+[Mon May  9 18:47:57 2016] [debug] 200 OK (0.002332s, 428.816/s)
+[Mon May  9 18:48:37 2016] [debug] GET "/list_NT_files"
+[Mon May  9 18:48:37 2016] [debug] Routing to a callback
+[Mon May  9 18:48:37 2016] [debug] 302 Found (0.000817s, 1223.990/s)
+[Mon May  9 18:48:37 2016] [debug] Routing to a callback
+[Mon May  9 18:49:22 2016] [debug] GET "/login"
+[Mon May  9 18:49:22 2016] [debug] Routing to a callback
+[Mon May  9 18:49:22 2016] [debug] Rendering cached template "login.html.ep"
+[Mon May  9 18:49:22 2016] [debug] 200 OK (0.003251s, 307.598/s)
+[Mon May  9 18:49:31 2016] [debug] GET "/list_NT_files"
+[Mon May  9 18:49:31 2016] [debug] Routing to a callback
+[Mon May  9 18:49:31 2016] [debug] 302 Found (0.001477s, 677.048/s)
+[Mon May  9 18:49:31 2016] [debug] Routing to a callback
+[Mon May  9 18:50:17 2016] [debug] GET "/login"
+[Mon May  9 18:50:17 2016] [debug] Routing to a callback
+[Mon May  9 18:50:17 2016] [debug] Rendering cached template "login.html.ep"
+[Mon May  9 18:50:17 2016] [debug] 200 OK (0.003602s, 277.624/s)
+[Mon May  9 19:01:30 2016] [debug] GET "/list_NT_files"
+[Mon May  9 19:01:30 2016] [debug] Routing to a callback
+[Mon May  9 19:01:30 2016] [debug] 302 Found (0.000764s, 1308.901/s)
+[Mon May  9 19:01:30 2016] [debug] Routing to a callback
+[Mon May  9 19:01:57 2016] [debug] GET "/list_databases"
+[Mon May  9 19:01:57 2016] [debug] Routing to a callback
+[Mon May  9 19:01:57 2016] [debug] 302 Found (0.000807s, 1239.157/s)
+[Mon May  9 19:01:57 2016] [debug] Routing to a callback
+[Mon May  9 19:02:09 2016] [debug] GET "/login"
+[Mon May  9 19:02:09 2016] [debug] Routing to a callback
+[Mon May  9 19:02:09 2016] [debug] Rendering cached template "login.html.ep"
+[Mon May  9 19:02:09 2016] [debug] 200 OK (0.003588s, 278.707/s)
+[Mon May  9 19:02:09 2016] [debug] GET "/login"
+[Mon May  9 19:02:09 2016] [debug] Routing to a callback
+[Mon May  9 19:02:09 2016] [debug] Rendering cached template "login.html.ep"
+[Mon May  9 19:02:09 2016] [debug] 200 OK (0.001202s, 831.947/s)
+[Mon May  9 19:02:16 2016] [debug] GET "/list_NT_files"
+[Mon May  9 19:02:16 2016] [debug] Routing to a callback
+[Mon May  9 19:02:16 2016] [debug] 302 Found (0.00127s, 787.402/s)
+[Mon May  9 19:02:16 2016] [debug] Routing to a callback
+[Mon May  9 19:02:36 2016] [debug] GET "/login"
+[Mon May  9 19:02:36 2016] [debug] Routing to a callback
+[Mon May  9 19:02:36 2016] [debug] Rendering cached template "login.html.ep"
+[Mon May  9 19:02:36 2016] [debug] 200 OK (0.003302s, 302.847/s)
+[Mon May  9 21:29:49 2016] [debug] POST "/bonafides"
+[Mon May  9 21:29:49 2016] [debug] Routing to a callback
+[Mon May  9 21:29:49 2016] [debug] 200 OK (0.021397s, 46.736/s)
+[Tue May 10 01:02:56 2016] [debug] GET "/main"
+[Tue May 10 01:02:56 2016] [debug] Routing to a callback
+[Tue May 10 01:02:56 2016] [debug] 302 Found (0.001537s, 650.618/s)
+[Tue May 10 01:02:56 2016] [debug] Routing to a callback
+[Tue May 10 01:02:56 2016] [debug] GET "/login"
+[Tue May 10 01:02:56 2016] [debug] Routing to a callback
+[Tue May 10 01:02:56 2016] [debug] Rendering template "login.html.ep"
+[Tue May 10 01:02:56 2016] [debug] 200 OK (0.021587s, 46.324/s)
+[Tue May 10 01:03:03 2016] [debug] POST "/bonafides"
+[Tue May 10 01:03:03 2016] [debug] Routing to a callback
+[Tue May 10 01:03:03 2016] [debug] 200 OK (0.052058s, 19.209/s)
+[Tue May 10 01:03:04 2016] [debug] GET "/main"
+[Tue May 10 01:03:04 2016] [debug] Routing to a callback
+[Tue May 10 01:03:04 2016] [debug] Routing to a callback
+[Tue May 10 01:03:04 2016] [debug] Rendering template "main.html.ep"
+[Tue May 10 01:03:04 2016] [debug] 200 OK (0.042703s, 23.418/s)
+[Tue May 10 01:03:04 2016] [debug] GET "/squeue"
+[Tue May 10 01:03:04 2016] [debug] Routing to a callback
+[Tue May 10 01:03:04 2016] [debug] Routing to a callback
+[Tue May 10 01:03:05 2016] [debug] 200 OK (0.034009s, 29.404/s)
+[Tue May 10 01:03:05 2016] [debug] GET "/sinfo"
+[Tue May 10 01:03:05 2016] [debug] Routing to a callback
+[Tue May 10 01:03:05 2016] [debug] Routing to a callback
+[Tue May 10 01:03:05 2016] [debug] 200 OK (0.046496s, 21.507/s)
+[Tue May 10 01:03:05 2016] [debug] GET "/list_databases"
+[Tue May 10 01:03:05 2016] [debug] Routing to a callback
+[Tue May 10 01:03:05 2016] [debug] Routing to a callback
+[Tue May 10 01:03:08 2016] [debug] 200 OK (3.834465s, 0.261/s)
+[Tue May 10 01:03:08 2016] [debug] GET "/list_NT_files"
+[Tue May 10 01:03:08 2016] [debug] Routing to a callback
+[Tue May 10 01:03:08 2016] [debug] Routing to a callback
+[Tue May 10 01:03:12 2016] [debug] 200 OK (3.893969s, 0.257/s)
+[Tue May 10 01:03:12 2016] [debug] GET "/UAC_CRUD_service"
+[Tue May 10 01:03:12 2016] [debug] Routing to a callback
+[Tue May 10 01:03:12 2016] [debug] Routing to a callback
+[Tue May 10 01:03:16 2016] [debug] 200 OK (3.82199s, 0.262/s)
+[Tue May 10 01:03:16 2016] [debug] GET "/filesystem_changes"
+[Tue May 10 01:03:16 2016] [debug] Routing to a callback
+[Tue May 10 01:03:16 2016] [debug] Routing to a callback
+[Tue May 10 01:03:16 2016] [debug] 101 Switching Protocols (0.002225s, 449.438/s)
+[Tue May 10 01:03:16 2016] [debug] GET "/squeue_ws"
+[Tue May 10 01:03:16 2016] [debug] Routing to a callback
+[Tue May 10 01:03:16 2016] [debug] Routing to a callback
+[Tue May 10 01:03:16 2016] [debug] 101 Switching Protocols (0.001894s, 527.983/s)
+[Tue May 10 01:03:37 2016] [debug] GET "/list_databases"
+[Tue May 10 01:03:37 2016] [debug] Routing to a callback
+[Tue May 10 01:03:37 2016] [debug] Routing to a callback
+[Tue May 10 01:03:40 2016] [debug] 200 OK (3.815696s, 0.262/s)
+[Tue May 10 01:03:40 2016] [debug] POST "/start_db"
+[Tue May 10 01:03:40 2016] [debug] Routing to a callback
+[Tue May 10 01:03:40 2016] [debug] Routing to a callback
+[Tue May 10 01:09:33 2016] [debug] GET "/main"
+[Tue May 10 01:09:33 2016] [debug] Routing to a callback
+[Tue May 10 01:09:33 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Tue May 10 01:09:33 2016] [debug] 302 Found (0.003554s, 281.373/s)
+[Tue May 10 01:09:33 2016] [debug] Routing to a callback
+[Tue May 10 01:09:34 2016] [debug] GET "/login"
+[Tue May 10 01:09:34 2016] [debug] Routing to a callback
+[Tue May 10 01:09:34 2016] [debug] Rendering template "login.html.ep"
+[Tue May 10 01:09:34 2016] [debug] 200 OK (0.008792s, 113.740/s)
+[Tue May 10 01:09:40 2016] [debug] POST "/bonafides"
+[Tue May 10 01:09:40 2016] [debug] Routing to a callback
+[Tue May 10 01:09:40 2016] [debug] Cookie "Cray_Graph_Engine" has a bad signature
+[Tue May 10 01:09:40 2016] [debug] 200 OK (0.025088s, 39.860/s)
+[Tue May 10 01:09:41 2016] [debug] GET "/main"
+[Tue May 10 01:09:41 2016] [debug] Routing to a callback
+[Tue May 10 01:09:41 2016] [debug] Routing to a callback
+[Tue May 10 01:09:41 2016] [debug] Rendering template "main.html.ep"
+[Tue May 10 01:09:41 2016] [debug] 200 OK (0.037049s, 26.991/s)
+[Tue May 10 01:09:41 2016] [debug] GET "/squeue"
+[Tue May 10 01:09:41 2016] [debug] Routing to a callback
+[Tue May 10 01:09:41 2016] [debug] Routing to a callback
+[Tue May 10 01:09:41 2016] [debug] 200 OK (0.030557s, 32.726/s)
+[Tue May 10 01:09:41 2016] [debug] GET "/list_NT_files"
+[Tue May 10 01:09:41 2016] [debug] Routing to a callback
+[Tue May 10 01:09:41 2016] [debug] Routing to a callback
+[Tue May 10 01:09:45 2016] [debug] 200 OK (3.861592s, 0.259/s)
+[Tue May 10 01:09:45 2016] [debug] GET "/list_databases"
+[Tue May 10 01:09:45 2016] [debug] Routing to a callback
+[Tue May 10 01:09:45 2016] [debug] Routing to a callback
+[Tue May 10 01:09:49 2016] [debug] 200 OK (3.706949s, 0.270/s)
+[Tue May 10 01:09:49 2016] [debug] GET "/sinfo"
+[Tue May 10 01:09:49 2016] [debug] Routing to a callback
+[Tue May 10 01:09:49 2016] [debug] Routing to a callback
+[Tue May 10 01:09:49 2016] [debug] 200 OK (0.030468s, 32.821/s)
+[Tue May 10 01:09:49 2016] [debug] GET "/UAC_CRUD_service"
+[Tue May 10 01:09:49 2016] [debug] Routing to a callback
+[Tue May 10 01:09:49 2016] [debug] Routing to a callback
+[Tue May 10 01:09:53 2016] [debug] 200 OK (3.807893s, 0.263/s)
+[Tue May 10 01:09:53 2016] [debug] GET "/filesystem_changes"
+[Tue May 10 01:09:53 2016] [debug] Routing to a callback
+[Tue May 10 01:09:53 2016] [debug] Routing to a callback
+[Tue May 10 01:09:53 2016] [debug] 101 Switching Protocols (0.001963s, 509.424/s)
+[Tue May 10 01:09:53 2016] [debug] GET "/squeue_ws"
+[Tue May 10 01:09:53 2016] [debug] Routing to a callback
+[Tue May 10 01:09:53 2016] [debug] Routing to a callback
+[Tue May 10 01:09:53 2016] [debug] 101 Switching Protocols (0.000885s, 1129.944/s)
+[Tue May 10 01:10:13 2016] [debug] GET "/list_NT_files"
+[Tue May 10 01:10:13 2016] [debug] Routing to a callback
+[Tue May 10 01:10:13 2016] [debug] Routing to a callback
+[Tue May 10 01:10:17 2016] [debug] 200 OK (3.885736s, 0.257/s)
+[Tue May 10 01:10:17 2016] [debug] GET "/list_databases"
+[Tue May 10 01:10:17 2016] [debug] Routing to a callback
+[Tue May 10 01:10:17 2016] [debug] Routing to a callback
+[Tue May 10 01:10:21 2016] [debug] 200 OK (3.828107s, 0.261/s)
+[Tue May 10 01:10:29 2016] [debug] POST "/start_db"
+[Tue May 10 01:10:29 2016] [debug] Routing to a callback
+[Tue May 10 01:10:29 2016] [debug] Routing to a callback

@@ -27,6 +27,7 @@ use Test::Deep::NoTest;
 use lib '/mnt/lustre/bossert/git';
 use CGE::cge_cli_wrapper::cge_utils qw(:ALL);
 use CGE::cge_cli_wrapper::cge_launch qw(:ALL);
+use CGE::cge_cli_wrapper::cge_query qw(:ALL);
 
 no warnings 'File::Find';
 use File::Basename;
@@ -555,6 +556,66 @@ group {
     else {
       $log->error('[UAC_CRUD_service_destroy] user '.$self->session('username').' was prevented from accessing database permissions.  Only the the user who launched the web-application may alter database permissions.');
       $self->render(text => 'Unauthorized:  Only the the user who launched the web-application may alter database permissions.', status => 403);
+    }
+  };
+
+  post 'sparqlSelect' => sub {
+    my $self = shift;
+    Mojo::IOLoop->stream($self->tx->connection)->timeout(3000);
+    my $qparams = $self->req->body_params->to_hash;
+    $self->stash('gzip' => 1);
+
+    #=+ Need to toss in the database directory
+    $qparams->{current_database} = $self->session('current_database');
+
+    my $results_ref = cge_select($qparams);
+    if(defined $results_ref) {
+      $self->render(json => $results_ref);
+    }
+    else {
+      $self->render(text => 'A query error occurred, please check the logs.', status => 500);
+    }
+  };
+
+  post 'sparqlConstruct' => sub {
+    my $self = shift;
+    Mojo::IOLoop->stream($self->tx->connection)->timeout(3000);
+    my $qparams = $self->req->body_params->to_hash;
+    $self->stash('gzip' => 1);
+
+    #=+ Need to toss in the database directory
+    $qparams->{current_database} = $self->session('current_database');
+
+    my $results_ref = cge_construct($qparams);
+    if(defined $results_ref) {
+      $self->render(json => $results_ref);
+    }
+    else {
+      $self->render(text => 'A query error occurred, please check the logs.', status => 500);
+    }
+  };
+
+  post 'sparqlInsert' => sub {
+    my $self = shift;
+    Mojo::IOLoop->stream($self->tx->connection)->timeout(3000);
+    my $qparams = $self->req->body_params->to_hash;
+    $self->stash('gzip' => 1);
+
+    if($self->session('username') eq (getpwuid($<))[0]) {
+      #=+ Need to toss in the database directory
+      $qparams->{current_database} = $self->session('current_database');
+
+      my $results_ref = cge_insert($qparams);
+      if(defined $results_ref) {
+        $self->render(json => $results_ref);
+      }
+      else {
+        $self->render(text => 'A query error occurred, please check the logs.', status => 500);
+      }
+    }
+    else {
+      $log->error('[sparqlInsert] user '.$self->session('username').' was prevented from altering a database.  Only the the user who launched the web-application may alter databases.');
+      $self->render(text => 'Unauthorized:  Only the the user who launched the web-application may alter a database.', status => 403);
     }
   };
 };
