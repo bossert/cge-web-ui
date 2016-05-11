@@ -1004,9 +1004,7 @@ $(function() {
   // Functions to do each of the query types (SELECT, CONSTRUCT, ASK, DESCRIBE, INSERT)
   // SELECT
   function sparqlSelect() {
-    $.post("sparqlSelect", { database: $("#DB_label").html(),'query': editor.getValue() }).done(function(data, textStatus, xhr) {
-      // Enable the query button
-      $("#querySubmitButton").removeAttr('disabled');
+    $.post("sparqlSelect", { database: $("#db_name").html(),'query': editor.getValue() }).done(function(data, textStatus, xhr) {
 
 			// If the query worked, store it
       storeQueryHistory(query);
@@ -1017,18 +1015,8 @@ $(function() {
 				return;
 			}
 
-      // if the previous query was a CONSTRUCT, then lets hide the graph metrics button
-      $("#nav-trigger-graphStatistics").fadeOut(800);
-
-      // Need to slide the query menu back
-      sliders("in",$("#nav-trigger-query").attr("id"));
-
       // Hide the graph search panel
       $("#graphSearch").fadeOut(1400);
-
-      // Show the results and visualization button/tab
-      $("#nav-trigger-results").fadeIn(1400);
-      $("#nav-trigger-visualization").fadeIn(1400);
 
       var dataBindings = [];
 	    var fieldTypes = {};

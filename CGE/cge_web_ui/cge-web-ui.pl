@@ -564,11 +564,12 @@ group {
     Mojo::IOLoop->stream($self->tx->connection)->timeout(3000);
     my $qparams = $self->req->body_params->to_hash;
     $self->stash('gzip' => 1);
-
+    say Dumper($qparams);
     #=+ Need to toss in the database directory
     $qparams->{current_database} = $self->session('current_database');
 
     my $results_ref = cge_select($qparams);
+    say Dumper($results_ref);
     if(defined $results_ref) {
       $self->render(json => $results_ref);
     }

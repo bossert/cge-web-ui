@@ -78,7 +78,7 @@
           <div id="dummyContainer2">
             <div id="query"></div>
           </div>
-          <input id="querySubmitButton" type="button" value="Query" class="k-button k-primary" disabled />
+          <input id="querySubmitButton" type="button" value="Query" class="k-button k-primary"  />
         </div>
         <div id='graph_settings' class='ss_button'>Graph Settings</div>
         <div class='ss_content'>
@@ -566,6 +566,9 @@
       </button>
     </div>
     <span id="popupNotification"> </span>
+    <div id="resultsPopup" style="display: none;">
+      <div id="resultsGrid"> </div>
+    </div>
     <div id='alterNodesPopup'style='display: none;'></div>
     <div id='new_database_popup'style='display: none;'>
       <table id='new_db_config'>
