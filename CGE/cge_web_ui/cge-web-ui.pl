@@ -293,7 +293,7 @@ group {
     $self->stash('gzip' => 1);
 
     #=+ Set retrieve interval for the loop
-    my $interval = 5;
+    my $interval = 30;
 
     my $id = Mojo::IOLoop->recurring($interval => sub {
 
@@ -313,7 +313,7 @@ group {
     $self->stash('gzip' => 1);
 
     #=+ Set retrieve interval for the loop
-    my $interval = 5;
+    my $interval = 30;
 
     my $id = Mojo::IOLoop->recurring($interval => sub {
 
@@ -334,7 +334,7 @@ group {
 
     my $old_nt_files = '';
     my $old_databases = '';
-    my $interval = 5;
+    my $interval = 30;
     my $id = Mojo::IOLoop->recurring($interval => sub {
       my $nt_files = _list_NT_files(undef,$self->session('username'));
       my $databases = _list_databases(undef,$self->session('username'));
@@ -392,6 +392,12 @@ group {
 
   get 'stop_db' => sub {
     my $self = shift;
+    my $qparams=$self->req->query_params->to_hash;
+    my ($current_database,$current_port);
+    if($qparams->{current_database} && $qparams->{current_port}) {
+      $self->session(current_database => $qparams->{current_database},current_port => $qparams->{current_port});
+    }
+
     if($self->session('current_database') && $self->session('current_port')) {
       my $success = cge_stop_graceful($self->session('current_port'),$self->session('current_database'));
       if($success) {
@@ -565,8 +571,6 @@ group {
     my $qparams = $self->req->body_params->to_hash;
     $self->stash('gzip' => 1);
     say Dumper($qparams);
-    #=+ Need to toss in the database directory
-    $qparams->{current_database} = $self->session('current_database');
 
     my $results_ref = cge_select($qparams);
     say Dumper($results_ref);
@@ -583,9 +587,6 @@ group {
     Mojo::IOLoop->stream($self->tx->connection)->timeout(3000);
     my $qparams = $self->req->body_params->to_hash;
     $self->stash('gzip' => 1);
-
-    #=+ Need to toss in the database directory
-    $qparams->{current_database} = $self->session('current_database');
 
     my $results_ref = cge_construct($qparams);
     if(defined $results_ref) {

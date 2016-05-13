@@ -114,6 +114,7 @@ sub cge_start {
   my $file = File::Tail->new($arguments{dataDir}.'.cge_web_ui/temp/'.$launch_stdout_file);
   while(my $line = $file->read) {
     last if $line =~ /Starting port forwarding/;
+    return (undef,undef) if $line =~ /^Error/;
   }
 
   my $pid;

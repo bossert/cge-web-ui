@@ -102,48 +102,58 @@ body {
 
 .c-hamburger--htx {
   background-color: #005696;
+  z-index: 99999;
 }
 
 .c-hamburger--htx span {
   transition: background 0s 0.3s;
+  z-index: 99999;
 }
 
 .c-hamburger--htx span::before,
 .c-hamburger--htx span::after {
   transition-duration: 0.3s, 0.3s;
   transition-delay: 0.3s, 0s;
+  z-index: 99999;
 }
 
 .c-hamburger--htx span::before {
   transition-property: top, transform;
+  z-index: 99999;
 }
 
 .c-hamburger--htx span::after {
   transition-property: bottom, transform;
+  z-index: 99999;
 }
 
 /* active state, i.e. menu open */
 .c-hamburger--htx.is-active {
   background-color: #005696;
+  z-index: 99999;
 }
 
 .c-hamburger--htx.is-active span {
   background: none;
+  z-index: 99999;
 }
 
 .c-hamburger--htx.is-active span::before {
   top: 0;
   transform: rotate(45deg);
+  z-index: 99999;
 }
 
 .c-hamburger--htx.is-active span::after {
   bottom: 0;
   transform: rotate(-45deg);
+  z-index: 99999;
 }
 
 .c-hamburger--htx.is-active span::before,
 .c-hamburger--htx.is-active span::after {
   transition-delay: 0s, 0.3s;
+  z-index: 99999;
 }
 
 /* Accordion Menu */
@@ -167,7 +177,6 @@ body {
   overflow-y: scroll;
   width: calc(100% - 20px);
   font-size: 0.85em;
-  margin: 0;
 }
 
 #uac_container {
@@ -238,6 +247,48 @@ body {
   font-weight: bold;
 }
 
+#current_db {
+  width: 100%;
+}
+
+#current_db tr:nth-child(1) {
+  width: 90%;
+}
+
+#current_db tr:nth-child(2) {
+  width: 5%;
+}
+
+#current_db tr:nth-child(3) {
+  width: 5%;
+}
+
+#query_table {
+  width: 100%;
+  table-layout: fixed;
+}
+
+#query_table td {
+  width: 25%;
+}
+
+#query_table .k-combobox {
+  width: 100%;
+  margin: 0;
+}
+
+#query_table .k-button {
+  width: 100%;
+  margin: 0;
+}
+
+#query_progress {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 99999;
+}
+
 #current_db thead {
   font-size: 1em;
   font-weight: bold;
@@ -248,14 +299,6 @@ body {
   font-size: 1em;
   font-weight: bold;
   text-align: left;
-}
-
-#current_db td:first {
-  width: 85%;
-}
-
-#current_db td:last {
-  width: 15%;
 }
 
 .widecombobox .k-widget.k-combobox {
@@ -287,14 +330,41 @@ span.k-in > span.highlight {
   width: 100%;
 }
 
+#alterNodesContainer table {
+	width: 100%;
+}
+
+#alterNodesContainer label {
+	font-family: 'fira';
+	font-size: 0.9em;
+}
+
+#alterNodesContainer h2 {
+  font-weight: bold;
+	font-size: 1.3em !important;
+}
+
 .tableH3 {
 	padding: 0;
 	margin: 0;
 }
 
 .tableH3 h3 {
-	font-family: 'fira';
 	font-size: 1.1em;
+}
+
+#alterNodesContainer table {
+	table-layout: fixed;
+	width: 100%;
+}
+
+.deleteMeTdFirst {
+	width: calc(60% - 5px);
+	word-wrap: break-word;
+}
+
+.deleteMeTdLast {
+	width: calc(40% - 5px);
 }
 
 #new_db_config input {
@@ -318,6 +388,28 @@ span.k-in > span.highlight {
 	word-wrap: break-word;
 }
 
+#graphSearch {
+	display: none;
+	position: fixed;
+	top: 5px;
+	right: 5px;
+	width: 320px;
+	z-index: 3;
+	padding: 0;
+	margin: 0;
+	opacity: 0.6;
+}
+
+#graphSearchTextBox {
+	margin: 0;
+	float: right;
+}
+
+#graphSearchColorPicker {
+	margin-right: 5px;
+	float: left;
+}
+
 /* Well, it's a little hacky right now, but need to force the pan-zoom widget to the bottom-right corner */
 .cy-panzoom {
 	position: fixed !important;
@@ -333,18 +425,29 @@ span.k-in > span.highlight {
   display: none;
 }
 
-.CodeMirror-line {
-  left: 30px;
+#dummyContainer1 {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
 }
 
-#dummyContainer1 .k-combobox {
-	width: calc(50% - 2px);
-	margin: 10px 0 0 0;
+.yasqe .CodeMirror {
+	width: calc(100% - 5px);
 }
 
-#dummyContainer1 .k-button {
-  width: 25%;
-  margin: 5px 0 5px 0;
+.yasqe .CodeMirror-sizer {
+  margin-left: 44px;
+  height: 100%;
+}
+
+.yasqe .CodeMirror-gutters {
+  width: 44px;
+  height: 100%;
+}
+
+.yasqe .CodeMirror-lines {
+  height: 100%;
 }
 
 #querySubmitButton {
@@ -371,4 +474,56 @@ span.k-in > span.highlight {
 
 .numbox {
 	width: 70px;
+}
+
+#graphSettings .k-combobox {
+   width: 100% !important;
+}
+
+#graphSettings .k-colorpicker {
+   width: 100% !important;
+}
+
+#graphSettings .k-selected-color {
+   width: 100% !important;
+}
+
+#layoutSettings .k-combobox {
+   width: 100% !important;
+}
+
+#chart_display_button {
+  width: 100%;
+  margin-top: 10px;
+}
+
+#spinner_container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 99999;
+}
+
+div.k-loading-mask {
+  z-index: 999999;
+  background-color: #EFEFEF;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+#viz {
+  width: 100%;
+  height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+#viz_main {
+	width: 100%;
+	height: 100%;
+}
+
+#viz_foot {
+	display: none;
 }

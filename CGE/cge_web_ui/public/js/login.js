@@ -1,12 +1,25 @@
 $(function() {
   'use strict';
-  
+
+  // Setting up the object for popup notifications throughout the application
+  var popup = $("#popupNotification").kendoNotification({
+    hideOnClick: true,
+    position: {
+      pinned: true,
+      top: null,
+      right: 20,
+      bottom: 20,
+      width: 400
+    },
+    stacking: "up"
+  }).data("kendoNotification");
+
   // Listen for our login
   $("#form_login").submit(function(event) {
     event.preventDefault();
     var u = $('#form_user').val();
     var p = $('#form_pass').val();
-    
+
     $.post('bonafides', { 'user': u, 'pass': p }, function() {
       // Feedback: if successful login, then change background color to green and then redirect
       $('#particle_background').css('background-color','#36802d');
@@ -17,13 +30,14 @@ $(function() {
       // Feedback: if unsuccessful login, then change background color to red and back
       var oc = $('#particle_background').css('background-color');
       $('#particle_background').css('background-color','#b61924');
-      
+      $('#form_pass').val('');
+      popup.show('Login Failed (invalid username and/or password).','error');
       window.setTimeout(function() {
         $('#particle_background').css('background-color',oc);
       }, 2 * 1000);
     });
   });
-  
+
   // Set up particles.js for the background interest
   particlesJS("particle_background", {
     "particles": {

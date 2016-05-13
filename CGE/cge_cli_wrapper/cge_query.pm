@@ -84,15 +84,16 @@ sub cge_select {
   }
   my $arg_string = join('',@args).' '.$partial_string;
 
-  $arg_ref->{database} .= '/' unless $arg_ref->{database} =~ /\/$/;
-  open(my $TF,'>',$arg_ref->{database}.'.cge_web_ui/temp/query.rq');
+  $arg_ref->{current_database} .= '/' unless $arg_ref->{current_database} =~ /\/$/;
+  say Dumper($arg_ref);
+  open(my $TF,'>',$arg_ref->{current_database}.'.cge_web_ui/temp/query.rq');
   print {$TF} $arg_ref->{query};
   close($TF);
 
-  say $cge_cli.' query '.$arg_string.' '.$arg_ref->{database}.'.cge_web_ui/temp/query.rq';
-  my($success,$error_message,$full_buf,$stdout_buf,$stderr_buf) = run(command => $cge_cli.' query '.$arg_string.' '.$arg_ref->{database}.'.cge_web_ui/temp/query.rq' , verbose => 1);
+  say $cge_cli.' query '.$arg_string.' '.$arg_ref->{current_database}.'.cge_web_ui/temp/query.rq';
+  my($success,$error_message,$full_buf,$stdout_buf,$stderr_buf) = run(command => $cge_cli.' query '.$arg_string.' '.$arg_ref->{current_database}.'.cge_web_ui/temp/query.rq' , verbose => 1);
   if($success) {
-    unlink $arg_ref->{database}.'.cge_web_ui/temp/query.rq';
+    unlink $arg_ref->{current_database}.'.cge_web_ui/temp/query.rq';
     my $json_response = join('',@$stdout_buf);
     my $json = decode_json($json_response);
     my %results = ('qtype' => 'select',
@@ -100,7 +101,7 @@ sub cge_select {
     return \%results;
   }
   else {
-    unlink $arg_ref->{database}.'.cge_web_ui/temp/query.rq';
+    unlink $arg_ref->{current_database}.'.cge_web_ui/temp/query.rq';
     return undef;
   }
 }
@@ -168,14 +169,14 @@ sub cge_construct {
   }
   my $arg_string = join('',@args).' '.$partial_string;
 
-  $arg_ref->{database} .= '/' unless $arg_ref->{database} =~ /\/$/;
-  open(my $TF,'>',$arg_ref->{database}.'.cge_web_ui/temp/query.rq');
+  $arg_ref->{current_database} .= '/' unless $arg_ref->{current_database} =~ /\/$/;
+  open(my $TF,'>',$arg_ref->{current_database}.'.cge_web_ui/temp/query.rq');
   print {$TF} $arg_ref->{query};
   close($TF);
 
-  my($success,$error_message,$full_buf,$stdout_buf,$stderr_buf) = run(command => $cge_cli.' query '.$arg_string.' '.$arg_ref->{database}.'.cge_web_ui/temp/query.rq' , verbose => 1);
+  my($success,$error_message,$full_buf,$stdout_buf,$stderr_buf) = run(command => $cge_cli.' query '.$arg_string.' '.$arg_ref->{current_database}.'.cge_web_ui/temp/query.rq' , verbose => 1);
   if($success) {
-    unlink $arg_ref->{database}.'.cge_web_ui/temp/query.rq';
+    unlink $arg_ref->{current_database}.'.cge_web_ui/temp/query.rq';
     #=+ Join the stdout buffer into one array and split on newlines so we have one line per element
     my @stdout_array = split(/\n/,join('',@$stdout_buf));
     my (%results,%nodes,@nodesArray,@edges);
@@ -342,7 +343,7 @@ sub cge_construct {
     return \%results;
   }
   else {
-    unlink $arg_ref->{database}.'.cge_web_ui/temp/query.rq';
+    unlink $arg_ref->{current_database}.'.cge_web_ui/temp/query.rq';
     return undef;
   }
 }
@@ -413,18 +414,18 @@ sub cge_insert {
   }
   my $arg_string = join('',@args).' '.$partial_string;
 
-  $arg_ref->{database} .= '/' unless $arg_ref->{database} =~ /\/$/;
-  open(my $TF,'>',$arg_ref->{database}.'.cge_web_ui/temp/update.ru');
+  $arg_ref->{current_database} .= '/' unless $arg_ref->{current_database} =~ /\/$/;
+  open(my $TF,'>',$arg_ref->{current_database}.'.cge_web_ui/temp/update.ru');
   print {$TF} $arg_ref->{query};
   close($TF);
 
-  my($success,$error_message,$full_buf,$stdout_buf,$stderr_buf) = run(command => $cge_cli.' update '.$arg_string.' '.$arg_ref->{database}.'.cge_web_ui/temp/update.ru' , verbose => 1);
+  my($success,$error_message,$full_buf,$stdout_buf,$stderr_buf) = run(command => $cge_cli.' update '.$arg_string.' '.$arg_ref->{current_database}.'.cge_web_ui/temp/update.ru' , verbose => 1);
   if($success) {
-    unlink $arg_ref->{database}.'.cge_web_ui/temp/update.ru';
+    unlink $arg_ref->{current_database}.'.cge_web_ui/temp/update.ru';
     return 1;
   }
   else {
-    unlink $arg_ref->{database}.'.cge_web_ui/temp/update.ru';
+    unlink $arg_ref->{current_database}.'.cge_web_ui/temp/update.ru';
     return undef;
   }
 }

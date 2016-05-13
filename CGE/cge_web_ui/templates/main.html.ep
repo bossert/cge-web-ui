@@ -11,6 +11,8 @@
     <link type="text/css" href="styles/kendo.dataviz.min.css" rel="stylesheet" />
     <link type="text/css" href="styles/kendo.dataviz.bootstrap.min.css" rel="stylesheet" />
     <link type="text/css" href="styles/yasqe.min.css" rel="stylesheet" />
+    <link type="text/css" href="styles/cytoscape.js-panzoom.css" rel="stylesheet" />
+    <link type="text/css" href="styles/font-awesome-4.0.3/css/font-awesome.css" rel="stylesheet" />
     <link type="text/css" href="styles/main.css" rel="stylesheet" />
 
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
@@ -18,8 +20,18 @@
     <script type="text/javascript" src="js/kendo.all.min.js"></script>
     <script type="text/javascript" src="js/moment.min.js"></script>
     <script type="text/javascript" src="js/cytoscape.min.js"></script>
+    <script type="text/javascript" src="js/cytoscape-cxtmenu.js"></script>
     <script type="text/javascript" src="js/arbor.js"></script>
     <script type="text/javascript" src="js/cytoscape-arbor.js"></script>
+    <script type="text/javascript" src="js/cytoscape-cose-bilkent.js"></script>
+    <script type="text/javascript" src="js/cola.v3.min.js"></script>
+    <script type="text/javascript" src="js/cytoscape-cola.js"></script>
+    <script type="text/javascript" src="js/dagre.js"></script>
+    <script type="text/javascript" src="js/cytoscape-dagre.js"></script>
+    <script type="text/javascript" src="js/cytoscape-spread.js"></script>
+    <script type="text/javascript" src="js/springy.js"></script>
+    <script type="text/javascript" src="js/cytoscape-springy.js"></script>
+    <script type="text/javascript" src="js/cytoscape-panzoom.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
   </head>
   <body>
@@ -29,18 +41,16 @@
         <div class='ss_content widecombobox'>
           <table id='current_db' class='sysinfo_tables'>
             <thead>
-              <tr><td>Current Database</td><td>Status</td></tr>
+              <tr><td>Current Database</td><td>Port</td><td>Status</td></tr>
             </thead>
             <tbody>
-              <tr><td id='db_name'>None</td><td id='db_status'>STOPPED</td></tr>
+              <tr><td id='db_name'>None</td><td id='db_port'>None</td><td><div id='spinner_container'><p id='db_status'>STOPPED</p></div></td></tr>
             </tbody>
           </table>
           <table id='db_config' class='sysinfo_tables'>
             <tbody>
               <tr><td><label for='instances'>Instances per node</label></td><td><label for='nodes'>Number of nodes</label></td><td><label for='timeout'>Build timeout</label></td></tr>
               <tr><td><input id='instances' name='instances' type='number'></td><td><input id='nodes' name='nodes' type='number'></td><td><input id='timeout' name='timeout' type='number'></td></tr>
-              <tr><td><label for='nvps'>NVP's</label></td><td></td><td></td></tr>
-              <tr><td colspan="2"><input id='nvps' class='k-textbox' name='nvps' type='text'></td><td></td></tr>
               <tr><td><label for='selectDB'>Available databases</label></td><td></td></tr>
               <tr><td colspan="2"><input id='selectDB' name='selectDB' placeholder='Select Database' class='k-button'></td><td><input id="startDB" type="button" value="Start" class="k-button k-primary"></td></tr>
             </tbody>
@@ -70,10 +80,12 @@
         <div id='query_update' class='ss_button'>Query/Update</div>
         <div class='ss_content'>
           <div id="dummyContainer1">
-            <input id="querySelector" placeholder="Preconfigured Queries" />
-            <input id="queryHistory"  placeholder="Query History" />
-            <input id="querySave" type="button" value="Save Query" class="k-button smallButton" />
-            <input id="clearHistory" type="button" value="Clear History" class="k-button smallButton" />
+            <table id='query_table'>
+              <tbody>
+                <tr><td colspan="2"><input id="querySelector" placeholder="Preconfigured Queries" /></td><td colspan="2"><input id="queryHistory"  placeholder="Query History" /></td></tr>
+                <tr><td><input id="querySave" type="button" value="Save Query" class="k-button smallButton" /></td><td colspan="2"><div id='query_progress'>&nbsp;</div></td><td><input id="clearHistory" type="button" value="Clear History" class="k-button smallButton" /></td></tr>
+              </tbody>
+            </table>
           </div>
           <div id="dummyContainer2">
             <div id="query"></div>
@@ -548,6 +560,7 @@
               </tr>
             </tbody>
           </table>
+          <input id='chart_display_button' class='k-button k-primary' value='Display' />
         </div>
         <!-- <div id='graph_algorithms' class='ss_button'>Graph Algorithms</div>
         <div class='ss_content'>
@@ -564,12 +577,81 @@
       <button class="c-hamburger c-hamburger--htx">
         <span>toggle menu</span>
       </button>
+      <div id="viz">
+        <div id="viz_main"></div>
+        <div id="viz_foot"></div>
+      </div>
+      <div id="graphSearch">
+        Highlight Color&nbsp;&nbsp;<input id="graphSearchColorPicker" />
+        <input id="graphSearchTextBox" type="text" class="k-textbox" placeholder="Search Graph" />
+        <!-- <input id="graphSearchSliderCombobox" />
+        <div id="fixSlider">
+          <div id="graphSearchSlider">
+            <input /><input />
+          </div>
+        </div> -->
+      </div>
     </div>
     <span id="popupNotification"> </span>
     <div id="resultsPopup" style="display: none;">
       <div id="resultsGrid"> </div>
     </div>
-    <div id='alterNodesPopup'style='display: none;'></div>
+    <div id='alterNodesPopup'style='display: none;'>
+      <div id="alterNodesContainer">
+        <table id="changeNodeSize">
+          <tbody>
+            <tr><td><h2>Change Node Size</h2></td></tr>
+            <tr><td><input type="radio" name="nodeSizeChange" value="attribute" checked /><label>&nbsp; Attribute &nbsp;&nbsp;</label><input type="radio" name="nodeSizeChange" value="constant" /><label>&nbsp; Constant</label></td></tr>
+            <tr id='changeNodeSizeComboBoxTr'><td><input id='changeNodeSizeCombobox' /></td></tr>
+            <tr id='changeNodeSizeNumboxTr'><td><input type='number' value='10' id='changeNodeSizeNumbox' class='k-textbox' /></td></tr>
+          </tbody>
+        </table>
+        <hr />
+        <table id="changeNodeColor">
+          <tbody>
+            <tr><td><h2>Change Node Color</h2></td></tr>
+            <tr><td><input type="radio"  name="nodeColorRange" value="numericAttribute" /><label>&nbsp; Numeric Attribute &nbsp;&nbsp;</label><input type="radio"  name="nodeColorRange" value="stringAttribute" /><label>&nbsp; String Attribute &nbsp;&nbsp;</label><input type="radio"  name="nodeColorRange" value="constant" checked /><label>&nbsp; Constant </label></td></tr>
+            <tr id="CNCNumericTr"><td>
+              <input id="CNCpropertyCombobox" />&nbsp;&nbsp;&nbsp;<input id="CNClowNumber" />&nbsp;&nbsp;&nbsp;<input id="CNChighNumber" />&nbsp;&nbsp;&nbsp;<input id='CNCnumericSubmit' type='button' class='k-button' value='Change' />
+            </td></tr>
+            <tr id="CNCStringTr"><td>
+              <table id='CNCstringPropertiesTable'>
+                <tbody>
+                  <tr><td><input id='CNCstringPropertyCombobox' /></td><td><input id='CNCstringPropertySubmit' type='button' class='k-button' value="change" /></td></tr>
+                </tbody>
+              </table>
+            </td></tr>
+            <tr id='CNCColorPickerTr'><td><input id="CNCColorPicker" /></td></tr>
+          </tbody>
+        </table>
+        <hr />
+        <table id="changeNodeShape">
+          <tbody>
+            <tr><td><h2>Change Node Shape</h2></td></tr>
+            <tr><td><input type="radio" name="nodeShapeChange" value="attribute" /><label>&nbsp;Attribute&nbsp;&nbsp;</label><input type="radio" name="nodeShapeChange" value="constant" checked /><label>&nbsp; Constant</label></td></tr>
+            <tr id="CNSStringTr"><td>
+              <table id='CNSstringPropertiesTable'>
+                <tbody>
+                  <tr><td><input id='CNSstringPropertyCombobox' /></td><td><input id='CNSstringPropertySubmit' type='button' class='k-button' value="change" /></td></tr>
+                </tbody>
+              </table>
+            </td></tr>
+            <tr id='CNSShapePickerTr'><td><input id="CNSShapePicker" /></td></tr>
+          </tbody>
+        </table>
+        <hr />
+        <table id="changeNodeImage">
+          <tr><td><h2>Change Node Image</h2></td></tr>
+          <tr id="CNIStringTr"><td>
+            <table id='CNIstringPropertiesTable'>
+              <tbody>
+                <tr><td><input id='CNIstringPropertyCombobox' /></td><td><input id='CNIstringPropertySubmit' type='button' class='k-button' value="change" /></td></tr>
+              </tbody>
+            </table>
+          </td></tr>
+        </table>
+      </div>
+    </div>
     <div id='new_database_popup'style='display: none;'>
       <table id='new_db_config'>
         <tbody>

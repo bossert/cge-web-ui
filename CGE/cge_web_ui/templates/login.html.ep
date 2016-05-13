@@ -10,6 +10,7 @@
     <link type="text/css" href="styles/login.css" rel="stylesheet" />
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script type="text/javascript" src="js/particles.min.js"></script>
+    <script type="text/javascript" src="js/kendo.all.min.js"></script>
     <script type="text/javascript" src="js/login.js"></script>
   </head>
   <body>
@@ -28,4 +29,5 @@
   <footer>
     <p>&copy;&nbsp;Copyright 2016 <a href='http://www.cray.com/'>Cray Inc.</a></p>
   </footer>
+  <span id="popupNotification"> </span>
 </html>

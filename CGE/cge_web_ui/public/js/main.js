@@ -1,47 +1,5 @@
 $(function() {
   'use strict';
-
-  // Adding a function to our treeview to retrieve checked nodes
-  // Thanks to great docs and support from Kendo UI:
-  // http://www.telerik.com/blogs/how-to-get-the-checked-items-from-a-treeview-with-checkboxes
-  kendo.ui.TreeView.prototype.getCheckedItems = (function(){
-    function getCheckedItems(){
-      var nodes = this.dataSource.view();
-      return getCheckedNodes(nodes);
-    }
-    function getCheckedNodes(nodes){
-      var node, childCheckedNodes;
-      var checkedNodes = [];
-      for (var i = 0; i < nodes.length; i++) {
-        node = nodes[i];
-        if (node.checked) {
-          checkedNodes.push(node);
-        }
-        if (node.hasChildren) {
-          childCheckedNodes = getCheckedNodes(node.children.view());
-          if (childCheckedNodes.length > 0){
-            checkedNodes = checkedNodes.concat(childCheckedNodes);
-          }
-        }
-      }
-      return checkedNodes;
-    }
-    return getCheckedItems;
-  })();
-
-  // Also extend treeview to support a check/uncheck all function
-  kendo.ui.TreeView.prototype.checkAll = (function(){
-    function checkAll() {
-      $(this+' .k-checkbox input').prop('checked',true).trigger('change');
-    }
-  })();
-
-  kendo.ui.TreeView.prototype.uncheckAll = (function(){
-    function uncheckAll() {
-      $(this+' .k-checkbox input').prop('checked',false).trigger('change');
-    }
-  })();
-
   // Setting up the object for popup notifications throughout the application
   var popup = $("#popupNotification").kendoNotification({
     hideOnClick: true,
@@ -97,7 +55,10 @@ $(function() {
   $('.ss_button').on('click', function() {
     $('.ss_content').slideUp();
     $(this).next('.ss_content').slideDown();
-    userAccessControlGrid.resize();
+
+    if($(this).attr('id') == 'access_control') {
+      userAccessControlGrid.resize();
+    }
   });
 
   /* Maybe do this differently later, but lets trigger a click so that the menu opens
@@ -117,9 +78,9 @@ $(function() {
 
         if(localStorage.getItem('current_pid') !== null &&
            localStorage.getItem('current_pid') == v.JOBID) {
-          $('#db_status').html('RUNNING');
+          $('#db_status').text('RUNNING');
           $('#startDB').prop('value','Stop');
-          $('#db_name').html(localStorage.getItem('current_db'));
+          $('#db_name').html(localStorage.getItem('current_database'));
         }
       });
     }
@@ -218,16 +179,6 @@ $(function() {
     format: 'n0'
   });
 
-  // Retrieve system information
-  $.get('sinfo',function(res) {
-    dbNodes.max(res.system.nodes);
-    dbNodes.value(1);
-    newDbNodes.max(res.system.nodes);
-    newDbNodes.value(1);
-  }).fail(function(xhr) {
-    popup.show("Failed to retrieve system information (" + xhr.status + " " + xhr.statusText + ")" ,"error");
-  });
-
   // This is for the user access control table (CRUD service)
   var userAccessControlDS = new kendo.data.DataSource({
     transport: {
@@ -308,18 +259,29 @@ $(function() {
   $('#startDB').on('click',function(e) {
     if($('#startDB').prop('value') == 'Start') {
       $('#db_name').html($('#selectDB').data('kendoComboBox').value());
-      $('#db_status').html('STARTING');
+      $('#db_status').html('&nbsp;');
+
+      kendo.ui.progress($('#spinner_container'),true);
       startDB();
     }
     else if($('#startDB').prop('value') == 'Stop') {
-      $.get('stop_db',function(res) {
+      $('#db_status').html('&nbsp;');
+      var current_database = $('#db_name').html();
+      var current_port = $('#db_port').html();
+
+      kendo.ui.progress($('#spinner_container'),true);
+
+      $.get('stop_db?'+'current_database='+current_database+'&current_port='+current_port,function(res) {
         $('#db_name').html('None');
-        $('#db_status').html('STOPPED');
+        $('db_port').html('-');
+        $('#db_status').text('STOPPED');
         $('#startDB').prop('value','Start');
         localStorage.removeItem('current_pid');
         localStorage.removeItem('current_port');
+        kendo.ui.progress($('#spinner_container'), false);
         popup.show('Stopped the current database: '+$('#db_name').html(),'success');
       }).fail(function(xhr) {
+        kendo.ui.progress($('#spinner_container'), false);
         popup.show('Failed to Stop the current database: '+$('#db_name').html(),'error');
       });
     }
@@ -478,7 +440,7 @@ $(function() {
   var imagesDataSource = new kendo.data.DataSource({
     type: 'json',
     transport: {
-      read: 'graph_icon_list'
+      read: '/graph_icon_list'
     }
   });
 
@@ -955,20 +917,19 @@ $(function() {
   // Create new database
   $('#createDB').on('click',function(e) {
     $('#db_name').html($('#new_db_name').val());
-    $('#db_status').html('BUILDING');
+    $('#db_status').html('&nbsp;');
     var items = $('#file_browser').data('kendoTreeView').getCheckedItems();
     var files = [];
     $.each(items,function(i,v){
       files.push(v.path);
     });
+
+    kendo.ui.progress($('#spinner_container'),true);
     buildDB(files);
   });
 
   // query execution button that grabs the query for the most recently focused query source (SPARQL editor, history, or canned)
   $("#querySubmitButton").on("click", function(e) {
-    // Disable the query button
-    $("#querySubmitButton").attr('disabled',true);
-
     // Let's make sure we are clearing out the work area and the popup contents
     $("#viz_main").empty();
 
@@ -978,18 +939,23 @@ $(function() {
     // refactored so that we can clean up the on-click function and also make other query types in a more modular way
     switch(queryType) {
       case 'SELECT':
+        kendo.ui.progress($('#query_progress'),true);
         sparqlSelect();
         break;
       case 'CONSTRUCT':
+        kendo.ui.progress($('#query_progress'),true);
         sparqlConstruct();
         break;
       case 'ASK':
+        kendo.ui.progress($('#query_progress'),true);
         sparqlAsk();
         break;
       case 'DESCRIBE':
+        kendo.ui.progress($('#query_progress'),true);
         sparqlDescribe();
         break;
       case 'INSERT':
+        kendo.ui.progress($('#query_progress'),true);
         sparqlInsert();
         break;
       default:
@@ -1004,7 +970,7 @@ $(function() {
   // Functions to do each of the query types (SELECT, CONSTRUCT, ASK, DESCRIBE, INSERT)
   // SELECT
   function sparqlSelect() {
-    $.post("sparqlSelect", { database: $("#db_name").html(),'query': editor.getValue() }).done(function(data, textStatus, xhr) {
+    $.post("sparqlSelect", { current_database: $("#db_name").html(), current_port: $('#db_port').html(),'query': editor.getValue() }).done(function(data, textStatus, xhr) {
 
 			// If the query worked, store it
       storeQueryHistory(query);
@@ -1064,8 +1030,8 @@ $(function() {
 
 			disableChartTypes(numNumericFields);
 
-		// Process the column headers
-		$.each(data.results.head.vars, function(index, value) {
+  		// Process the column headers
+  		$.each(data.results.head.vars, function(index, value) {
         columns.push({'field': value, 'title': value});
         var to = {};
         to[value] = {type: "string"};
@@ -1135,13 +1101,6 @@ $(function() {
       // Create/update/refresh the grid
       resultsGrid.setOptions(configuration);
       resultsGrid.dataSource.page(1);
-
-			// If this is not the first time we have queried, need to unregister the old click handler
-			$("#nav-trigger-results").off('click');
-      $("#nav-trigger-results").on('click',function() {
-        // Center and show the popup window
-        gridWindow.center().open();
-      });
 
 			// Create the comboboxes for each potential series and value field/Axis depending on the type of chart selected
 			vizChartType.bind('select', function(event) {
@@ -1243,12 +1202,9 @@ $(function() {
 			});
 
       // Visualize SELECT results
-      $("#vizSubmit").on('click',function() {
+      $("#chart_display_button").on('click',function() {
         // empty the viz area
         $("#viz_main").empty();
-
-        // Need to slide the query menu back
-        sliders("in",$("#nav-trigger-visualization").attr("id"));
 
         // add a dummy container that we can destroy later
         $("#viz_main").html('<div id="chartContainer"></div>');
@@ -1636,71 +1592,26 @@ $(function() {
           kendo.resize($(".k-chart"));
         });
       });
+      kendo.ui.progress($('#query_progress'),false);
+      $('.c-hamburger').trigger('click');
     }).fail(function(xhr) {
-      // If we are timed-out
-      if (xhr.status === 401) {
-        // First, clear the host, database, and status text
-        $("#host_label").html('');
-        $("#DB_label").html('');
-        $("#status_label").html('');
-
-        // Next, disable the query button
-        $("#querySubmitButton").attr('disabled',true);
-
-        // Change "login" tab text color to red so we know we are no longer logged in
-        var styles = { 'color': "#FFCCD2" };
-        $("#nav-trigger-login").css(styles);
-
-        popup.show("Session for " + host + " has timed out, please log back in.","error");
-      }
-      else {
-        // Enable the query button
-        $("#querySubmitButton").removeAttr('disabled');
-        popup.show("Error, no results (" + xhr.status + " " + xhr.statusText + ")","error");
-      }
+      kendo.ui.progress($('#query_progress'),false);
+      popup.show("Error, no results (" + xhr.status + " " + xhr.statusText + ")","error");
     });
   }
 
   // CONSTRUCT
   function sparqlConstruct() {
-    $.post("sparqlConstruct", { database: $("#DB_label").html(),'query': editor.getValue() }).done(function(data, textStatus, xhr) {
-      // Enable the query button
-      $("#querySubmitButton").removeAttr('disabled');
+    $.post("sparqlConstruct", { current_database: $("#db_name").html(),'query': editor.getValue() }).done(function(data, textStatus, xhr) {
 
       // If the query worked, store it
       storeQueryHistory(query);
-
-      // Need to slide the query menu back
-      sliders("in",$("#nav-trigger-query").attr("id"));
-
-      // Hide the visualization tab if the previous query was a SELECT
-      $("#nav-trigger-visualization").fadeOut(800);
-
+      $('.c-hamburger').trigger('click');
       // Draw the graph
       drawGraph(data.elements);
     }).fail(function(xhr) {
-      // If we are timed-out
-      $("#spinnerWrapper").fadeOut(800);
-      if (xhr.status === 401) {
-        // First, clear the host, database, and status text
-        $("#host_label").html('');
-        $("#DB_label").html('');
-        $("#status_label").html('');
-
-        // Next, disable the query button
-        $("#querySubmitButton").attr('disabled',true);
-
-        // Change "login" tab text color to red so we know we are no longer logged in
-        var styles = { 'color': "#FFCCD2" };
-        $("#nav-trigger-login").css(styles);
-
-        popup.show("Session for " + host + " has timed out, please log back in.","error");
-      }
-      else {
-        // Enable the query button
-        $("#querySubmitButton").removeAttr('disabled');
-        popup.show("Error, no results (" + xhr.status + " " + xhr.statusText + ")","error");
-      }
+      kendo.ui.progress($('#query_progress'),false);
+      popup.show("Error, no results (" + xhr.status + " " + xhr.statusText + ")","error");
     });
   }
 
@@ -1712,30 +1623,11 @@ $(function() {
 
   // INSERT/INSERT DATA
   function sparqlInsert() {
-		$.post("sparqlInsert", { database: $("#DB_label").html(),'query': editor.getValue() }).done(function(data, textStatus, xhr) {
+		$.post("sparqlInsert", { current_database: $("#db_name").html(),'query': editor.getValue() }).done(function(data, textStatus, xhr) {
 			popup.show("Update executed successfully.","success");
 		}).fail(function(xhr) {
-      // If we are timed-out
-      if (xhr.status === 401) {
-        // First, clear the host, database, and status text
-        $("#host_label").html('');
-        $("#DB_label").html('');
-        $("#status_label").html('');
-
-        // Next, disable the query button
-        $("#querySubmitButton").attr('disabled',true);
-
-        // Change "login" tab text color to red so we know we are no longer logged in
-        var styles = { 'color': "#FFCCD2" };
-        $("#nav-trigger-login").css(styles);
-
-        popup.show("Session for " + host + " has timed out, please log back in.","error");
-      }
-      else {
-        // Enable the query button
-        $("#querySubmitButton").removeAttr('disabled');
-        popup.show("Error, no results (" + xhr.status + " " + xhr.statusText + ")","error");
-      }
+      kendo.ui.progress($('#query_progress'),false);
+      popup.show("Error, no results (" + xhr.status + " " + xhr.statusText + ")","error");
     });
 	}
 
@@ -1749,16 +1641,15 @@ $(function() {
 
     $.post('start_db',{ dataDir: dataDir, imagesPerNode: imagesPerNode, nodeCount: nodeCount, startupTimeout: timeout, nvps: nvps }).done(function(res, textStatus, xhr) {
       // Assuming the startup works, set the current database
-      $('#db_status').html('RUNNING');
+      $('#db_status').text('RUNNING');
       $('#startDB').prop('value','Stop');
+      $('#db_port').html(res.port);
       localStorage.setItem('current_pid',res.pid);
       localStorage.setItem('current_port',res.port);
-      localStorage.setItem('current_db',dataDir);
-
-      // Finally, enable the query button
-      $("#querySubmitButton").prop('disabled',false);
-
+      localStorage.setItem('current_database',dataDir);
+      kendo.ui.progress($('#spinner_container'), false);
     }).fail(function(xhr) {
+      kendo.ui.progress($('#spinner_container'), false);
       popup.show("Failed to start the requested database (" + xhr.status + " " + xhr.statusText + ")" ,"error");
     });
   };
@@ -1773,12 +1664,15 @@ $(function() {
     $.post('build_db',{ name: name, imagesPerNode: imagesPerNode, nodeCount: nodeCount, startupTimeout: timeout, nvps: nvps, files: files }).done(function(res, textStatus, xhr) {
       // Assuming the startup works, set the current database
       $('#db_name').html(res.current_database);
-      $('#db_status').html('RUNNING');
+      $('#db_port').html(res.port);
+      $('#db_status').text('RUNNING');
       $('#startDB').prop('value','Stop');
       localStorage.setItem('current_pid',res.pid);
       localStorage.setItem('current_port',res.port);
-      localStorage.setItem('current_db',res.current_database);
+      localStorage.setItem('current_database',res.current_database);
+      kendo.ui.progress($('#spinner_container'), false);
     }).fail(function(xhr) {
+      kendo.ui.progress('#startDB',false);
       popup.show("Failed to start the requested database (" + xhr.status + " " + xhr.statusText + ")" ,"error");
     });
   }
@@ -1958,7 +1852,6 @@ $(function() {
 
         var layoutS = {};
         layoutS = getLayoutSettings(layoutSelector.value());
-        showSpinner();
         cy.layout(layoutS);
       }
     }).fail(function(xhr) {
@@ -1995,7 +1888,7 @@ $(function() {
   	});
   	ls['name']=id;
   	ls['padding'] = 10;
-  	ls['stop'] = function() { $("#spinnerWrapper").fadeOut(800); };
+  	// ls['stop'] = function() { $("#spinnerWrapper").fadeOut(800); };
 		return ls;
   }
 
@@ -2279,33 +2172,32 @@ $(function() {
       arbornodeMass.setDataSource(testNumericDatasource);
       arbornodeMass.select(0);
 
-      $('#hiveplotaxisSort').data('kendoComboBox').setDataSource(testNumericDatasource);
-      $('#hiveplotaxisSort').data('kendoComboBox').select(0);
-
-      if ($('#hiveplotaxisFilterType').val() === 'numeric') {
-        $('#hiveplotaxisProperty').data('kendoComboBox').setDataSource(testNumericDatasource);
-        $('#hiveplotaxisProperty').data('kendoComboBox').select(0);
-      }
-      else {
-        $('#hiveplotaxisProperty').data('kendoComboBox').setDataSource(allFieldsDatasource);
-        $('#hiveplotaxisProperty').data('kendoComboBox').select(0);
-      }
-
-
-      // Change event handler for the type of axis for hiveplot layouts
-      $('#hiveplotaxisFilterType').data('kendoComboBox').bind('change',function(event) {
-        if ($('#hiveplotaxisFilterType').val() === 'numeric') {
-          $('#hiveplotaxisProperty').data('kendoComboBox').setDataSource(testNumericDatasource);
-        }
-        else {
-          $('#hiveplotaxisProperty').data('kendoComboBox').setDataSource(allFieldsDatasource);
-        }
-      });
+      // $('#hiveplotaxisSort').data('kendoComboBox').setDataSource(testNumericDatasource);
+      // $('#hiveplotaxisSort').data('kendoComboBox').select(0);
+      //
+      // if ($('#hiveplotaxisFilterType').val() === 'numeric') {
+      //   $('#hiveplotaxisProperty').data('kendoComboBox').setDataSource(testNumericDatasource);
+      //   $('#hiveplotaxisProperty').data('kendoComboBox').select(0);
+      // }
+      // else {
+      //   $('#hiveplotaxisProperty').data('kendoComboBox').setDataSource(allFieldsDatasource);
+      //   $('#hiveplotaxisProperty').data('kendoComboBox').select(0);
+      // }
+      //
+      //
+      // // Change event handler for the type of axis for hiveplot layouts
+      // $('#hiveplotaxisFilterType').data('kendoComboBox').bind('change',function(event) {
+      //   if ($('#hiveplotaxisFilterType').val() === 'numeric') {
+      //     $('#hiveplotaxisProperty').data('kendoComboBox').setDataSource(testNumericDatasource);
+      //   }
+      //   else {
+      //     $('#hiveplotaxisProperty').data('kendoComboBox').setDataSource(allFieldsDatasource);
+      //   }
+      // });
 
       // Now that we have the arbor numeric fields, draw the graph
       var layoutSettings = {};
       layoutSettings = getLayoutSettings(layoutSelector.value());
-      showSpinner();
       cy.layout(layoutSettings);
     });
 
@@ -2317,10 +2209,6 @@ $(function() {
       else {
         var Ls = {};
         Ls = getLayoutSettings(layoutSelector.value());
-
-        // Need to slide the settings menu back
-        sliders("in",$("#nav-trigger-settings").attr("id"));
-        showSpinner();
         cy.layout(Ls);
         cy.fit(cy.$());
         cy.center();
@@ -2561,6 +2449,7 @@ $(function() {
         cy.nodes().removeClass('highlight_connected_nodes');
       }
     });
+    kendo.ui.progress($('#query_progress'),false);
   }
 
   // Functions to change node/edge style (size, shape, and color for now)
@@ -3021,20 +2910,62 @@ $(function() {
 
     squeue_ws.onmessage = function(msg) {
       var res = JSON.parse(msg.data);
-      $('#current_queue > tbody').html('');
       if(res.length >= 1) {
+        $('#current_queue > tbody').html('');
         $.each(res,function(i,v) {
           var htmlInsert = '<tr><td>'+v.JOBID+'</td><td>'+v.USER+'</td><td>'+v.STATE+'</td><td>'+v.TIME+'</td><td>'+v.NODES+'</td></tr>';
           $('#current_queue > tbody').append(htmlInsert);
 
           if(localStorage.getItem('current_pid') !== null &&
              localStorage.getItem('current_pid') == v.JOBID) {
-            $('#db_status').html('RUNNING');
+            $('#db_status').text('RUNNING');
             $('#startDB').prop('value','Stop');
-            $('#db_name').html(localStorage.getItem('current_db'));
+            $('#db_name').html(localStorage.getItem('current_database'));
+            $('#db_port').html(localStorage.getItem('current_port'));
           }
         });
       }
     };
   }
+
+  // Adding a function to our treeview to retrieve checked nodes
+  // Thanks to great docs and support from Kendo UI:
+  // http://www.telerik.com/blogs/how-to-get-the-checked-items-from-a-treeview-with-checkboxes
+  kendo.ui.TreeView.prototype.getCheckedItems = (function(){
+    function getCheckedItems(){
+      var nodes = this.dataSource.view();
+      return getCheckedNodes(nodes);
+    }
+    function getCheckedNodes(nodes){
+      var node, childCheckedNodes;
+      var checkedNodes = [];
+      for (var i = 0; i < nodes.length; i++) {
+        node = nodes[i];
+        if (node.checked) {
+          checkedNodes.push(node);
+        }
+        if (node.hasChildren) {
+          childCheckedNodes = getCheckedNodes(node.children.view());
+          if (childCheckedNodes.length > 0){
+            checkedNodes = checkedNodes.concat(childCheckedNodes);
+          }
+        }
+      }
+      return checkedNodes;
+    }
+    return getCheckedItems;
+  })();
+
+  // Also extend treeview to support a check/uncheck all function
+  kendo.ui.TreeView.prototype.checkAll = (function(){
+    function checkAll() {
+      $(this+' .k-checkbox input').prop('checked',true).trigger('change');
+    }
+  })();
+
+  kendo.ui.TreeView.prototype.uncheckAll = (function(){
+    function uncheckAll() {
+      $(this+' .k-checkbox input').prop('checked',false).trigger('change');
+    }
+  })();
 });
