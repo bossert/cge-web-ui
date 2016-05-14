@@ -952,7 +952,7 @@ $(function() {
         break;
       case 'DESCRIBE':
         kendo.ui.progress($('#query_progress'),true);
-        sparqlDescribe();
+        sparqlConstruct();
         break;
       case 'INSERT':
         kendo.ui.progress($('#query_progress'),true);
@@ -1616,10 +1616,28 @@ $(function() {
   }
 
   // ASK
-  function sparqlAsk() { popup.show("Not implemented yet.  Hold your horses!","info"); }
+  function sparqlAsk() {
+    $.post("sparqlSelect", { current_database: $("#db_name").html(), current_port: $('#db_port').html(),'query': editor.getValue() }).done(function(data, textStatus, xhr) {
+      // If the query worked, store it
+      storeQueryHistory(query);
 
-  // DESCRIBE
-  function sparqlDescribe() { popup.show("Not implemented yet.  Hold your horses!","info"); }
+      // Hide the graph search panel
+      $("#graphSearch").fadeOut(1400);
+      console.log(data);
+      if(typeof data.results.boolean != 'undefined') {
+        kendo.ui.progress($('#query_progress'),false);
+        popup.show('The server returned \''+data.results.boolean+'\'','success');
+      }
+      else {
+        kendo.ui.progress($('#query_progress'),false);
+        popup.show("Error, no results (" + xhr.status + " " + xhr.statusText + ")","error");
+      }
+
+    }).fail(function(xhr) {
+      kendo.ui.progress($('#query_progress'),false);
+      popup.show("Error, no results (" + xhr.status + " " + xhr.statusText + ")","error");
+    });
+  }
 
   // INSERT/INSERT DATA
   function sparqlInsert() {
@@ -2468,7 +2486,7 @@ $(function() {
   	$('#CNIstringPropertyCombobox').data('kendoComboBox').setDataSource(new kendo.data.DataSource({data: finalNumericArray.string}));
 
   	// Now that we are here, go ahead and read in the list of available image icons
-  	imagesDataSource.fetch();
+  	imagesDataSource.read();
 
   	// Start with all fields set to the default and "constant" except for node size
   	// Node size

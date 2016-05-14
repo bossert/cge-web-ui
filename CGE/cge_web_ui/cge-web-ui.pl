@@ -293,7 +293,7 @@ group {
     $self->stash('gzip' => 1);
 
     #=+ Set retrieve interval for the loop
-    my $interval = 30;
+    my $interval = 10;
 
     my $id = Mojo::IOLoop->recurring($interval => sub {
 
@@ -313,7 +313,7 @@ group {
     $self->stash('gzip' => 1);
 
     #=+ Set retrieve interval for the loop
-    my $interval = 30;
+    my $interval = 10;
 
     my $id = Mojo::IOLoop->recurring($interval => sub {
 
@@ -334,7 +334,7 @@ group {
 
     my $old_nt_files = '';
     my $old_databases = '';
-    my $interval = 30;
+    my $interval = 10;
     my $id = Mojo::IOLoop->recurring($interval => sub {
       my $nt_files = _list_NT_files(undef,$self->session('username'));
       my $databases = _list_databases(undef,$self->session('username'));
@@ -570,7 +570,6 @@ group {
     Mojo::IOLoop->stream($self->tx->connection)->timeout(3000);
     my $qparams = $self->req->body_params->to_hash;
     $self->stash('gzip' => 1);
-    say Dumper($qparams);
 
     my $results_ref = cge_select($qparams);
     say Dumper($results_ref);

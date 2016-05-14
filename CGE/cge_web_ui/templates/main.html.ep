@@ -205,7 +205,7 @@
                     <td>Stiffness</td><td><input class="numbox k-textbox" type="number" min="0" max="15000" value="500" data-layoutsetting="stiffness" id="arborstiffnessBox" /> </td><td><input id="arborstiffness" data-layoutsetting="stiffness" class="kslider" /> </td>
                   </tr>
                   <tr>
-                    <td>Friction</td><td><input class="numbox k-textbox" type="number" min="0" max="1" value="0.5" step='0.01' data-layoutsetting="friction" data-layoutsetting="friction" id="arborfrictionBox" /> </td><td><input id="arborfriction" data-layoutsetting="friction" class="kslider" /> </td>
+                    <td>Friction</td><td><input class="numbox k-textbox" type="number" min="0" max="1" value="0.5" step='0.01' data-layoutsetting="friction" id="arborfrictionBox" /> </td><td><input id="arborfriction" data-layoutsetting="friction" class="kslider" /> </td>
                   </tr>
                   <tr>
                     <td>Gravity</td><td></td><td><input type='radio'  name="arborgravity" data-layoutsetting="gravity" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="arborgravity" data-layoutsetting="gravity" value="false"/>false</td>
@@ -426,36 +426,6 @@
                 </table>
               </td>
             </tr>
-            <!-- <tr id="hiveplot" class="hidden_layout_options lsettr">
-              <td colspan="3">
-                <table id="hiveplotLayoutTable">
-                  <tr>
-                    <td>Fit to viewport</td><td></td><td><input type='radio'  name="hiveplotfit" data-layoutsetting="fit" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="hiveplotfit" data-layoutsetting="fit" value="false" />false</td>
-                  </tr>
-                  <tr>
-                    <td>Hive Plot Type</td><td></td><td><input id="hiveplothiveplotType" data-layoutsetting="hiveplotType" /></td>
-                  </tr>
-                  <tr>
-                    <td>Radius</td><td><input id="hiveplotradiusBox" class="numbox k-textbox" type="number" min="10" max="100" value="25" data-layoutsetting="radius" /> </td><td><input id="hiveplotradius" data-layoutsetting="radius" class="kslider" /> </td>
-                  </tr>
-                  <tr>
-                    <td>Number Of Axes</td><td><input id="hiveplotnumberOfAxesBox" class="numbox k-textbox" type="number" min="3" max="24" value="3" data-layoutsetting="numberOfAxes" /> </td><td><input id="hiveplotnumberOfAxes" data-layoutsetting="numberOfAxes" class="kslider" /> </td>
-                  </tr>
-                  <tr>
-                    <td>Axis Filter Type</td><td></td><td><input id="hiveplotaxisFilterType" data-layoutsetting="axisFilterType" /></td>
-                  </tr>
-                  <tr>
-                    <td>Axis Property</td><td></td><td><input id="hiveplotaxisProperty" data-layoutsetting="axisProperty" /></td>
-                  </tr>
-                  <tr>
-                    <td>Axis Sort Property</td><td></td><td><input id="hiveplotaxisSort" data-layoutsetting="axisSort" /></td>
-                  </tr>
-                  <tr>
-                    <td>Axis Sort Order</td><td></td><td><input id="hiveplotaxisSortDirection" data-layoutsetting="axisSortDirection" /></td>
-                  </tr>
-                </table>
-              </td>
-            </tr> -->
             <tr id="random" class="lsettr">
               <td colspan="3">
                 <table id="randomLayoutTable">
@@ -528,18 +498,6 @@
                 </table>
               </td>
             </tr>
-            <!-- <tr id="jgraph" class="hidden_layout_options lsettr">
-              <td colspan="3">
-                <table id="jgraphLayoutTable">
-                  <tr>
-                    <td>Shader</td><td></td><td><input id="jgraphShader" data-layoutsetting="shader" /></td>
-                  </tr>
-                  <tr>
-                    <td>3d layout</td><td></td><td><input type='radio'  name="jgraphLayout" data-layoutsetting="runOptimization" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="jgraphLayout" data-layoutsetting="runOptimization" value="false" />false</td>
-                  </tr>
-                </table>
-              </td>
-            </tr> -->
           </table>
         </div>
         <div id='charting' class='ss_button'>Charting</div>
@@ -562,10 +520,6 @@
           </table>
           <input id='chart_display_button' class='k-button k-primary' value='Display' />
         </div>
-        <!-- <div id='graph_algorithms' class='ss_button'>Graph Algorithms</div>
-        <div class='ss_content'>
-          <p>hello</p>
-        </div> -->
       </div>
       <div id='logo_copyright'>
         <img id='cray_logo' alt="Cray logo" src="images/cray_logo.png" />
@@ -584,19 +538,13 @@
       <div id="graphSearch">
         Highlight Color&nbsp;&nbsp;<input id="graphSearchColorPicker" />
         <input id="graphSearchTextBox" type="text" class="k-textbox" placeholder="Search Graph" />
-        <!-- <input id="graphSearchSliderCombobox" />
-        <div id="fixSlider">
-          <div id="graphSearchSlider">
-            <input /><input />
-          </div>
-        </div> -->
       </div>
     </div>
     <span id="popupNotification"> </span>
     <div id="resultsPopup" style="display: none;">
       <div id="resultsGrid"> </div>
     </div>
-    <div id='alterNodesPopup'style='display: none;'>
+    <div id='alterNodesPopup' style='display: none;'>
       <div id="alterNodesContainer">
         <table id="changeNodeSize">
           <tbody>
@@ -652,7 +600,7 @@
         </table>
       </div>
     </div>
-    <div id='new_database_popup'style='display: none;'>
+    <div id='new_database_popup' style='display: none;'>
       <table id='new_db_config'>
         <tbody>
           <tr><td><label for='new_instances'>Instances per node</label></td><td><label for='new_nodes'>Number of nodes</label></td><td><label for='new_timeout'>Build timeout</label></td></tr>
@@ -663,7 +611,7 @@
         </tbody>
       </table>
     </div>
-    <div id="QuerySavePopup"style='display: none;'>
+    <div id="QuerySavePopup" style='display: none;'>
       <form id="querySaveForm">
         <table>
           <tbody>
@@ -680,97 +628,14 @@
         </table>
       </form>
     </div>
-    <div id="websocketReconnect"style='display: none;'>
+    <div id="websocketReconnect" style='display: none;'>
       <p>Websocket connection has been closed due to inactivity.  Reconnect?</p>
       <input id="websocketReconnectButtonYes" type="button" class="k-button" value="Yes"/>
       <input id="websocketReconnectButtonNo" type="button" class="k-button" value="No" />
     </div>
-    <div id="graphTooltip"style='display: none;'> </div>
-    <div id="graphHistogramsPopup"style='display: none;'>
+    <div id="graphTooltip" style='display: none;'> </div>
+    <div id="graphHistogramsPopup" style='display: none;'>
       <div id="histogramsWrapper"></div>
-    </div>
-    <div id="alterNodesPopup"style='display: none;'>
-      <div id="alterNodesContainer">
-        <table id="changeNodeSize">
-          <tbody>
-            <tr><td><h2>Change Node Size</h2></td></tr>
-            <tr><td><input type="radio" name="nodeSizeChange" value="attribute" checked /><label>&nbsp; Attribute &nbsp;&nbsp;</label><input type="radio" name="nodeSizeChange" value="constant" /><label>&nbsp; Constant</label></td></tr>
-            <tr id='changeNodeSizeComboBoxTr'><td><input id='changeNodeSizeCombobox' /></td></tr>
-            <tr id='changeNodeSizeNumboxTr'><td><input type='number' value='10' id='changeNodeSizeNumbox' class='k-textbox' /></td></tr>
-          </tbody>
-        </table>
-        <hr />
-        <table id="changeNodeColor">
-          <tbody>
-            <tr><td><h2>Change Node Color</h2></td></tr>
-            <tr><td><input type="radio"  name="nodeColorRange" value="numericAttribute" /><label>&nbsp; Numeric Attribute &nbsp;&nbsp;</label><input type="radio"  name="nodeColorRange" value="stringAttribute" /><label>&nbsp; String Attribute &nbsp;&nbsp;</label><input type="radio"  name="nodeColorRange" value="constant" checked /><label>&nbsp; Constant </label></td></tr>
-            <tr id="CNCNumericTr"><td>
-              <input id="CNCpropertyCombobox" />&nbsp;&nbsp;&nbsp;<input id="CNClowNumber" />&nbsp;&nbsp;&nbsp;<input id="CNChighNumber" />&nbsp;&nbsp;&nbsp;<input id='CNCnumericSubmit' type='button' class='k-button' value='Change' />
-            </td></tr>
-            <tr id="CNCStringTr"><td>
-              <table id='CNCstringPropertiesTable'>
-                <tbody>
-                  <tr><td><input id='CNCstringPropertyCombobox' /></td><td><input id='CNCstringPropertySubmit' type='button' class='k-button' value="change" /></td></tr>
-                </tbody>
-              </table>
-            </td></tr>
-            <tr id='CNCColorPickerTr'><td><input id="CNCColorPicker" /></td></tr>
-          </tbody>
-        </table>
-        <hr />
-        <table id="changeNodeShape">
-          <tbody>
-            <tr><td><h2>Change Node Shape</h2></td></tr>
-            <tr><td><input type="radio" name="nodeShapeChange" value="attribute" /><label>&nbsp;Attribute&nbsp;&nbsp;</label><input type="radio" name="nodeShapeChange" value="constant" checked /><label>&nbsp; Constant</label></td></tr>
-            <tr id="CNSStringTr"><td>
-              <table id='CNSstringPropertiesTable'>
-                <tbody>
-                  <tr><td><input id='CNSstringPropertyCombobox' /></td><td><input id='CNSstringPropertySubmit' type='button' class='k-button' value="change" /></td></tr>
-                </tbody>
-              </table>
-            </td></tr>
-            <tr id='CNSShapePickerTr'><td><input id="CNSShapePicker" /></td></tr>
-          </tbody>
-        </table>
-        <hr />
-        <table id="changeNodeImage">
-          <tr><td><h2>Change Node Image</h2></td></tr>
-          <tr id="CNIStringTr"><td>
-            <table id='CNIstringPropertiesTable'>
-              <tbody>
-                <tr><td><input id='CNIstringPropertyCombobox' /></td><td><input id='CNIstringPropertySubmit' type='button' class='k-button' value="change" /></td></tr>
-              </tbody>
-            </table>
-          </td></tr>
-        </table>
-        <!-- <hr />
-        <table id="changeEdgeColor">
-          <tbody>
-            <tr><td><h2>Change Edge Color</h2></td></tr>
-            <tr><td><input type="radio"  name="edgeColorRange" value="property" /><label>&nbsp; Edge property &nbsp;&nbsp;</label><input type="radio"  name="edgeColorRange" value="Constant" checked /><label>&nbsp; Constant</label></td></tr>
-            <tr></tr>
-            <tr></tr>
-          </tbody>
-        </table>
-        <hr />
-        <table id="changeEdgeWidth">
-          <tbody>
-            <tr><td><h2>Change Edge width</h2></td></tr>
-            <tr><td><input type="radio" name="edgeWidthChange" value="attribute" /><label>&nbsp; Attribute &nbsp;&nbsp;</label><input type="radio" name="edgeWidthChange" value="constant" checked /><label>&nbsp; Constant</label></td></tr>
-            <tr></tr>
-            <tr></tr>
-          </tbody>
-        </table>
-        <hr />
-        <table id="changeEdgeType">
-          <tbody>
-            <tr><td><h2>Change Edge type</h2></td></tr>
-            <tr><td><input type="radio" name="edgeTypeChange" value="attribute" /><label>&nbsp; Attribute &nbsp;&nbsp;</label><input type="radio" name="edgeTypeChange" value="constant" checked /><label>&nbsp; Constant</label></td></tr>
-            <tr></tr>
-            <tr></tr>
-          </tbody>
-        </table> -->
-      </div>
     </div>
   </body>
 </html>
