@@ -1,6 +1,0 @@
-SELECT ?pred (COUNT(*) AS ?count)
-WHERE {
-  ?sub ?pred ?obj .
-}
-GROUP BY ?pred
-LIMIT 100
