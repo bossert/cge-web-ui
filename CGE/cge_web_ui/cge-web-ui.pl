@@ -22,6 +22,7 @@ use Tie::Hash::Expire;
 use IPC::Cmd qw(can_run run);
 use File::Path::Tiny;
 use File::Find;
+use File::Slurp;
 use FindBin;
 use Test::Deep::NoTest;
 use lib '/mnt/lustre/bossert/git';
@@ -72,6 +73,7 @@ use File::Basename;
 #   + [user_home_directory]           :: User's home directory
 #      + .cge_web_ui                  :: Directory for holding web UI files and directories
 #         + log                       :: This is directory that web UI logs are stored
+#         + queries                   :: This directory should contain user-defined general purpose queries (i.e. not specific to a certain database)
 #         = analytics_ui_config.yaml  :: User's personal configuration file; overrides master settings
 
 #========================================#
@@ -247,7 +249,7 @@ group {
     }
     $self->render(json => \@filesToSend);
   };
-
+  
   get '/list_databases' => sub {
     my $self = shift;
     my $qparams=$self->req->query_params->to_hash;
@@ -515,12 +517,12 @@ group {
     my $qparams = $json->[0];
     say Dumper($qparams);
     if($self->session('username') eq (getpwuid($<))[0]) {
-      $qparams->{database} .= '/' unless $qparams->{database} =~ /\/$/;
+      $qparams->{database}->{path} .= '/' unless $qparams->{database}->{path} =~ /\/$/;
       my %changes = (
         action      => 'modify',
         username    => $qparams->{username},
-        database    => $qparams->{database},
-        permissions => $qparams->{permissions}
+        database    => $qparams->{database}->{path},
+        permissions => $qparams->{permissions}->{permissions}
       );
 
       my $success = modify_user(\%changes);
@@ -544,11 +546,11 @@ group {
     my $qparams = $json->[0];
     say Dumper($qparams);
     if($self->session('username') eq (getpwuid($<))[0]) {
-      $qparams->{database} .= '/' unless $qparams->{database} =~ /\/$/;
+      $qparams->{database}->{path} .= '/' unless $qparams->{database}->{path} =~ /\/$/;
       my %delete = (
         action   => 'revoke',
         username => $qparams->{username},
-        database => $qparams->{database}
+        database => $qparams->{database}->{path}
       );
 
       my $success = modify_user(\%delete);
@@ -619,6 +621,64 @@ group {
       $self->render(text => 'Unauthorized:  Only the the user who launched the web-application may alter a database.', status => 403);
     }
   };
+  
+  get 'query_list' => sub {
+    my $self = shift;
+    my $qparams = $self->req->query_params->to_hash;
+    
+    my @databases = (
+      (getpwnam $self->session('username'))[7].'/.cge_web_ui/queries/',
+      $root_directory.'queries/'
+    );
+    
+    if(exists $qparams->{current_database}) {
+      $qparams->{current_database} .= '/' unless $qparams->{current_database} =~ /\/$/;
+      push @databases, $qparams->{current_database}.'.cge_web_ui/queries/';
+    }
+    
+    my $querylist_ref = loadQueries(\@databases);
+    $self->render(json => $querylist_ref);
+  };
+  
+  post 'saveQuery' => sub {
+    my $self = shift;
+    my $qparams = $self->req->body_params->to_hash;
+    say Dumper($qparams);
+    my $filename = $qparams->{'title'};
+    my $shared = $qparams->{'general'};
+    my $counter = 1;
+  
+    my $which_directory;
+    if($shared eq 'general_purpose') {
+      $which_directory = (getpwnam $self->session('username'))[7].'/.cge_web_ui/queries/';
+      mkdir $which_directory unless -d $which_directory;
+    }
+    elsif($shared eq 'specific') {
+      $which_directory = $self->session('current_database').'/.cge_web_ui/queries/';
+      mkdir $which_directory unless -d $which_directory;
+    }
+    else {
+      $self->render(text => '[ERROR] Unknown option: '.$shared, status => 500);
+    }
+  
+    if (-f $which_directory.$filename.'.rq') {
+      while (-f $which_directory.$filename.'_'.$counter.'.rq') {
+        $counter++;
+      }
+      $filename .= '_'.$counter;
+    }
+    say $which_directory.$filename.'.rq';
+    open(my $OF, '>', $which_directory.$filename.'.rq') or croak;
+    say {$OF} $qparams->{'query'};
+    close($OF);
+  
+    if (!-z $which_directory.$filename.'_'.$counter.'.rq') {
+      $self->rendered(200);
+    }
+    else {
+      $self->rendered(500);
+    }
+};
 };
 
 #========================================#
@@ -749,7 +809,7 @@ sub _user_lookup {
   foreach my $entry($mesg->entries) {
     my %temp;
     foreach my $kv(@{$entry->{'asn'}->{'attributes'}}) {
-      #=+ The regext here is looking for a value that is EXACTLY cn, uid, or homeDirectory (case-sensitive).  Feel free to add more values if they are useful
+      #=+ The regex here is looking for a value that is EXACTLY cn, uid, or homeDirectory (case-sensitive).  Feel free to add more values if they are useful
       if ($kv->{'type'} =~ m/^(:?cn|uid|homeDirectory)$/) {
         $temp{$kv->{'type'}} = $kv->{'vals'}->[0];
       }
@@ -792,13 +852,21 @@ sub _list_database_permissions {
           next unless -d $authorized_users_dir.$f;
           if(-e $authorized_users_dir.$f.'/properties.yaml') {
             my $perms_config = YAML::AppConfig->new(file => $authorized_users_dir.$f.'/properties.yaml');
+            my %permissions;
+            if($perms_config->config->{permissions} eq 'ro') {
+              %permissions = (permissionsString => 'Read-Only', permissions => 'ro');
+            }
+            elsif($perms_config->config->{permissions} eq 'rw') {
+              %permissions = (permissionsString => 'Read-Write', permissions => 'rw');
+            }
+            
             my %temp_user = (
               id            => $perms_config->config->{database}.$perms_config->config->{username},
               username      => $perms_config->config->{username},
-              permissions   => $perms_config->config->{permissions},
+              permissions   => \%permissions,
               created       => $perms_config->config->{created},
               last_modified => $perms_config->config->{last_modified},
-              database      => $perms_config->config->{database}
+              database      => { path => $perms_config->config->{database} }
             );
             push @userperms, \%temp_user;
           }
@@ -928,6 +996,35 @@ sub _list_databases {
     }
   },$root);
   return \@output;
+}
+
+sub loadQueries {
+  my ($directories) = @_;
+  my @files = ();
+  
+  #=+ Just in case we don't get any directories
+  return undef if scalar(@$directories) == 0;
+  
+  foreach my $dir(@$directories) {
+    if(-d $dir) {
+      $dir .= '/' unless $dir =~ /\/$/;
+      my @temp = read_dir $dir;
+      foreach my $file(@temp) {
+        push @files, $dir.$file if $file =~ m/\.rq$|\.ru$/;
+      }
+    }
+  }
+  
+  my @queries;
+  @files = sort @files;
+  
+  foreach my $file(@files) {
+      my $query = read_file($file);
+      $file =~ s/.+\/([^\/]+)\.rq$/$1/;
+      push @queries, {'name' => $file, 'query' => $query};
+  }
+  
+  return \@queries;
 }
 
 #=+ Read in our configuration file

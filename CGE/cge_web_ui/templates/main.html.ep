@@ -6,17 +6,17 @@
     <link href="images/favicon.ico" rel="icon" type="image/x-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=1.0, minimum-scale=1.0, maximum-scale=1.0"/>
     <link type="text/css" href="//fonts.googleapis.com/css?family=Michroma" rel="stylesheet" />
-    <link type="text/css" href="styles/kendo.common.min.css" rel="stylesheet" />
-    <link type="text/css" href="styles/kendo.bootstrap.min.css" rel="stylesheet" />
+    <link type="text/css" href="styles/kendo.common-material.min.css" rel="stylesheet" />
+    <link type="text/css" href="styles/kendo.material.min.css" rel="stylesheet" />
     <link type="text/css" href="styles/kendo.dataviz.min.css" rel="stylesheet" />
-    <link type="text/css" href="styles/kendo.dataviz.bootstrap.min.css" rel="stylesheet" />
-    <link type="text/css" href="styles/yasqe.min.css" rel="stylesheet" />
+    <link type="text/css" href="styles/kendo.dataviz.material.min.css" rel="stylesheet" />
     <link type="text/css" href="styles/cytoscape.js-panzoom.css" rel="stylesheet" />
     <link type="text/css" href="styles/font-awesome-4.0.3/css/font-awesome.css" rel="stylesheet" />
+    <link type="text/css" href="styles/progress_bar.css" rel="stylesheet" />
+    <link type="text/css" href="styles/yasqe.min.css" rel="stylesheet" />
     <link type="text/css" href="styles/main.css" rel="stylesheet" />
 
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-    <script type="text/javascript" src="js/yasqe.bundled.min.js"></script>
     <script type="text/javascript" src="js/kendo.all.min.js"></script>
     <script type="text/javascript" src="js/moment.min.js"></script>
     <script type="text/javascript" src="js/cytoscape.min.js"></script>
@@ -32,6 +32,7 @@
     <script type="text/javascript" src="js/springy.js"></script>
     <script type="text/javascript" src="js/cytoscape-springy.js"></script>
     <script type="text/javascript" src="js/cytoscape-panzoom.js"></script>
+    <script type="text/javascript" src="js/yasqe.bundled.min.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
   </head>
   <body>
@@ -44,7 +45,7 @@
               <tr><td>Current Database</td><td>Port</td><td>Status</td></tr>
             </thead>
             <tbody>
-              <tr><td id='db_name'>None</td><td id='db_port'>None</td><td><div id='spinner_container'><p id='db_status'>STOPPED</p></div></td></tr>
+              <tr><td id='db_name'>None</td><td id='db_port'>-</td><td><div id='spinner_container'><p id='db_status'>STOPPED</p></div></td></tr>
             </tbody>
           </table>
           <table id='db_config' class='sysinfo_tables'>
@@ -112,7 +113,7 @@
                 <td>Selection type</td><td> </td><td><input class="cyOption" id="selectionType" /></td>
               </tr>
               <tr>
-                <td>Hide edges on move</td><td> </td><td><input class="cyOption" type='radio'  name="hideEdgesOnViewport" value="true" checked />true &nbsp; &nbsp;<input class="cyOption" type='radio'  name="hideEdgesOnViewport" value="false" />false</td>
+                <td>Hide edges on move</td><td></td><td><input class="cyOption" type='radio'  name="hideEdgesOnViewport" value="true" checked />true &nbsp; &nbsp;<input class="cyOption" type='radio'  name="hideEdgesOnViewport" value="false" />false</td>
               </tr>
               <tr>
                 <td>Hide labels on move</td><td> </td><td><input class="cyOption" type='radio'  name="hideLabelsOnViewport" value="true" checked />true &nbsp; &nbsp;<input class="cyOption" type='radio'  name="hideLabelsOnViewport" value="false" />false</td>
@@ -178,7 +179,7 @@
         <div class='ss_content'>
           <table id="layoutSettings">
             <tr>
-              <td colspan="2"><select id="layoutSelector"> </select></td><td><input id="layoutSubmit" type="button" value="Run Layout" class="k-button" /></td>
+              <td colspan="2"><select id="layoutSelector"> </select></td><td><input id="layoutSubmit" type="button" value="Run Layout" class="k-button k-primary" /></td>
             </tr>
             <tr id="arbor" class="hidden_layout_options lsettr">
               <td colspan="3">
@@ -539,6 +540,11 @@
         Highlight Color&nbsp;&nbsp;<input id="graphSearchColorPicker" />
         <input id="graphSearchTextBox" type="text" class="k-textbox" placeholder="Search Graph" />
       </div>
+      <div id='results_and_histogram_wrapper' style='display: none;'>
+        &nbsp;
+        <input id='nav-trigger-graphStatistics' class='k-button k-primary k-state-disabled' value='Graph Stats' disabled />
+        <input id='nav-trigger-results' class='k-button k-primary k-state-disabled' value='Results' disabled />
+      </div>
     </div>
     <span id="popupNotification"> </span>
     <div id="resultsPopup" style="display: none;">
@@ -550,8 +556,8 @@
           <tbody>
             <tr><td><h2>Change Node Size</h2></td></tr>
             <tr><td><input type="radio" name="nodeSizeChange" value="attribute" checked /><label>&nbsp; Attribute &nbsp;&nbsp;</label><input type="radio" name="nodeSizeChange" value="constant" /><label>&nbsp; Constant</label></td></tr>
-            <tr id='changeNodeSizeComboBoxTr'><td><input id='changeNodeSizeCombobox' /></td></tr>
-            <tr id='changeNodeSizeNumboxTr'><td><input type='number' value='10' id='changeNodeSizeNumbox' class='k-textbox' /></td></tr>
+            <tr id='changeNodeSizeComboBoxTr'><td><input id='changeNodeSizeCombobox' class='half_wide' /></td></tr>
+            <tr id='changeNodeSizeNumboxTr'><td><input type='number' value='10' id='changeNodeSizeNumbox' class='k-textbox half_wide' /></td></tr>
           </tbody>
         </table>
         <hr />
@@ -560,12 +566,12 @@
             <tr><td><h2>Change Node Color</h2></td></tr>
             <tr><td><input type="radio"  name="nodeColorRange" value="numericAttribute" /><label>&nbsp; Numeric Attribute &nbsp;&nbsp;</label><input type="radio"  name="nodeColorRange" value="stringAttribute" /><label>&nbsp; String Attribute &nbsp;&nbsp;</label><input type="radio"  name="nodeColorRange" value="constant" checked /><label>&nbsp; Constant </label></td></tr>
             <tr id="CNCNumericTr"><td>
-              <input id="CNCpropertyCombobox" />&nbsp;&nbsp;&nbsp;<input id="CNClowNumber" />&nbsp;&nbsp;&nbsp;<input id="CNChighNumber" />&nbsp;&nbsp;&nbsp;<input id='CNCnumericSubmit' type='button' class='k-button' value='Change' />
+              <input id="CNCpropertyCombobox" />&nbsp;&nbsp;&nbsp;<input id="CNClowNumber" />&nbsp;&nbsp;&nbsp;<input id="CNChighNumber" />&nbsp;&nbsp;&nbsp;<input id='CNCnumericSubmit' type='button' class='k-button k-primary' value='Change' />
             </td></tr>
             <tr id="CNCStringTr"><td>
               <table id='CNCstringPropertiesTable'>
                 <tbody>
-                  <tr><td><input id='CNCstringPropertyCombobox' /></td><td><input id='CNCstringPropertySubmit' type='button' class='k-button' value="change" /></td></tr>
+                  <tr><td><input id='CNCstringPropertyCombobox' class='widecombobox' /></td><td><input id='CNCstringPropertySubmit' type='button' class='k-button k-primary widebutton' value="change" /></td></tr>
                 </tbody>
               </table>
             </td></tr>
@@ -580,11 +586,11 @@
             <tr id="CNSStringTr"><td>
               <table id='CNSstringPropertiesTable'>
                 <tbody>
-                  <tr><td><input id='CNSstringPropertyCombobox' /></td><td><input id='CNSstringPropertySubmit' type='button' class='k-button' value="change" /></td></tr>
+                  <tr><td><input id='CNSstringPropertyCombobox' class='widecombobox' /></td><td><input id='CNSstringPropertySubmit' type='button' class='k-button k-primary widebutton' value="change" /></td></tr>
                 </tbody>
               </table>
             </td></tr>
-            <tr id='CNSShapePickerTr'><td><input id="CNSShapePicker" /></td></tr>
+            <tr id='CNSShapePickerTr'><td><input id="CNSShapePicker" class='half_wide' /></td></tr>
           </tbody>
         </table>
         <hr />
@@ -593,7 +599,7 @@
           <tr id="CNIStringTr"><td>
             <table id='CNIstringPropertiesTable'>
               <tbody>
-                <tr><td><input id='CNIstringPropertyCombobox' /></td><td><input id='CNIstringPropertySubmit' type='button' class='k-button' value="change" /></td></tr>
+                <tr><td><input id='CNIstringPropertyCombobox' class='widecombobox' /></td><td><input id='CNIstringPropertySubmit' type='button' class='k-button k-primary widebutton' value="change" /></td></tr>
               </tbody>
             </table>
           </td></tr>
@@ -616,13 +622,13 @@
         <table>
           <tbody>
             <tr>
-              <td><input id="queryName" class="querySaveFormWide k-textbox" type="text" name="queryName" placeholder="Query Name" /></td>
+              <td><input id="queryName" class="querySaveFormWide k-textbox" type="text" name="queryName" placeholder="Query Name" required /></td>
             </tr>
             <tr>
-              <td>Save Query to Shared Store?&nbsp;&nbsp;&nbsp;&nbsp;<input id="pqT" type="radio" name="privateQuery" value="true">true&nbsp;&nbsp;&nbsp;<input id="pqF" type="radio" name="privateQuery" value="false" checked>false</td>
+              <td><input id="pqT" type="radio" name="dbSpecificQuery" value="specific" checked >Database-specific<br/><input id="pqF" type="radio" name="dbSpecificQuery" value="general_purpose" >General Purpose</td>
             </tr>
             <tr>
-              <td><br /><input id="saveQ" class="querySaveFormWide k-button" type="submit" value="Save" /></td>
+              <td><br /><input id="saveQ" class="querySaveFormWide k-button k-primary" type="submit" value="Save" /></td>
             </tr>
           </tbody>
         </table>

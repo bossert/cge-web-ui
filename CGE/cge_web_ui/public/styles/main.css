@@ -23,7 +23,7 @@ body {
   min-height: 100%;
   margin: 0;
   padding: 0;
-  background-color: #005696; /**/
+  background-color: #005696;
   transition: left 1s;
 }
 
@@ -59,9 +59,10 @@ body {
   height: 32px;
   font-size: 0;
   text-indent: -9999px;
-  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
   box-shadow: none;
-  border-radius: none;
+  border-radius: 0;
   border: none;
   cursor: pointer;
   transition: background 1s, left 1s;
@@ -176,10 +177,11 @@ body {
 }
 
 #user_permissions_grid {
-  /*margin-left: -10px;*/
-  /*margin-top: -10px;
-  margin-bottom: -10px;*/
   width: 100%;
+}
+
+#user_permissions_grid .k-grid-content>table>tbody>tr {
+  font-size: 0.8em;
 }
 
 #treeview_display {
@@ -243,6 +245,15 @@ body {
   width: 100%;
 }
 
+#current_db td {
+  text-overflow: ellipsis;
+}
+
+#db_status {
+  padding: 0;
+  margin: 0;
+}
+
 #current_db tr:nth-child(1) {
   width: 90%;
 }
@@ -272,12 +283,12 @@ body {
 #query_table .k-button {
   width: 100%;
   margin: 0;
+  font-size: 0.8em;
 }
 
 #query_progress {
   position: relative;
   width: 100%;
-  height: 100%;
   z-index: 5;
 }
 
@@ -293,13 +304,29 @@ body {
   text-align: left;
 }
 
-.widecombobox .k-widget.k-combobox {
+.widecombobox, .widecombobox .k-widget.k-combobox {
   width: 100%;
   padding: 0;
 }
 
-#db_config input {
+.widebutton, #CNCColorPickerTr .k-selected-color {
+   width: 100%;
+}
+
+#CNCColorPickerTr .k-colorpicker, .half_wide {
+  width: 50%;
+}
+
+#CNCnumericSubmit {
+  width: 9vw;
+}
+
+#db_config .k-widget, #db_config .k-button {
   width: 100%;
+}
+
+#db_config input[name='selectDB_input'] {
+  height: 100%;
 }
 
 #treeViewSearchInput {
@@ -322,12 +349,24 @@ span.k-in > span.highlight {
   width: 100%;
 }
 
+#alterNodesContainer .k-button {
+  font-size: 0.8em;
+}
+
+/*#alterNodesContainer .k-combobox,
+#alterNodesContainer .k-textbox {
+  width: 100%;
+}*/
+
+
+
 #alterNodesContainer table {
 	width: 100%;
+  table-layout: fixed;
+  font-size: 0.9em;
 }
 
 #alterNodesContainer label {
-	font-family: 'fira';
 	font-size: 0.9em;
 }
 
@@ -345,11 +384,6 @@ span.k-in > span.highlight {
 	font-size: 1.1em;
 }
 
-#alterNodesContainer table {
-	table-layout: fixed;
-	width: 100%;
-}
-
 .deleteMeTdFirst {
 	width: calc(60% - 5px);
 	word-wrap: break-word;
@@ -359,12 +393,41 @@ span.k-in > span.highlight {
 	width: calc(40% - 5px);
 }
 
-#new_db_config input {
-  width: 100%;
+#new_database_popup {
+  background-color: #EFEFEF;
+  margin: 0;
+  padding: 10px;
+}
+
+#new_db_config {
+  table-layout: fixed;
+  width: calc(100% - 10px);
+  margin: 0;
+  padding: 0;
+}
+
+#new_db_config tr {
+  margin: 0;
+  padding: 0;
+}
+
+#new_db_config td {
+  margin: 0;
+}
+
+#new_db_config .k-widget {
+  width: calc(100% - 5px);
+  margin: 0 5px 0 0;
+}
+
+#new_db_config .k-textbox {
+  width: calc(100% - 5px);
+  margin: 0 5px 0 0;
 }
 
 #createDB {
-  margin-top: 20px;
+  width: calc(100% - 5px);
+  margin-top: 5px;
 }
 
 #new_db {
@@ -385,7 +448,7 @@ span.k-in > span.highlight {
 	position: fixed;
 	top: 5px;
 	right: 5px;
-	width: 320px;
+	width: 330px;
 	z-index: 3;
 	padding: 0;
 	margin: 0;
@@ -424,26 +487,16 @@ span.k-in > span.highlight {
   margin: 0;
 }
 
-.yasqe .CodeMirror {
-	width: calc(100% - 5px);
+.yasqe .CodeMirror-gutter.CodeMirror-linenumbers {
+  width: 29px !important;
 }
 
 .yasqe .CodeMirror-sizer {
-  margin-left: 44px;
-  height: 100%;
-}
-
-.yasqe .CodeMirror-gutters {
-  width: 44px;
-  height: 100%;
-}
-
-.yasqe .CodeMirror-lines {
-  height: 100%;
+  margin-left: 44px !important;
 }
 
 #querySubmitButton {
-  width: 100%;
+  width: calc(100% - 2px);
   margin-top: 5px;
 }
 
@@ -484,15 +537,17 @@ span.k-in > span.highlight {
    width: 100% !important;
 }
 
+#layoutSubmit {
+  width: 100%;
+}
+
 #chart_display_button {
   width: 100%;
   margin-top: 10px;
 }
 
 #spinner_container {
-  position: relative;
   width: 100%;
-  height: 100%;
   z-index: 5;
 }
 
@@ -507,15 +562,67 @@ div.k-loading-mask {
 #viz {
   width: 100%;
   height: 100%;
-	margin: 0;
+	margin: 30px 30px 0 30px;
 	padding: 0;
 }
 
 #viz_main {
-	width: 100%;
-	height: 100%;
+	width: calc(100% - 60px);
+	height: calc(100% - 30px);
 }
 
 #viz_foot {
 	display: none;
+}
+
+#user_permissions_grid .k-button {
+  font-size: 0.7em;
+  width: calc(100% - 6px);
+  margin: 2px;
+  padding: 5px;
+}
+
+#user_permissions_grid span.k-icon {
+  vertical-align: middle;
+}
+
+.cxtmenu-content {
+  font-size: 0.7em;
+}
+
+#results_and_histogram_wrapper {
+  position: fixed;
+  width: 9vw;
+  right: 4vw;
+  bottom: 2vh;
+  opacity: 0.6;
+}
+
+#results_and_histogram_wrapper .k-button {
+  width: 100%;
+  font-size: 0.7em;
+  padding: 5px;
+  margin-top: 5px;
+}
+
+#QuerySavePopup {
+  background-color: #EFEFEF;
+}
+
+#querySaveForm {
+  font-size: 0.8em;
+  width: 100%;
+}
+
+#querySaveForm table {
+  width: 100%;
+}
+
+#queryName {
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+#saveQ {
+  width: 100%;
 }

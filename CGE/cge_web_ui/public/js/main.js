@@ -34,7 +34,7 @@ $(function() {
     ]
   }).data('kendoWindow');
 
-  // Popup window to reconnect websocket connections
+  // Popup window to reconnect web socket connections
   var websocketReconnect = $("#websocketReconnect").kendoWindow({
     width: "300px",
     title: "Websocket Reconnect",
@@ -46,9 +46,26 @@ $(function() {
   // Our fancy hamburger menu button
   $('.c-hamburger').on('click', function(e) {
     e.preventDefault();
-    (this.classList.contains("is-active") === true) ? this.classList.remove("is-active") : this.classList.add("is-active");
-    ($('#navigation').css('left') == '0px') ? $('#navigation').css('left','-500px') : $('#navigation').css('left','0px');
-    ($('#content_area').css('left') == '0px') ? $('#content_area').css('left','500px') : $('#content_area').css('left','0px');
+    if(this.classList.contains("is-active") === true) {
+      this.classList.remove("is-active");
+    }
+    else {
+      this.classList.add("is-active");
+    }
+    
+    if($('#navigation').css('left') == '0px') {
+      $('#navigation').css('left','-500px');
+    }
+    else {
+      $('#navigation').css('left','0px');
+    }
+    
+    if($('#content_area').css('left') == '0px') {
+      $('#content_area').css('left','500px');
+    }
+    else {
+      $('#content_area').css('left','0px');
+    }
   });
 
   // Menu panel bar
@@ -81,6 +98,7 @@ $(function() {
           $('#db_status').text('RUNNING');
           $('#startDB').prop('value','Stop');
           $('#db_name').html(localStorage.getItem('current_database'));
+          $('#db_port').html(localStorage.getItem('current_port'));
         }
       });
     }
@@ -114,8 +132,8 @@ $(function() {
         checkChildren: true,
         template: '# if(!item.hasChildren) { # <input type="checkbox" name="checkedFiles[#= item.id #]" value="true" /> # } #'
       },
-      dataBound: function(e) {
-        InitSearch('#file_browser', '#treeViewSearchInput');
+      dataBound: function() {
+        initSearch('#file_browser', '#treeViewSearchInput');
       }
   });
 
@@ -151,10 +169,10 @@ $(function() {
     value: 8,
     format: 'n0'
   });
-  var dbNodes = $('#nodes').kendoNumericTextBox({
+  $('#nodes').kendoNumericTextBox({
     min: 1,
     format: 'n0'
-  }).data('kendoNumericTextBox');
+  });
 
   $('#timeout').kendoNumericTextBox({
     min: 3600,
@@ -168,10 +186,10 @@ $(function() {
     value: 8,
     format: 'n0'
   });
-  var newDbNodes = $('#new_nodes').kendoNumericTextBox({
+  $('#new_nodes').kendoNumericTextBox({
     min: 1,
     format: 'n0'
-  }).data('kendoNumericTextBox');
+  });
 
   $('#new_timeout').kendoNumericTextBox({
     min: 3600,
@@ -215,7 +233,7 @@ $(function() {
         id: 'id',
         fields: {
           username:      {type: 'text'},
-          database:      {type: 'text'},
+          dbObj:         'database',
           permissions:   {type: 'text', defaultValue: { permissions: 'ro'}}
         }
       }
@@ -228,13 +246,25 @@ $(function() {
     toolbar: ['create'],
     columns: [
       {field: 'username',title: 'User Name'},
-      {field: 'database', title: 'Database', editor: function(container,options) {
-        var textarea = $('<textarea class="k-textbox"></textarea>');
-        textarea.attr('name',options.field);
-        textarea.appendTo(container);
+      {field: 'dbObj', title: 'Database', nullable: true, template: "#= dbObj.path #", editor: function(container,options) {
+        $('<input required data-text-field="path" data-value-field="path" data-bind="value:' + options.field + '"/>')
+        .appendTo(container)
+        .kendoDropDownList({
+          dataTextField: 'path',
+          dataValueField: 'path',
+          autoBind: false,
+          optionLabel: 'Select',
+          dataSource: {
+            transport: {
+              read: {
+                url: 'list_databases'
+              },
+              dataType: 'json'
+            }
+          }
+        }).data('kendoDropDownList').list.width('350px');
       }},
-      {field: 'permissions', title: 'Permissions', nullable: true, editor: function(container,options){
-        console.log(options);
+      {field: 'permissions', title: 'Permissions', nullable: true, template: "#= permissions.permissionsString #", editor: function(container,options) {
         $('<input required data-text-field="permissionsString" data-value-field="permissions" data-bind="value:' + options.field + '"/>')
         .appendTo(container)
         .kendoDropDownList({
@@ -247,21 +277,21 @@ $(function() {
             {permissionsString: 'Read-Only',permissions: 'ro'},
             {permissionsString: 'Read-Write',permissions: 'rw'}
           ]
-        });
-      }, template: "#= permissions.permissionsString #"},
-      {command: ["edit", "destroy"], title: "&nbsp;" }
+        }).data('kendoDropDownList').list.width('100px');
+      }},
+      {command: ["edit", "destroy"], title: "Action" }
     ],
     editable: 'inline',
     groupable: true
   }).data('kendoGrid');
 
   // Start a database
-  $('#startDB').on('click',function(e) {
+  $('#startDB').on('click',function() {
     if($('#startDB').prop('value') == 'Start') {
       $('#db_name').html($('#selectDB').data('kendoComboBox').value());
       $('#db_status').html('&nbsp;');
 
-      kendo.ui.progress($('#spinner_container'),true);
+      progressBar($('#spinner_container'),true);
       startDB();
     }
     else if($('#startDB').prop('value') == 'Stop') {
@@ -269,25 +299,26 @@ $(function() {
       var current_database = $('#db_name').html();
       var current_port = $('#db_port').html();
 
-      kendo.ui.progress($('#spinner_container'),true);
+      progressBar($('#spinner_container'),true);
 
-      $.get('stop_db?'+'current_database='+current_database+'&current_port='+current_port,function(res) {
+      $.get('stop_db?'+'current_database='+current_database+'&current_port='+current_port,function() {
         $('#db_name').html('None');
-        $('db_port').html('-');
+        $('#db_port').html('-');
         $('#db_status').text('STOPPED');
         $('#startDB').prop('value','Start');
         localStorage.removeItem('current_pid');
         localStorage.removeItem('current_port');
-        kendo.ui.progress($('#spinner_container'), false);
+        progressBar($('#spinner_container'), false);
+        getQueryList();
         popup.show('Stopped the current database: '+$('#db_name').html(),'success');
-      }).fail(function(xhr) {
-        kendo.ui.progress($('#spinner_container'), false);
+      }).fail(function() {
+        progressBar($('#spinner_container'), false);
         popup.show('Failed to Stop the current database: '+$('#db_name').html(),'error');
       });
     }
   });
 
-  // Popup to show graph histograms
+  // Popup to show graph
   var graphHistogramPopup = $("#graphHistogramsPopup").kendoWindow({
     width: "70%",
     height: "60%",
@@ -306,27 +337,36 @@ $(function() {
   var resultsGrid = $("#resultsGrid").kendoGrid().data('kendoGrid');
 
   // Color picker, slider, and combobox for graph search highlighting
-  var graphSearchColorPicker = $("#graphSearchColorPicker").kendoColorPicker({
+  $("#graphSearchColorPicker").kendoColorPicker({
     value: "#777ea2",
     buttons: true
-  }).data('kendoColorPicker');
+  });
 
-  var graphSearchSliderCombobox = $("#graphSearchSliderCombobox").kendoComboBox({
+  $("#graphSearchSliderCombobox").kendoComboBox({
     dataTextField: "text",
     dataValueField: "value",
     filter: "contains",
     suggest: true,
     index: 2
-  }).data('kendoComboBox');
+  });
 
-  $("#graphSearch").on('mouseover mouseenter', function(e) {
+  // A little detail, but want to fade out the search and results inputs except when the user needs to use them
+  $("#graphSearch").on('mouseover mouseenter', function() {
     $("#graphSearch").css("opacity", 1.0);
   });
 
-  $("#graphSearch").on('mouseleave', function(e) {
-    $("#graphSearch").css("opacity", 0.7);
+  $("#graphSearch").on('mouseleave', function() {
+    $("#graphSearch").css("opacity", 0.6);
   });
 
+  $("#results_and_histogram_wrapper").on('mouseover mouseenter', function() {
+    $("#results_and_histogram_wrapper").css("opacity", 1.0);
+  });
+  
+  $("#results_and_histogram_wrapper").on('mouseleave', function() {
+    $("#results_and_histogram_wrapper").css("opacity", 0.6);
+  });
+  
   // textarea for codemirror
   var editor = YASQE(document.getElementById("query"), {
   	createShareLink: null,
@@ -372,7 +412,10 @@ $(function() {
     width: 600,
     position: "right"
   });
-
+  
+  // Retrieve query list
+  getQueryList();
+  
   // Kendo UI widgets for the graph visual property changes.  These are used in the 'alterNodes' function
   $('#changeNodeSizeCombobox').kendoComboBox({
     dataTextField: "text",
@@ -414,7 +457,7 @@ $(function() {
     dataValueField: "value",
     filter: "contains",
     placeholder: "Available string properties",
-    change: function(event) {
+    change: function() {
       var newValue = this.value();
       var valueArray = [];
       $('.deleteMeCP').remove();
@@ -423,7 +466,6 @@ $(function() {
         valueArray.push(node.data(newValue));
       });
 
-      var unique = [];
       sortUnique(valueArray);
 
       $.each(valueArray,function(index, value) {
@@ -438,9 +480,9 @@ $(function() {
 
   // Maybe change this later, but for now, set up our shared data source and then read it when the combobox is actually accessed
   var imagesDataSource = new kendo.data.DataSource({
-    type: 'json',
     transport: {
-      read: '/graph_icon_list'
+      read: '/graph_icon_list',
+      dataType: 'json'
     }
   });
 
@@ -449,7 +491,7 @@ $(function() {
     dataValueField: "value",
     filter: "contains",
     placeholder: "Available string properties",
-    change: function(event) {
+    change: function() {
       var newValue = this.value();
       var valueArray = [];
       $('.deleteMeIP').remove();
@@ -458,7 +500,6 @@ $(function() {
         valueArray.push(node.data(newValue));
       });
 
-      var unique = [];
       sortUnique(valueArray);
 
       $.each(valueArray,function(index, value) {
@@ -479,7 +520,7 @@ $(function() {
     dataValueField: "value",
     filter: "contains",
     placeholder: "Available string properties",
-    change: function(event) {
+    change: function() {
       var newValue = this.value();
       var valueArray = [];
       $('.deleteMeSP').remove();
@@ -488,7 +529,6 @@ $(function() {
         valueArray.push(node.data(newValue));
       });
 
-      var unique = [];
       sortUnique(valueArray);
 
       // Need to make sure that when we set the index of the comboboxes, we dont go past the list length
@@ -621,9 +661,10 @@ $(function() {
   $("#querySaveForm").submit(function(event) {
     var queryTitle = $("#queryName").val();
     var q = editor.getValue();
-    var priv = $('input[name=privateQuery]:checked').val();
-    $.post('saveQuery', { title: queryTitle, query: q, private: priv }, function() {
+    var priv = $('input[name=dbSpecificQuery]:checked').val();
+    $.post('saveQuery', { title: queryTitle, query: q, general: priv }, function() {
       queryPopup.close();
+      getQueryList();
       popup.show("Saved " + queryTitle,"success");
     }).fail(function(xhr) {
       queryPopup.close();
@@ -637,7 +678,7 @@ $(function() {
   // But first, initialize all the settings widgets
   // Graph (cytoscape.js) settings
   // Iterate over sliders
-  $('.kslider').each(function(index,obj) {
+  $('.kslider').each(function() {
   	var value = Number($('#'+$(this).attr('id')+'Box').attr('value'));
   	var min = Number($('#'+$(this).attr('id')+'Box').attr('min'));
   	var max = Number($('#'+$(this).attr('id')+'Box').attr('max'));
@@ -681,7 +722,7 @@ $(function() {
   });
 
   // Iterate over color pickers
-  $('.kcolorPicker').each(function(index,obj) {
+  $('.kcolorPicker').each(function() {
   	var value = $(this).attr('value');
   	$(this).kendoColorPicker({
 	    value: value,
@@ -689,7 +730,7 @@ $(function() {
 	  });
   });
 
-  var targetArrowShape = $("#target-arrow-shape").kendoComboBox({
+  $("#target-arrow-shape").kendoComboBox({
     dataTextField: "text",
     dataValueField: "value",
     dataSource: [
@@ -705,9 +746,9 @@ $(function() {
     filter: "contains",
     suggest: true,
     index: 3
-  }).data('kendoComboBox');
+  });
 
-  var nodeShape = $("#shape").kendoComboBox({
+  $("#shape").kendoComboBox({
     dataTextField: "text",
     dataValueField: "value",
     dataSource: [
@@ -727,9 +768,9 @@ $(function() {
     filter: "contains",
     suggest: true,
     index: 1
-  }).data('kendoComboBox');
+  });
 
-  var targetArrowFill = $("#target-arrow-fill").kendoComboBox({
+  $("#target-arrow-fill").kendoComboBox({
     dataTextField: "text",
     dataValueField: "value",
     dataSource: [
@@ -739,9 +780,9 @@ $(function() {
     filter: "contains",
     suggest: true,
     index: 0
-  }).data('kendoComboBox');
+  });
 
-  var selectionType = $("#selectionType").kendoComboBox({
+  $("#selectionType").kendoComboBox({
     dataTextField: "text",
     dataValueField: "value",
     dataSource: [
@@ -751,9 +792,9 @@ $(function() {
     filter: "contains",
     suggest: true,
     index: 0
-  }).data('kendoComboBox');
+  });
 
-  var curveStyle = $("#curve-style").kendoComboBox({
+  $("#curve-style").kendoComboBox({
     dataTextField: "text",
     dataValueField: "value",
     dataSource: [
@@ -765,10 +806,10 @@ $(function() {
     ],
     filter: "contains",
     suggest: true,
-    index: 2
-  }).data('kendoComboBox');
+    index: 3
+  });
 
-  var lineStyle = $("#line-style").kendoComboBox({
+  $("#line-style").kendoComboBox({
     dataTextField: "text",
     dataValueField: "value",
     dataSource: [
@@ -779,7 +820,7 @@ $(function() {
     filter: "contains",
     suggest: true,
     index: 0
-  }).data('kendoComboBox');
+  });
 
   // Layout selection and settings
   var layoutSelector = $("#layoutSelector").kendoComboBox({
@@ -803,7 +844,7 @@ $(function() {
     filter: "contains",
     suggest: true,
     index: 8,
-    change: function(e) {
+    change: function() {
     	$(".lsettr").addClass("hidden_layout_options");
     	var newselection = this.value();
     	$("#"+newselection).removeClass("hidden_layout_options");
@@ -818,7 +859,7 @@ $(function() {
     suggest: true
   }).data('kendoComboBox');
 
-  var dagrerankDir = $("#dagrerankDir").kendoComboBox({
+  $("#dagrerankDir").kendoComboBox({
     dataTextField: "text",
     dataValueField: "value",
     dataSource: [
@@ -828,58 +869,6 @@ $(function() {
     filter: "contains",
     suggest: true,
     index: 0
-  }).data('kendoComboBox');
-
-  var jgraphshader = $('#jgraphShader').kendoComboBox({
-    dataTextField: "text",
-    dataValueField: "value",
-    dataSource: [
-      { text: "Basic"  , value: "basic" },
-      { text: "Lambert", value: "lambert" },
-      { text: "Phong"  , value: "phong" },
-      { text: "Toon"   , value: "toon" }
-    ],
-    index: 1
-  }).data('kendoComboBox');
-
-  $('#hiveplothiveplotType').kendoComboBox({
-    dataTextField: 'text',
-    dataValueField: 'value',
-    dataSource: [
-      { text: 'Single', value: 'single' },
-      { text: 'Panel', value: 'panel' }
-    ],
-    index: 0
-  });
-
-  $('#hiveplotaxisFilterType').kendoComboBox({
-    dataTextField: "text",
-    dataValueField: "value",
-    dataSource: [
-      { text: "Numeric", value: "numeric" },
-      { text: "String" , value: "string" }
-    ],
-    index: 0
-  });
-
-  $('#hiveplotaxisSortDirection').kendoComboBox({
-    dataTextField: "text",
-    dataValueField: "value",
-    dataSource: [
-      { text: "Ascending" , value: "asc" },
-      { text: "Descending", value: "desc" }
-    ],
-    index: 0
-  });
-
-  $('#hiveplotaxisProperty').kendoComboBox({
-    dataTextField: "text",
-    dataValueField: "value"
-  });
-
-  $('#hiveplotaxisSort').kendoComboBox({
-    dataTextField: "text",
-    dataValueField: "value"
   });
 
   // Need to populate the textboxes before each slider with the current value of the slider on the right
@@ -894,9 +883,9 @@ $(function() {
   });
 
   // Finally, the panelbar itself
-  var settingsPanelBar = $("#settingsPanelBar").kendoPanelBar({
+  $("#settingsPanelBar").kendoPanelBar({
     expandMode: 'single'
-  }).data('kendoPanelBar');
+  });
 
   // All the widgets for the visualization set up for SELECT query
   var vizChartType = $("#vizChartType").kendoComboBox({
@@ -910,12 +899,12 @@ $(function() {
   websocketConnect();
 
   // Open dialog to create new database
-  $('#new_db').on('click',function(e) {
+  $('#new_db').on('click',function() {
     new_database_window.center().open();
   });
 
   // Create new database
-  $('#createDB').on('click',function(e) {
+  $('#createDB').on('click',function() {
     $('#db_name').html($('#new_db_name').val());
     $('#db_status').html('&nbsp;');
     var items = $('#file_browser').data('kendoTreeView').getCheckedItems();
@@ -924,12 +913,12 @@ $(function() {
       files.push(v.path);
     });
 
-    kendo.ui.progress($('#spinner_container'),true);
+    progressBar($('#spinner_container'),true);
     buildDB(files);
   });
 
   // query execution button that grabs the query for the most recently focused query source (SPARQL editor, history, or canned)
-  $("#querySubmitButton").on("click", function(e) {
+  $("#querySubmitButton").on("click", function() {
     // Let's make sure we are clearing out the work area and the popup contents
     $("#viz_main").empty();
 
@@ -939,23 +928,23 @@ $(function() {
     // refactored so that we can clean up the on-click function and also make other query types in a more modular way
     switch(queryType) {
       case 'SELECT':
-        kendo.ui.progress($('#query_progress'),true);
+        progressBar($('#query_progress'),true);
         sparqlSelect();
         break;
       case 'CONSTRUCT':
-        kendo.ui.progress($('#query_progress'),true);
+        progressBar($('#query_progress'),true);
         sparqlConstruct();
         break;
       case 'ASK':
-        kendo.ui.progress($('#query_progress'),true);
+        progressBar($('#query_progress'),true);
         sparqlAsk();
         break;
       case 'DESCRIBE':
-        kendo.ui.progress($('#query_progress'),true);
+        progressBar($('#query_progress'),true);
         sparqlConstruct();
         break;
       case 'INSERT':
-        kendo.ui.progress($('#query_progress'),true);
+        progressBar($('#query_progress'),true);
         sparqlInsert();
         break;
       default:
@@ -973,16 +962,21 @@ $(function() {
     $.post("sparqlSelect", { current_database: $("#db_name").html(), current_port: $('#db_port').html(),'query': editor.getValue() }).done(function(data, textStatus, xhr) {
 
 			// If the query worked, store it
-      storeQueryHistory(query);
+      storeQueryHistory();
 
 			// It would appear we can still get an empty result set...so let's kill it here if we do
-			if (data.results.results.bindings.length == 0) {
+			if (data.results.results.bindings.length === 0) {
 				popup.show("Error, no results (" + xhr.status + " " + xhr.statusText + ")","error");
 				return;
 			}
 
       // Hide the graph search panel
       $("#graphSearch").fadeOut(1400);
+      
+      // Show the results button
+      $('#results_and_histogram_wrapper').fadeIn(1400);
+      $("#nav-trigger-results").prop("disabled", false).removeClass("k-state-disabled");
+      $("#nav-trigger-graphStatistics").prop("disabled", true).addClass("k-state-disabled");
 
       var dataBindings = [];
 	    var fieldTypes = {};
@@ -1101,6 +1095,13 @@ $(function() {
       // Create/update/refresh the grid
       resultsGrid.setOptions(configuration);
       resultsGrid.dataSource.page(1);
+      
+      // If this is not the first time we have queried, need to unregister the old click handler
+			$("#nav-trigger-results").off('click');
+      $("#nav-trigger-results").on('click',function() {
+        // Center and show the popup window
+        gridWindow.center().open();
+      });
 
 			// Create the comboboxes for each potential series and value field/Axis depending on the type of chart selected
 			vizChartType.bind('select', function(event) {
@@ -1155,32 +1156,30 @@ $(function() {
 					$(".hideRow").hide();
 
 					// First the series names
-					var dropdownNum = 1;
+					var dropdownNuma = 1;
 					$.each(fieldTypes, function(index,object) {
 						if (object.type == "string") {
-							var addedRow = '<tr><td>Series ' + dropdownNum + '</td><td><input id="series' + dropdownNum + '" class="vizCombo vizSeries" placeholder="Select Series ' + dropdownNum + '" /></td></tr>';
+							var addedRow = '<tr><td>Series ' + dropdownNuma + '</td><td><input id="series' + dropdownNuma + '" class="vizCombo vizSeries" placeholder="Select Series ' + dropdownNuma + '" /></td></tr>';
 
 							// Append the new row
 							$("#vizSettingsTable tbody").append(addedRow);
 
 							// After it has been appended, initialize the combobox
-							$("#series" + dropdownNum).kendoComboBox({
+							$("#series" + dropdownNuma).kendoComboBox({
 								dataTextField: "text",
 								dataValueField: "value",
 								dataSource: comboboxStringFields,
 								filter: "contains",
 								suggest: true
 							});
-							dropdownNum++;
+							dropdownNuma++;
 						}
 					});
 
 					// Add two value axis comboboxes
-					addedRow = '<tr><td>X Axis</td><td><input id="XAxis" class="vizCombo" placeholder="Select X Axis" /></td></tr>';
-					$("#vizSettingsTable tbody").append(addedRow);
+					$("#vizSettingsTable tbody").append('<tr><td>X Axis</td><td><input id="XAxis" class="vizCombo" placeholder="Select X Axis" /></td></tr>');
 
-					addedRow = '<tr><td>Y Axis</td><td><input id="YAxis" class="vizCombo" placeholder="Select Y Axis" /></td></tr>';
-					$("#vizSettingsTable tbody").append(addedRow);
+					$("#vizSettingsTable tbody").append('<tr><td>Y Axis</td><td><input id="YAxis" class="vizCombo" placeholder="Select Y Axis" /></td></tr>');
 
 					// After it has been appended, initialize the combobox
 					$("#XAxis").kendoComboBox({
@@ -1210,13 +1209,9 @@ $(function() {
         $("#viz_main").html('<div id="chartContainer"></div>');
 
         // Loop through the result set to create the appropriate arrays
-        var chartData = [];
-        var catAxis = $("#vizCategoryAxis").val();
-        var valAxis = $("#vizValueAxis").val();
-
 				// Figure out if we want a log scale or not
-				var wantLogScale = $('input[name=logScale]:checked', '#vizSettings').val();
-				if (wantLogScale == "true") {
+				var wantLogScale;
+				if ($('input[name=logScale]:checked', '#vizSettings').val() == "true") {
 					wantLogScale = "log";
 				}
 				else {
@@ -1228,16 +1223,18 @@ $(function() {
 
 				// Figure out if we want a value distribution or not
 				var wantDistribution = $('input[name=distributionRadioButton]:checked', '#vizSettings').val();
+        var measureName = $("#valueAxis").data('kendoComboBox').value();
+        var seriesWanted = [];
+        var seriesData = {};
+        var seriesArray = [];
+        
 				if (/^polarArea$|^polarLine$|^polarScatter$|^scatter$|^scatterLine$/.test(chartType)) {
-					var seriesWanted = [];
-					var seriesData = {};
-					var seriesArray = [];
 					var xAxis = $("#XAxis").data('kendoComboBox').value();
 					var yAxis = $("#YAxis").data('kendoComboBox').value();
 
 					$(".vizSeries input").each(function(index,object) {
 						if ($(object).attr('id')) {
-							if ($("#" + $(object).attr('id')).data('kendoComboBox').value() != '') {
+							if ($("#" + $(object).attr('id')).data('kendoComboBox').value() !== '') {
 								var seriesName = $("#" + $(object).attr('id')).data('kendoComboBox').value();
 								seriesWanted.push(seriesName);
 								seriesData[seriesName] = [];
@@ -1310,16 +1307,11 @@ $(function() {
 				else if (/^area$|^bar$|^column$|^line$|^radarArea$|^radarColumn$|^verticalArea$|^verticalLine$/.test(chartType)) {
 					if (wantDistribution == 'true') {
 						// iterate over each of the selected series fields and push onto an array
-						var seriesWanted = [];
-						var seriesData = {};
-						var seriesArray = [];
 						var tempValueObj = {};
-
-						var measureName = $("#valueAxis").data('kendoComboBox').value();
 
 						$(".vizSeries input").each(function(i,object) {
 							if ($(object).attr('id')) {
-								if ($("#" + $(object).attr('id')).data('kendoComboBox').value() != '') {
+								if ($("#" + $(object).attr('id')).data('kendoComboBox').value() !== '') {
 									var seriesName = $("#" + $(object).attr('id')).data('kendoComboBox').value();
 									seriesWanted.push(seriesName);
 									tempValueObj[seriesName] = {};
@@ -1389,17 +1381,10 @@ $(function() {
 						});
 					}
 					else {
-						console.log("got to the else, even though the distribution is wanted");
 						// iterate over each of the selected series fields and push onto an array
-						var seriesWanted = [];
-						var seriesData = {};
-						var seriesArray = [];
-
-						var measureName = $("#valueAxis").data('kendoComboBox').value();
-
 						$(".vizSeries input").each(function(i,object) {
 							if ($(object).attr('id')) {
-								if ($("#" + $(object).attr('id')).data('kendoComboBox').value() != '') {
+								if ($("#" + $(object).attr('id')).data('kendoComboBox').value() !== '') {
 									var seriesName = $("#" + $(object).attr('id')).data('kendoComboBox').value();
 									seriesWanted.push(seriesName);
 									seriesData[seriesName] = [];
@@ -1464,121 +1449,11 @@ $(function() {
 						});
 					}
 				}
-				return;
-
-				// Create object to hold min and max values
-				var minMaxObject = {};
-
-				if (wantDistribution == "true") {
-					// First create a temp object to aggregate the values
-					var tempValueObj = {};
-					$.each(data.results.results.bindings, function(index1,object1) {
-						var number = parseFloat(object1[valAxis].value) || 0;
-						var roundedNumberString = parseFloat(number.toFixed(1));
-						if (tempValueObj.hasOwnProperty(roundedNumberString)) {
-							tempValueObj[roundedNumberString]++;
-						}
-						else {
-							tempValueObj[roundedNumberString] = 1;
-						}
-					});
-
-					// Now create the array for the chart
-					$.each(tempValueObj, function(index1,object1) {
-						var tempObj = {};
-						tempObj[catAxis] = parseFloat(index1);
-						tempObj[valAxis] = object1;
-
-						chartData.push(tempObj);
-
-						if (minMaxObject.hasOwnProperty(valAxis)) {
-							if (tempObj[valAxis] > minMaxObject[valAxis].max) {
-								minMaxObject[valAxis].max = tempObj[valAxis];
-							}
-							if (tempObj[valAxis] < minMaxObject[valAxis].min) {
-								minMaxObject[valAxis].min = tempObj[valAxis];
-							}
-						}
-						else {
-							minMaxObject[valAxis] = {};
-							minMaxObject[valAxis].min = tempObj[valAxis];
-							minMaxObject[valAxis].max = tempObj[valAxis];
-						}
-					});
-				}
-				else {
-					$.each(data.results.results.bindings, function(index1,object1) {
-						var tempObj = {};
-						tempObj[catAxis] = object1[catAxis].value || 0;
-						tempObj[valAxis] = object1[valAxis].value || 0;
-						chartData.push(tempObj);
-
-						if (minMaxObject.hasOwnProperty(valAxis)) {
-							if (tempObj[valAxis] > minMaxObject[valAxis].max) {
-								minMaxObject[valAxis].max = tempObj[valAxis];
-							}
-							if (tempObj[valAxis] < minMaxObject[valAxis].min) {
-								minMaxObject[valAxis].min = tempObj[valAxis];
-							}
-						}
-						else {
-							minMaxObject[valAxis] = {};
-							minMaxObject[valAxis].min = tempObj[valAxis];
-							minMaxObject[valAxis].max = tempObj[valAxis];
-						}
-					});
-				}
-
-        // create the desired chart
-        var chartDS = new kendo.data.DataSource({
-          data: chartData,
-          sort: { field: $("#vizCategoryAxis").val(), dir: "asc" }
-        });
-
-        $("#chartContainer").kendoChart({
-          dataSource : chartDS,
-          theme: "Material",
-          tooltip: {
-            visible: true,
-            template: "#: category #: #: value #"
-          },
-          title: {
-            align: "left",
-            text: "Result Set Visualization",
-            color: "black"
-          },
-          legend: {
-            visible: false
-          },
-          seriesDefaults: {
-            type: $("#vizChartType").val()
-          },
-          series: [{
-            field: valAxis
-          }],
-          valueAxis: {
-            field: valAxis,
-						type: wantLogScale,
-            majorGridLines: {
-                visible: false
-            }
-          },
-          categoryAxis: {
-            field: catAxis,
-            majorGridLines: {
-              visible: false
-            },
-            labels: {
-              visible: false,
-              step: 2,
-              rotation: 90
-            }
-          }
-        });
 
 				// Change function for log scale radio button.  We set it initially, but need to be able to change dynamically
 				$('input[name=logScale]').on('change',function() {
-					var wls = $('input[name=logScale]:checked', '#vizSettings').val();
+					var wls = $('input[name=logScale]:checked').attr('value');
+          
 					if (wls == "true") {
 						$("#chartContainer").data('kendoChart').setOptions({ valueAxis: { type: "log" }});
 					}
@@ -1591,26 +1466,27 @@ $(function() {
         $(window).resize(function(){
           kendo.resize($(".k-chart"));
         });
+        
       });
-      kendo.ui.progress($('#query_progress'),false);
+      progressBar($('#query_progress'),false);
       $('.c-hamburger').trigger('click');
     }).fail(function(xhr) {
-      kendo.ui.progress($('#query_progress'),false);
+      progressBar($('#query_progress'),false);
       popup.show("Error, no results (" + xhr.status + " " + xhr.statusText + ")","error");
     });
   }
 
   // CONSTRUCT
   function sparqlConstruct() {
-    $.post("sparqlConstruct", { current_database: $("#db_name").html(),'query': editor.getValue() }).done(function(data, textStatus, xhr) {
+    $.post("sparqlConstruct", { current_database: $("#db_name").html(), current_port: $('#db_port').html(),'query': editor.getValue() }).done(function(data) {
 
       // If the query worked, store it
-      storeQueryHistory(query);
+      storeQueryHistory();
       $('.c-hamburger').trigger('click');
       // Draw the graph
       drawGraph(data.elements);
     }).fail(function(xhr) {
-      kendo.ui.progress($('#query_progress'),false);
+      progressBar($('#query_progress'),false);
       popup.show("Error, no results (" + xhr.status + " " + xhr.statusText + ")","error");
     });
   }
@@ -1619,32 +1495,32 @@ $(function() {
   function sparqlAsk() {
     $.post("sparqlSelect", { current_database: $("#db_name").html(), current_port: $('#db_port').html(),'query': editor.getValue() }).done(function(data, textStatus, xhr) {
       // If the query worked, store it
-      storeQueryHistory(query);
+      storeQueryHistory();
 
       // Hide the graph search panel
       $("#graphSearch").fadeOut(1400);
-      console.log(data);
+      
       if(typeof data.results.boolean != 'undefined') {
-        kendo.ui.progress($('#query_progress'),false);
+        progressBar($('#query_progress'),false);
         popup.show('The server returned \''+data.results.boolean+'\'','success');
       }
       else {
-        kendo.ui.progress($('#query_progress'),false);
+        progressBar($('#query_progress'),false);
         popup.show("Error, no results (" + xhr.status + " " + xhr.statusText + ")","error");
       }
 
     }).fail(function(xhr) {
-      kendo.ui.progress($('#query_progress'),false);
+      progressBar($('#query_progress'),false);
       popup.show("Error, no results (" + xhr.status + " " + xhr.statusText + ")","error");
     });
   }
 
   // INSERT/INSERT DATA
   function sparqlInsert() {
-		$.post("sparqlInsert", { current_database: $("#db_name").html(),'query': editor.getValue() }).done(function(data, textStatus, xhr) {
+		$.post("sparqlInsert", { current_database: $("#db_name").html(), current_port: $('#db_port').html(),'query': editor.getValue() }).done(function() {
 			popup.show("Update executed successfully.","success");
 		}).fail(function(xhr) {
-      kendo.ui.progress($('#query_progress'),false);
+      progressBar($('#query_progress'),false);
       popup.show("Error, no results (" + xhr.status + " " + xhr.statusText + ")","error");
     });
 	}
@@ -1657,7 +1533,7 @@ $(function() {
     var timeout       = $('#timeout').val();
     var nvps          = $('#nvps').val();
 
-    $.post('start_db',{ dataDir: dataDir, imagesPerNode: imagesPerNode, nodeCount: nodeCount, startupTimeout: timeout, nvps: nvps }).done(function(res, textStatus, xhr) {
+    $.post('start_db',{ dataDir: dataDir, imagesPerNode: imagesPerNode, nodeCount: nodeCount, startupTimeout: timeout, nvps: nvps }).done(function(res) {
       // Assuming the startup works, set the current database
       $('#db_status').text('RUNNING');
       $('#startDB').prop('value','Stop');
@@ -1665,12 +1541,13 @@ $(function() {
       localStorage.setItem('current_pid',res.pid);
       localStorage.setItem('current_port',res.port);
       localStorage.setItem('current_database',dataDir);
-      kendo.ui.progress($('#spinner_container'), false);
+      getQueryList();
+      progressBar($('#spinner_container'), false);
     }).fail(function(xhr) {
-      kendo.ui.progress($('#spinner_container'), false);
+      progressBar($('#spinner_container'), false);
       popup.show("Failed to start the requested database (" + xhr.status + " " + xhr.statusText + ")" ,"error");
     });
-  };
+  }
 
   function buildDB(files) {
     var name          = $('#new_db_name').val();
@@ -1679,7 +1556,7 @@ $(function() {
     var timeout       = $('#new_timeout').val();
     var nvps          = $('#new_nvps').val();
 
-    $.post('build_db',{ name: name, imagesPerNode: imagesPerNode, nodeCount: nodeCount, startupTimeout: timeout, nvps: nvps, files: files }).done(function(res, textStatus, xhr) {
+    $.post('build_db',{ name: name, imagesPerNode: imagesPerNode, nodeCount: nodeCount, startupTimeout: timeout, nvps: nvps, files: files }).done(function(res) {
       // Assuming the startup works, set the current database
       $('#db_name').html(res.current_database);
       $('#db_port').html(res.port);
@@ -1688,16 +1565,32 @@ $(function() {
       localStorage.setItem('current_pid',res.pid);
       localStorage.setItem('current_port',res.port);
       localStorage.setItem('current_database',res.current_database);
-      kendo.ui.progress($('#spinner_container'), false);
+      progressBar($('#spinner_container'), false);
     }).fail(function(xhr) {
-      kendo.ui.progress('#startDB',false);
+      progressBar('#startDB',false);
       popup.show("Failed to start the requested database (" + xhr.status + " " + xhr.statusText + ")" ,"error");
     });
   }
 
+  function getQueryList() {
+    // Retrieve query list
+    var cdb = '';
+    if(localStorage.getItem('current_database') !== null) {
+      cdb = '?current_database='+localStorage.getItem('current_database');
+    }
+    
+    $.get('query_list'+cdb, function(res) {
+      var queriesDS = new kendo.data.DataSource({
+        data: res
+      });
+      $("#querySelector").data('kendoComboBox').setDataSource(queriesDS);
+    }).fail(function() {
+      popup.show('Failed to retrieve query list','error');
+    });
+  }
+  
   // Function to search and filter the treeview of available N-triples files
-  function InitSearch(treeViewId, searchInputId) {
-    var tv = $(treeViewId).data('kendoTreeView');
+  function initSearch(treeViewId, searchInputId) {
     $(searchInputId).on('keyup', function () {
         $(treeViewId + ' li.k-item').show();
         $('span.k-in > span.highlight').each(function () {
@@ -1709,7 +1602,7 @@ $(function() {
         }
         var term = this.value.toUpperCase();
         var tlen = term.length;
-        $(treeViewId + ' span.k-in').each(function (index) {
+        $(treeViewId + ' span.k-in').each(function () {
             var text = $(this).text();
             var html = '';
             var q = 0;
@@ -1721,8 +1614,7 @@ $(function() {
             if (q > 0) {
                 html += text.substring(q);
                 $(this).html(html);
-                $(this).parentsUntil('.k-treeview').filter('.k-item').each(function (index, element) {
-                    //tv.expand($(this));
+                $(this).parentsUntil('.k-treeview').filter('.k-item').each(function () {
                     $(this).data('SearchTerm', term);
                 });
             }
@@ -1803,7 +1695,7 @@ $(function() {
 	}
 
   // Function to retrieve related nodes
-  function retrieveAssociates(cy,node,nodeType,eleid) {
+  function retrieveAssociates(cy,node,nodeType) {
     var sparql = '';
 
     if(nodeType == 'URI') {
@@ -1816,9 +1708,9 @@ $(function() {
     	sparql = "CONSTRUCT { ?s ?p \"" + node + "\" . } WHERE { ?s ?p \"" + node + "\" . } LIMIT "+$('#limitAssociates').val();
     }
 
-    $.post("sparqlConstruct", { database: $("#DB_label").html(),'query': sparql }, function(data) {
+    $.post("sparqlConstruct", { current_database: $("#db_name").html(), current_port: $('#db_port').html(),'query': sparql }, function(data) {
       // Need to make sure we actually got some results
-      if (data.elements.nodes.length == 0) {
+      if (data.elements.nodes.length === 0) {
         popup.show("No connected nodes","error");
         return true;
       }
@@ -1831,9 +1723,6 @@ $(function() {
       	$.each(data.elements.edges,function(index,obj) {
       		if(typeof cy.$('#'+obj.data.id).id() === 'undefined') {
       			cy.add(obj);
-      		}
-      		else {
-      		  console.log(obj);
       		}
       	});
 
@@ -1853,7 +1742,6 @@ $(function() {
 		    }
 
     		cy.nodes().each(function(index,node) {
-		    	var json = node.json();
 
 		    	node.data('degree',node.degree());
 		    	// If user selected to calculate centrality
@@ -1881,14 +1769,14 @@ $(function() {
   function getLayoutSettings(id) {
   	var ls = {};
 
-  	$('#'+id+'LayoutTable [data-layoutsetting]').each(function(index,item) {
+  	$('#'+id+'LayoutTable [data-layoutsetting]').each(function() {
   		if($(this).attr('type') == 'radio' && !$(this).is(':checked')) {
   			return true;
   		}
   		else if($(this).attr('data-layoutsetting') == 'nodeMass') {
   			ls.nodeMass = function(node) {
   				var zero = cy.$('#'+node.id).data($('#arbornodeMass').val());
-  				if(zero == 0) {
+  				if(zero === 0) {
   					zero = 1;
   				}
   				return zero;
@@ -1904,9 +1792,8 @@ $(function() {
   			ls[$(this).attr('data-layoutsetting')] = $(this).val();
   		}
   	});
-  	ls['name']=id;
-  	ls['padding'] = 10;
-  	// ls['stop'] = function() { $("#spinnerWrapper").fadeOut(800); };
+  	ls.name = id;
+  	ls.padding = 10;
 		return ls;
   }
 
@@ -2116,23 +2003,23 @@ $(function() {
           // Test if the field is numeric
           var isNum = $.isNumeric(v);
 
-          if(testNumeric.fields[k] == true  || !testNumeric.fields.hasOwnProperty(k)) {
+          if(testNumeric.fields[k] === true  || !testNumeric.fields.hasOwnProperty(k)) {
             testNumeric.fields[k] = isNum;
           }
 
           // Now determine if it is an integer or decimal
-          if(isNum == true) {
+          if(isNum === true) {
             var id = parseInt(v) !== v;
             if(!testNumeric.isDecimal.hasOwnProperty(k)) {
-              if(id == true) {
+              if(id === true) {
                 testNumeric.isDecimal[k] = true;
               }
               else {
                 testNumeric.isDecimal[k] = false;
               }
             }
-            else if(testNumeric.isDecimal[k] == false) {
-              if(id == true) {
+            else if(testNumeric.isDecimal[k] === false) {
+              if(id === true) {
                 testNumeric.isDecimal[k] = true;
               }
             }
@@ -2155,12 +2042,12 @@ $(function() {
       }).update();
 
       // Add min and max values for all numeric properties
-      $.each(testNumeric.fields, function(k,v) {
-        if(testNumeric.fields[k] == true) {
-          var maxval = cy.nodes().max(function(ele,i){
+      $.each(testNumeric.fields, function(k) {
+        if(testNumeric.fields[k] === true) {
+          var maxval = cy.nodes().max(function(ele){
             return ele.data(k);
           });
-          var minval = cy.nodes().min(function(ele,i){
+          var minval = cy.nodes().min(function(ele){
             return ele.data(k);
           });
           testNumeric.maxValues[k] = maxval.value;
@@ -2170,7 +2057,7 @@ $(function() {
 
       // populate the nodeMass and hiveplot(if numeric filter type is currently selected) property combobox for Arbor
       $.each(testNumeric.fields,function(kk,vv) {
-        if(vv == true) {
+        if(vv === true) {
           finalNumericArray.numeric.push({ text: kk, value: kk });
         }
         else {
@@ -2182,36 +2069,8 @@ $(function() {
         data: finalNumericArray.numeric
       });
 
-      var allFieldsArray = finalNumericArray.numeric.concat(finalNumericArray.string);
-      var allFieldsDatasource = new kendo.data.DataSource({
-        data: allFieldsArray
-      });
-
       arbornodeMass.setDataSource(testNumericDatasource);
       arbornodeMass.select(0);
-
-      // $('#hiveplotaxisSort').data('kendoComboBox').setDataSource(testNumericDatasource);
-      // $('#hiveplotaxisSort').data('kendoComboBox').select(0);
-      //
-      // if ($('#hiveplotaxisFilterType').val() === 'numeric') {
-      //   $('#hiveplotaxisProperty').data('kendoComboBox').setDataSource(testNumericDatasource);
-      //   $('#hiveplotaxisProperty').data('kendoComboBox').select(0);
-      // }
-      // else {
-      //   $('#hiveplotaxisProperty').data('kendoComboBox').setDataSource(allFieldsDatasource);
-      //   $('#hiveplotaxisProperty').data('kendoComboBox').select(0);
-      // }
-      //
-      //
-      // // Change event handler for the type of axis for hiveplot layouts
-      // $('#hiveplotaxisFilterType').data('kendoComboBox').bind('change',function(event) {
-      //   if ($('#hiveplotaxisFilterType').val() === 'numeric') {
-      //     $('#hiveplotaxisProperty').data('kendoComboBox').setDataSource(testNumericDatasource);
-      //   }
-      //   else {
-      //     $('#hiveplotaxisProperty').data('kendoComboBox').setDataSource(allFieldsDatasource);
-      //   }
-      // });
 
       // Now that we have the arbor numeric fields, draw the graph
       var layoutSettings = {};
@@ -2243,7 +2102,7 @@ $(function() {
     });
 
     // Bind change event for graph settings input only
-    $("#graphSettings :input").on('change',function(event) {
+    $("#graphSettings :input").on('change',function() {
       var k,v;
 
       // First, retrieve the changed setting and value
@@ -2305,22 +2164,25 @@ $(function() {
     // context menus
     cy.cxtmenu({
       selector: 'node',
+      activePadding: 5,
+      itemTextShadowColor: 'none',
+      activeFillColor: 'rgba(0, 86, 150, 0.75)',
       commands: [
         {
           content: 'Retrieve connected nodes',
           select: function(ele){
-            retrieveAssociates(cy,ele.data('label'),ele.data('nodeType'),ele.id());
+            retrieveAssociates(cy,ele.data('label'),ele.data('nodeType'));
           }
         },
         {
           content: 'Reset zoom',
-          select: function(ele) {
+          select: function() {
             cy.fit(cy.$());
           }
         },
         {
           content: 'Alter node/edge properties',
-          select: function(ele) {
+          select: function() {
             alterNodes(cy,testNumeric,finalNumericArray);
           }
         }
@@ -2329,16 +2191,19 @@ $(function() {
 
     cy.cxtmenu({
       selector: 'core',
+      activePadding: 5,
+      itemTextShadowColor: 'none',
+      activeFillColor: 'rgba(0, 86, 150, 0.75)',
       commands: [
         {
           content: 'Reset zoom',
-          select: function(ele) {
+          select: function() {
             cy.fit(cy.$());
           }
         },
         {
           content: 'Alter node/edge properties',
-          select: function(ele) {
+          select: function() {
             alterNodes(cy,testNumeric,finalNumericArray);
           }
         }
@@ -2346,7 +2211,7 @@ $(function() {
     });
 
     // highlight selected nodes/edges when box-selection is used/enabled
-    cy.on('tapdrag tap', function(event) {
+    cy.on('tapdrag tap', function() {
       cy.batch(function() {
         cy.$(':selected').addClass('selected_outline');
         cy.elements().not(cy.$(':selected')).removeClass('selected_outline');
@@ -2368,7 +2233,7 @@ $(function() {
       var html = '<table>';
 
       var sortedArray = [];
-      $.each(node.data(), function(key,value) {
+      $.each(node.data(), function(key) {
         if(key != 'id' && key != 'label' && key != 'nodeType') {
           sortedArray.push(key);
         }
@@ -2432,7 +2297,9 @@ $(function() {
     });
 
     // show the results tab/button
-    $("#nav-trigger-results").fadeIn(1400);
+    $("#results_and_histogram_wrapper").fadeIn(1400);
+    $("#nav-trigger-results").prop("disabled", false).removeClass("k-state-disabled");
+    $("#nav-trigger-graphStatistics").prop("disabled", false).removeClass("k-state-disabled");
 
     // Need to unregister previous click handler from SELECT queries
     $("#nav-trigger-results").off('click');
@@ -2441,14 +2308,13 @@ $(function() {
     });
 
     // show the histogram tab/button
-    $("#nav-trigger-graphStatistics").fadeIn(1400);
     $("#nav-trigger-graphStatistics").on('click', function() {
       generateHistograms(cy,testNumeric);
     });
 
 
     // search the graph
-    $("#graphSearchTextBox").on('keyup focusin focusout', function(e) {
+    $("#graphSearchTextBox").on('keyup focusin focusout', function() {
       var searchTerm = $(this).val().toLowerCase();
 
       // only start searching if we have 3 or more characters
@@ -2467,7 +2333,7 @@ $(function() {
         cy.nodes().removeClass('highlight_connected_nodes');
       }
     });
-    kendo.ui.progress($('#query_progress'),false);
+    progressBar($('#query_progress'),false);
   }
 
   // Functions to change node/edge style (size, shape, and color for now)
@@ -2490,7 +2356,7 @@ $(function() {
 
   	// Start with all fields set to the default and "constant" except for node size
   	// Node size
-  	$('input[name=nodeSizeChange]').on('change',function(event) {
+  	$('input[name=nodeSizeChange]').on('change',function() {
   		var newSelection = $('input[name=nodeSizeChange]:checked').val();
   		if(newSelection == 'attribute') {
   			$('#changeNodeSizeNumboxTr').hide();
@@ -2502,7 +2368,7 @@ $(function() {
   		}
   	});
 
-  	$('#changeNodeSizeCombobox').data('kendoComboBox').bind('select',function(event) {
+  	$('#changeNodeSizeCombobox').data('kendoComboBox').bind('select',function() {
   		var newValue = $('#changeNodeSizeCombobox').val();
   		var min = testNumeric.minValues[newValue];
   		var max = testNumeric.maxValues[newValue];
@@ -2517,7 +2383,7 @@ $(function() {
       }).update();
   	});
 
-  	$('#changeNodeSizeNumbox').on('change',function(event) {
+  	$('#changeNodeSizeNumbox').on('change',function() {
   		cy.style().selector('node').style({
   		  'width': $('#changeNodeSizeNumbox').val(),
   		  'height': $('#changeNodeSizeNumbox').val()
@@ -2556,7 +2422,7 @@ $(function() {
 	  	}).update();
 	  });
 
-	  $('input[name=nodeColorRange]').on('change',function(event) {
+	  $('input[name=nodeColorRange]').on('change',function() {
 	  	var newSelection = $('input[name=nodeColorRange]:checked').val();
 	  	if(newSelection == 'numericAttribute') {
 	  		$('#CNCStringTr').hide();
@@ -2576,7 +2442,7 @@ $(function() {
 	  });
 
 	  // Shape change
-	  $('input[name=nodeShapeChange]').on('change',function(event) {
+	  $('input[name=nodeShapeChange]').on('change',function() {
       var newSelection = $('input[name=nodeShapeChange]:checked').val();
       if(newSelection == 'attribute') {
         $('#CNSShapePickerTr').hide();
@@ -2590,7 +2456,7 @@ $(function() {
 
   	$('#CNSstringPropertySubmit').on('click',function() {
       var shapemap = {};
-      $('.deleteMeSP').each(function(index,object) {
+      $('.deleteMeSP').each(function(index) {
         var propLabel = $(this).find('td').eq(0).text();
         shapemap[propLabel] = $('#SP'+index).data('kendoComboBox').value();
       });
@@ -2605,7 +2471,7 @@ $(function() {
 
   	$('#CNIstringPropertySubmit').on('click',function() {
   	  var iconMap = {};
-  	  $('.deleteMeIP').each(function(index,object) {
+  	  $('.deleteMeIP').each(function(index) {
   	    var propLabel = $(this).find('td').eq(0).text();
   	    iconMap[propLabel] = $('#IP'+index).data('kendoComboBox').value();
   	  });
@@ -2627,7 +2493,7 @@ $(function() {
   }
 
   // Function to store queries in localStorage and then update the combobox
-  function storeQueryHistory(query) {
+  function storeQueryHistory() {
     // Maybe not the way to go...but for now, going to keep query history in localStorage
     // If this is the first time, or the user deleted the history
     var qh = [];
@@ -2722,18 +2588,24 @@ $(function() {
 
     var nodeStats = {};
     // First create arrays for each numeric property populated with an element per value
-    console.log(numericProps);
     $.each(numericProps.fields, function(k,v) {
-    	if(v == true) {
+    	if(v === true) {
     		if(!nodeStats.hasOwnProperty(k)) {
 	    		nodeStats[k] = [];
 	    	}
 
 	    	var incr;
-	    	numericProps.isDecimal[k] === true? incr = 0.01 : incr = 1;
+        
+        if(numericProps.isDecimal[k] === true) {
+          incr = 0.01;
+        }
+        else {
+          incr = 1;
+        }
+        
 	    	var max = numericProps.maxValues[k];
 
-	    	for(index = 0; index <= max; index += incr) {
+	    	for(var index = 0; index <= max; index += incr) {
 	    		nodeStats[k].push({name: index.toFixed(2), number: Number(index.toFixed(2)), value: 0});
 	    	}
     	}
@@ -2742,7 +2614,7 @@ $(function() {
     // Now count all occurences of each value for the distribution
     cy.nodes().forEach(function(node) {
     	$.each(numericProps.fields, function(k,v) {
-    		if(v == true) {
+    		if(v === true) {
     			var snum = node.data(k);
 	    		var num = snum.toFixed(2);
 
@@ -2764,7 +2636,7 @@ $(function() {
 
     // For now, need a hack/workaround to make sure that the popup is fully drawn so that the charts "know" how big to be
     setTimeout(function(){
-    	$.each(nodeStats,function(k,v) {
+    	$.each(nodeStats,function(k) {
 	    	// First, append a div to the popup
 	    	$('#histogramsWrapper').append('<div id=\''+k+'Chart\' class=\'graphHistogramCharts\' ></div>');
 
@@ -2834,7 +2706,7 @@ $(function() {
     var stepSize = {};
     var multiple = 15;
 
-    $.each(data,function(k,v) {
+    $.each(data,function(k) {
     	if(data[k].length <= 50) {
     		stepSize[k] = 1;
     	}
@@ -2844,35 +2716,6 @@ $(function() {
     });
 
     return stepSize;
-  }
-
-  // Function to return a date string for query execution time elapsed
-  function timeElapsed(executionTime) {
-    var now = Date.now();
-    var elapsed = now - executionTime;
-    var time = {
-      years : Math.round(moment.duration(elapsed, 'milliseconds').years()),
-      months : Math.round(moment.duration(elapsed, 'milliseconds').months()),
-      days : Math.round(moment.duration(elapsed, 'milliseconds').days()),
-      hours : Math.round(moment.duration(elapsed, 'milliseconds').hours()),
-      minutes : Math.round(moment.duration(elapsed, 'milliseconds').minutes()),
-      seconds : Math.round(moment.duration(elapsed, 'milliseconds').seconds())
-    };
-
-    time.years = (time.years < 10) ? ("0" + time.years) : time.years;
-    time.months = (time.months < 10) ? ("0" + time.months) : time.months;
-    time.days = (time.days < 10) ? ("0" + time.days) : time.days;
-    time.hours = (time.hours < 10) ? ("0" + time.hours) : time.hours;
-    time.minutes = (time.minutes < 10) ? ("0" + time.minutes) : time.minutes;
-    time.seconds = (time.seconds < 10) ? ("0" + time.seconds) : time.seconds;
-
-    if(time.years   > 0){   return time.years   + ' years '     + time.months   + ' months remaining';}
-    if(time.months  > 0){   return time.months  + ' months '    + time.days     + ' days remaining';}
-    if(time.days    > 0){   return time.days    + ' days '      + time.hours    + ' hours remaining';}
-    if(time.hours   > 0){   return time.hours   + ':'     + time.minutes  + ':' + time.seconds;}
-    if(time.minutes > 0){   return '00:' + time.minutes + ':'   + time.seconds;}
-    if(time.seconds > 0){   return '00:00:' + time.seconds;}
-    return "";
   }
 
   function sortUnique(arr) {
@@ -2946,11 +2789,22 @@ $(function() {
     };
   }
 
+  // Function to show/hide a progress bar
+  function progressBar(element,show) {
+    if(show === true) {
+      element.addClass('progress progress-bar progress-bar-striped active');
+    }
+    else {
+      element.removeClass('progress progress-bar progress-bar-striped active');
+    }
+  }
+  
   // Adding a function to our treeview to retrieve checked nodes
   // Thanks to great docs and support from Kendo UI:
   // http://www.telerik.com/blogs/how-to-get-the-checked-items-from-a-treeview-with-checkboxes
   kendo.ui.TreeView.prototype.getCheckedItems = (function(){
     function getCheckedItems(){
+      /*jshint validthis: true */
       var nodes = this.dataSource.view();
       return getCheckedNodes(nodes);
     }
@@ -2977,12 +2831,14 @@ $(function() {
   // Also extend treeview to support a check/uncheck all function
   kendo.ui.TreeView.prototype.checkAll = (function(){
     function checkAll() {
+      /*jshint validthis: true */
       $(this+' .k-checkbox input').prop('checked',true).trigger('change');
     }
   })();
 
   kendo.ui.TreeView.prototype.uncheckAll = (function(){
     function uncheckAll() {
+      /*jshint validthis: true */
       $(this+' .k-checkbox input').prop('checked',false).trigger('change');
     }
   })();
