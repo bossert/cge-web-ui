@@ -1,5 +1,9 @@
 $(function() {
   'use strict';
+  
+  // Need to declare a few variables that will be used for SPARQL queries
+  var sparqlQueryWs, sparqlInsertWs, dbStartStopWs;
+  
   // Setting up the object for popup notifications throughout the application
   var popup = $("#popupNotification").kendoNotification({
     hideOnClick: true,
@@ -53,18 +57,20 @@ $(function() {
       this.classList.add("is-active");
     }
     
-    if($('#navigation').css('left') == '0px') {
-      $('#navigation').css('left','-500px');
+    if($('#navigation_wrapper').css('left') == '0px') {
+      $('#navigation_wrapper').css('left','-500px');
+      //$('.c-hamburger').css('right','0px');
     }
     else {
-      $('#navigation').css('left','0px');
+      $('#navigation_wrapper').css('left','0px');
+      //$('.c-hamburger').css('left','500px');
     }
     
-    if($('#content_area').css('left') == '0px') {
-      $('#content_area').css('left','500px');
+    if($('#content_area').css('left') == '32px') {
+      $('#content_area').css('left','532px');
     }
     else {
-      $('#content_area').css('left','0px');
+      $('#content_area').css('left','32px');
     }
   });
 
@@ -82,7 +88,7 @@ $(function() {
      and the first menu item is exposed on page load */
   $('.c-hamburger').trigger('click');
   setTimeout(function() {
-    $('#database_management').next('.ss_content').slideDown();
+    $('#system_status').next('.ss_content').slideDown();
   },1000);
 
   // Need to check if there is a running DB that "this user started" in case the app was closed and reopened
@@ -103,7 +109,7 @@ $(function() {
       });
     }
   }).fail(function(xhr) {
-    popup.show("Failed to retrieve system queue information (" + xhr.status + " " + xhr.statusText + ")" ,"error");
+    popup.show("Failed to retrieve system queue information (" + xhr.status + " " + xhr.responseText + ")" ,"error");
   });
 
   // N_triples file browser
@@ -166,7 +172,7 @@ $(function() {
   $('#instances').kendoNumericTextBox({
     min: 1,
     max: 32,
-    value: 8,
+    value: 16,
     format: 'n0'
   });
   $('#nodes').kendoNumericTextBox({
@@ -247,6 +253,7 @@ $(function() {
     columns: [
       {field: 'username',title: 'User Name'},
       {field: 'dbObj', title: 'Database', nullable: true, template: "#= dbObj.path #", editor: function(container,options) {
+        console.log(options);
         $('<input required data-text-field="path" data-value-field="path" data-bind="value:' + options.field + '"/>')
         .appendTo(container)
         .kendoDropDownList({
@@ -292,29 +299,29 @@ $(function() {
       $('#db_status').html('&nbsp;');
 
       progressBar($('#spinner_container'),true);
-      startDB();
+      
+      var startDbInput = {
+        dataDir: $('#selectDB').data('kendoComboBox').value(),
+        imagesPerNode: $('#instances').val(),
+        nodeCount: $('#nodes').val(),
+        startupTimeout: $('#timeout').val(),
+        nvps: $('#nvps').val(),
+        action: 'start'
+      };
+      
+      dbStartStopWs.send(JSON.stringify(startDbInput));
     }
     else if($('#startDB').prop('value') == 'Stop') {
       $('#db_status').html('&nbsp;');
-      var current_database = $('#db_name').html();
-      var current_port = $('#db_port').html();
+      var currentInput = {
+        current_database: $('#db_name').html(),
+        current_port: $('#db_port').html(),
+        action: 'stop'
+      };
 
       progressBar($('#spinner_container'),true);
 
-      $.get('stop_db?'+'current_database='+current_database+'&current_port='+current_port,function() {
-        $('#db_name').html('None');
-        $('#db_port').html('-');
-        $('#db_status').text('STOPPED');
-        $('#startDB').prop('value','Start');
-        localStorage.removeItem('current_pid');
-        localStorage.removeItem('current_port');
-        progressBar($('#spinner_container'), false);
-        getQueryList();
-        popup.show('Stopped the current database: '+$('#db_name').html(),'success');
-      }).fail(function() {
-        progressBar($('#spinner_container'), false);
-        popup.show('Failed to Stop the current database: '+$('#db_name').html(),'error');
-      });
+      dbStartStopWs.send(JSON.stringify(currentInput));
     }
   });
 
@@ -668,7 +675,7 @@ $(function() {
       popup.show("Saved " + queryTitle,"success");
     }).fail(function(xhr) {
       queryPopup.close();
-      popup.show("Save failed (" + xhr.status + " " + xhr.statusText + ")" ,"error");
+      popup.show("Save failed (" + xhr.status + " " + xhr.responseText + ")" ,"error");
     });
     event.preventDefault();
   });
@@ -835,15 +842,14 @@ $(function() {
       { text: "Cose-bilkent", value: "cose-bilkent" },
       { text: "Dagre"       , value: "dagre" },
       { text: "Grid"        , value: "grid" },
-      // { text: "Hive Plot"   , value: "hiveplot" },
-      // { text: "JGraph"      , value: "jgraph" },
+      { text: "Hive Plot"   , value: "hiveplot" },
       { text: "Random"      , value: "random" },
       { text: "Spread"      , value: "spread" },
       { text: "Springy"     , value: "springy" }
     ],
     filter: "contains",
     suggest: true,
-    index: 8,
+    index: 7,
     change: function() {
     	$(".lsettr").addClass("hidden_layout_options");
     	var newselection = this.value();
@@ -869,6 +875,46 @@ $(function() {
     filter: "contains",
     suggest: true,
     index: 0
+  });
+  
+  $('#hiveplothiveplotType').kendoComboBox({
+    dataTextField: 'text',
+    dataValueField: 'value',
+    dataSource: [
+      { text: 'Single', value: 'single' },
+      { text: 'Panel', value: 'panel' }
+    ],
+    index: 0
+  });
+  
+  $('#hiveplotaxisFilterType').kendoComboBox({
+    dataTextField: "text",
+    dataValueField: "value",
+    dataSource: [
+      { text: "Numeric", value: "numeric" },
+      { text: "String" , value: "string" }
+    ],
+    index: 0
+  });
+  
+  $('#hiveplotaxisSortDirection').kendoComboBox({
+    dataTextField: "text",
+    dataValueField: "value",
+    dataSource: [
+      { text: "Ascending" , value: "asc" },
+      { text: "Descending", value: "desc" }
+    ],
+    index: 0
+  });
+  
+  $('#hiveplotaxisProperty').kendoComboBox({
+    dataTextField: "text",
+    dataValueField: "value"
+  });
+  
+  $('#hiveplotaxisSort').kendoComboBox({
+    dataTextField: "text",
+    dataValueField: "value"
   });
 
   // Need to populate the textboxes before each slider with the current value of the slider on the right
@@ -929,23 +975,23 @@ $(function() {
     switch(queryType) {
       case 'SELECT':
         progressBar($('#query_progress'),true);
-        sparqlSelect();
+        sparqlQueryWs.send(JSON.stringify({ qtype: 'select', current_database: $("#db_name").html(), current_port: $('#db_port').html(), 'query': editor.getValue() }));
         break;
       case 'CONSTRUCT':
         progressBar($('#query_progress'),true);
-        sparqlConstruct();
+        sparqlQueryWs.send(JSON.stringify({ qtype: 'construct', current_database: $("#db_name").html(), current_port: $('#db_port').html(), 'query': editor.getValue() }));
         break;
       case 'ASK':
         progressBar($('#query_progress'),true);
-        sparqlAsk();
+        sparqlQueryWs.send(JSON.stringify({ qtype: 'ask', current_database: $("#db_name").html(), current_port: $('#db_port').html(), 'query': editor.getValue() }));
         break;
       case 'DESCRIBE':
         progressBar($('#query_progress'),true);
-        sparqlConstruct();
+        sparqlQueryWs.send(JSON.stringify({ qtype: 'describe', current_database: $("#db_name").html(), current_port: $('#db_port').html(), 'query': editor.getValue() }));
         break;
       case 'INSERT':
         progressBar($('#query_progress'),true);
-        sparqlInsert();
+        sparqlInsertWs.send(JSON.stringify({ qtype: 'insert', current_database: $("#db_name").html(), current_port: $('#db_port').html(), 'query': editor.getValue() }));
         break;
       default:
         popup.show("Unrecognized query type.","error");
@@ -958,18 +1004,21 @@ $(function() {
   //=========================================================
   // Functions to do each of the query types (SELECT, CONSTRUCT, ASK, DESCRIBE, INSERT)
   // SELECT
-  function sparqlSelect() {
-    $.post("sparqlSelect", { current_database: $("#db_name").html(), current_port: $('#db_port').html(),'query': editor.getValue() }).done(function(data, textStatus, xhr) {
-
-			// If the query worked, store it
+  function sparqlSelect(data) {
+    if(data.hasOwnProperty('error_code'))  {
+      progressBar($('#query_progress'),false);
+      popup.show(data.error_code,'error');
+    }
+    else {
+      // If the query worked, store it
       storeQueryHistory();
-
-			// It would appear we can still get an empty result set...so let's kill it here if we do
-			if (data.results.results.bindings.length === 0) {
-				popup.show("Error, no results (" + xhr.status + " " + xhr.statusText + ")","error");
-				return;
-			}
-
+  
+      // It would appear we can still get an empty result set...so let's kill it here if we do
+      if (data.results.results.bindings.length === 0) {
+        popup.show(xhr.responseText,"error");
+        return;
+      }
+  
       // Hide the graph search panel
       $("#graphSearch").fadeOut(1400);
       
@@ -977,82 +1026,86 @@ $(function() {
       $('#results_and_histogram_wrapper').fadeIn(1400);
       $("#nav-trigger-results").prop("disabled", false).removeClass("k-state-disabled");
       $("#nav-trigger-graphStatistics").prop("disabled", true).addClass("k-state-disabled");
-
+  
       var dataBindings = [];
-	    var fieldTypes = {};
-	    var columns = [];
+      var fieldTypes = {};
+      var columns = [];
       var fields = [];
       var comboboxStringFields = [];
-	    var comboboxNumberFields = [];
-
-	    // Process the actual data.
+      var comboboxNumberFields = [];
+  
+      // Process the actual data.
       $.each(data.results.results.bindings, function(index1, value) {
         var tempobj = {};
         $.each(value, function(k1,v1) {
           tempobj[k1] = v1.value;
-
-					// Need to set the type of the field...probably a better way to do this, but it works
-					// TODO Need to double check with dates to make sure this displays properly
-					if (v1.hasOwnProperty("datatype")) {
-						if (/#string/.test(v1.datatype)) {
-							fieldTypes[k1] = { type: "string", name: k1 };
-						}
-						else if(/#date/.test(v1.datatype)) {
-							fieldTypes[k1] = { type: "date", name: k1 };
-						}
-						else  {
-							fieldTypes[k1] = { type: "number", name: k1 };
-						}
-					}
-					else {
-						fieldTypes[k1] = { type: "string", name: k1 };
-					}
+  
+          // Need to set the type of the field...probably a better way to do this, but it works
+          // TODO Need to double check with dates to make sure this displays properly
+          if (v1.hasOwnProperty("datatype")) {
+            if (/#string/.test(v1.datatype)) {
+              fieldTypes[k1] = { type: "string", name: k1 };
+            }
+            else if(/#date/.test(v1.datatype)) {
+              fieldTypes[k1] = { type: "date", name: k1, format: "{0: yyyy-MM-dd HH:mm:ss.fff}" };
+              //tempobj[k1] = kendo.parseDate(v1.value,'yyyy-MM-dd HH:mm:ss.fff');
+              
+            }
+            else  {
+              fieldTypes[k1] = { type: "number", name: k1 };
+            }
+          }
+          else {
+            fieldTypes[k1] = { type: "string", name: k1 };
+          }
         });
         tempobj.id=index1;
         dataBindings.push(tempobj);
       });
-
-			// Create a variable to keep track of how many numeric fields we have
-			var numNumericFields = 0;
-
-			// Disable chart types as appropriate
-			$.each(fieldTypes, function(index,object) {
-				if (object.type == "number") {
-					numNumericFields++;
-				}
-			});
-
-			disableChartTypes(numNumericFields);
-
-  		// Process the column headers
-  		$.each(data.results.head.vars, function(index, value) {
+  
+      // Create a variable to keep track of how many numeric fields we have
+      var numNumericFields = 0;
+  
+      // Disable chart types as appropriate
+      $.each(fieldTypes, function(index,object) {
+        if (object.type == "number") {
+          numNumericFields++;
+        }
+      });
+  
+      disableChartTypes(numNumericFields);
+  
+      // Process the column headers
+      $.each(data.results.head.vars, function(index, value) {
         columns.push({'field': value, 'title': value});
         var to = {};
         to[value] = {type: "string"};
         fields.push(to);
-
-        // Let's also populate the two Comboboxes for the Visualization while we are at it
-        if (fieldTypes[value].type == "string") {
-					comboboxStringFields.push({'text': value, 'value': value});
-				}
-				else if (fieldTypes[value].type == "number") {
-					comboboxNumberFields.push({'text': value, 'value': value});
-				}
-				else {
-					// TODO need to do something with dates to treat them as an axis
-					console.log("Got dates!");
-				}
+        
+        // Let's also populate the two Combo boxes for the Visualization while we are at it
+        if(typeof fieldTypes[value] != 'undefined') {
+          if (fieldTypes[value].type == "string") {
+            comboboxStringFields.push({'text': value, 'value': value});
+          }
+          else if (fieldTypes[value].type == "number") {
+            comboboxNumberFields.push({'text': value, 'value': value});
+          }
+          else {
+            // TODO need to do something with dates to treat them as an axis
+            console.log("Got dates!");
+          }
+        }
       });
-
+      console.log(fieldTypes);
       var configuration = {
         dataSource: {
           data: dataBindings,
           pageSize: 25,
-					schema: {
-						model: {
-							fields: fieldTypes
-						}
-					}
+          schema: {
+            model: {
+              fields: fieldTypes
+            }
+          }
         },
         height: "100%",
         scrollable: true,
@@ -1060,6 +1113,7 @@ $(function() {
         filterable: true,
         reorderable: true,
         resizable: true,
+        groupable: true,
         toolbar: ["excel"],
         excel: {
           allPages: true,
@@ -1069,399 +1123,399 @@ $(function() {
         pageable: {
           input: true,
           numeric: false,
-          pageSizes: [10,25,50,100, "all"]
+          pageSizes: [10,25,50,100,250,500, "all"]
         },
         columns: columns
       };
-
+  
       // Create the popup window
       var gridWindow = $("#resultsPopup").kendoWindow({
         width: "70%",
-				height: "60%",
+        height: "60%",
         title: "Query Results",
         actions: [
             "Minimize",
             "Maximize",
             "Close"
         ],
-				resize: function() {
-					resultsGrid.resize();
-				}
+        resize: function() {
+          resultsGrid.resize();
+        }
       }).data('kendoWindow');
-
+  
       // Center and show the popup window
       gridWindow.center().open();
-
+  
       // Create/update/refresh the grid
       resultsGrid.setOptions(configuration);
       resultsGrid.dataSource.page(1);
       
       // If this is not the first time we have queried, need to unregister the old click handler
-			$("#nav-trigger-results").off('click');
+      $("#nav-trigger-results").off('click');
       $("#nav-trigger-results").on('click',function() {
         // Center and show the popup window
         gridWindow.center().open();
       });
-
-			// Create the comboboxes for each potential series and value field/Axis depending on the type of chart selected
-			vizChartType.bind('select', function(event) {
-				var dataItem = this.dataItem(event.item.index());
-
-				// Need to remove all table rows except for the first one
-				$("#vizSettingsTable").find("tr:gt(3)").remove();
-
-				// Need to create different setup types depending on the selected type of chart (e.g. series vs X Y axis, bar/column vs. scatter)
-				if (/^Area$|^Bar$|^Column$|^Line$|^Radar-Area$|^Radar-Column$|^Vertical-Area$|^Vertical-Line$/.test(dataItem.text)) {
-					// Show the distibution row
-					$(".hideRow").show();
-
-					// First the series names
-					var dropdownNum = 1;
-					$.each(fieldTypes, function(index,object) {
-						if (object.type == "string") {
-							var addedRow = '<tr><td>Series ' + dropdownNum + '</td><td><input id="series' + dropdownNum + '" class="vizCombo vizSeries" placeholder="Select Series ' + dropdownNum + '" /></td></tr>';
-
-							// Append the new row
-							$("#vizSettingsTable tbody").append(addedRow);
-
-							// After it has been appended, initialize the combobox
-							$("#series" + dropdownNum).kendoComboBox({
-								dataTextField: "text",
-								dataValueField: "value",
-								dataSource: comboboxStringFields,
-								filter: "contains",
-								suggest: true
-							});
-							dropdownNum++;
-						}
-					});
-
-					// Now, the numeric fields
-					var addedRow = '<tr><td>Value Axis</td><td><input id="valueAxis" class="vizCombo vizValues" placeholder="Select Value Axis" /></td></tr>';
-
-					// Append the new row
-					$("#vizSettingsTable tbody").append(addedRow);
-
-					// After it has been appended, initialize the combobox
-					$("#valueAxis").kendoComboBox({
-						dataTextField: "text",
-						dataValueField: "value",
-						dataSource: comboboxNumberFields,
-						filter: "contains",
-						suggest: true
-					});
-				}
-				else if (/^Bubble$|^Polar-Area$|^Polar-Line$|^Polar-Scatter$|^Scatter$|^Scatter-Line$/.test(dataItem.text)) {
-					// Hide the distribution row
-					$(".hideRow").hide();
-
-					// First the series names
-					var dropdownNuma = 1;
-					$.each(fieldTypes, function(index,object) {
-						if (object.type == "string") {
-							var addedRow = '<tr><td>Series ' + dropdownNuma + '</td><td><input id="series' + dropdownNuma + '" class="vizCombo vizSeries" placeholder="Select Series ' + dropdownNuma + '" /></td></tr>';
-
-							// Append the new row
-							$("#vizSettingsTable tbody").append(addedRow);
-
-							// After it has been appended, initialize the combobox
-							$("#series" + dropdownNuma).kendoComboBox({
-								dataTextField: "text",
-								dataValueField: "value",
-								dataSource: comboboxStringFields,
-								filter: "contains",
-								suggest: true
-							});
-							dropdownNuma++;
-						}
-					});
-
-					// Add two value axis comboboxes
-					$("#vizSettingsTable tbody").append('<tr><td>X Axis</td><td><input id="XAxis" class="vizCombo" placeholder="Select X Axis" /></td></tr>');
-
-					$("#vizSettingsTable tbody").append('<tr><td>Y Axis</td><td><input id="YAxis" class="vizCombo" placeholder="Select Y Axis" /></td></tr>');
-
-					// After it has been appended, initialize the combobox
-					$("#XAxis").kendoComboBox({
-						dataTextField: "text",
-						dataValueField: "value",
-						dataSource: comboboxNumberFields,
-						filter: "contains",
-						suggest: true
-					});
-
-					$("#YAxis").kendoComboBox({
-						dataTextField: "text",
-						dataValueField: "value",
-						dataSource: comboboxNumberFields,
-						filter: "contains",
-						suggest: true
-					});
-				}
-			});
-
+  
+      // Create the comboboxes for each potential series and value field/Axis depending on the type of chart selected
+      vizChartType.bind('select', function(event) {
+        var dataItem = this.dataItem(event.item.index());
+  
+        // Need to remove all table rows except for the first one
+        $("#vizSettingsTable").find("tr:gt(3)").remove();
+  
+        // Need to create different setup types depending on the selected type of chart (e.g. series vs X Y axis, bar/column vs. scatter)
+        if (/^Area$|^Bar$|^Column$|^Line$|^Radar-Area$|^Radar-Column$|^Vertical-Area$|^Vertical-Line$/.test(dataItem.text)) {
+          // Show the distibution row
+          $(".hideRow").show();
+  
+          // First the series names
+          var dropdownNum = 1;
+          $.each(fieldTypes, function(index,object) {
+            if (object.type == "string") {
+              var addedRow = '<tr><td>Series ' + dropdownNum + '</td><td><input id="series' + dropdownNum + '" class="vizCombo vizSeries" placeholder="Select Series ' + dropdownNum + '" /></td></tr>';
+  
+              // Append the new row
+              $("#vizSettingsTable tbody").append(addedRow);
+  
+              // After it has been appended, initialize the combobox
+              $("#series" + dropdownNum).kendoComboBox({
+                dataTextField: "text",
+                dataValueField: "value",
+                dataSource: comboboxStringFields,
+                filter: "contains",
+                suggest: true
+              });
+              dropdownNum++;
+            }
+          });
+  
+          // Now, the numeric fields
+          var addedRow = '<tr><td>Value Axis</td><td><input id="valueAxis" class="vizCombo vizValues" placeholder="Select Value Axis" /></td></tr>';
+  
+          // Append the new row
+          $("#vizSettingsTable tbody").append(addedRow);
+  
+          // After it has been appended, initialize the combobox
+          $("#valueAxis").kendoComboBox({
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: comboboxNumberFields,
+            filter: "contains",
+            suggest: true
+          });
+        }
+        else if (/^Bubble$|^Polar-Area$|^Polar-Line$|^Polar-Scatter$|^Scatter$|^Scatter-Line$/.test(dataItem.text)) {
+          // Hide the distribution row
+          $(".hideRow").hide();
+  
+          // First the series names
+          var dropdownNuma = 1;
+          $.each(fieldTypes, function(index,object) {
+            if (object.type == "string") {
+              var addedRow = '<tr><td>Series ' + dropdownNuma + '</td><td><input id="series' + dropdownNuma + '" class="vizCombo vizSeries" placeholder="Select Series ' + dropdownNuma + '" /></td></tr>';
+  
+              // Append the new row
+              $("#vizSettingsTable tbody").append(addedRow);
+  
+              // After it has been appended, initialize the combobox
+              $("#series" + dropdownNuma).kendoComboBox({
+                dataTextField: "text",
+                dataValueField: "value",
+                dataSource: comboboxStringFields,
+                filter: "contains",
+                suggest: true
+              });
+              dropdownNuma++;
+            }
+          });
+  
+          // Add two value axis comboboxes
+          $("#vizSettingsTable tbody").append('<tr><td>X Axis</td><td><input id="XAxis" class="vizCombo" placeholder="Select X Axis" /></td></tr>');
+  
+          $("#vizSettingsTable tbody").append('<tr><td>Y Axis</td><td><input id="YAxis" class="vizCombo" placeholder="Select Y Axis" /></td></tr>');
+  
+          // After it has been appended, initialize the combobox
+          $("#XAxis").kendoComboBox({
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: comboboxNumberFields,
+            filter: "contains",
+            suggest: true
+          });
+  
+          $("#YAxis").kendoComboBox({
+            dataTextField: "text",
+            dataValueField: "value",
+            dataSource: comboboxNumberFields,
+            filter: "contains",
+            suggest: true
+          });
+        }
+      });
+  
       // Visualize SELECT results
       $("#chart_display_button").on('click',function() {
         // empty the viz area
         $("#viz_main").empty();
-
+  
         // add a dummy container that we can destroy later
         $("#viz_main").html('<div id="chartContainer"></div>');
-
+  
         // Loop through the result set to create the appropriate arrays
-				// Figure out if we want a log scale or not
-				var wantLogScale;
-				if ($('input[name=logScale]:checked', '#vizSettings').val() == "true") {
-					wantLogScale = "log";
-				}
-				else {
-					wantLogScale = "numeric";
-				}
-
-				// We need to know what chart type we are dealing with
-				var chartType = vizChartType.value();
-
-				// Figure out if we want a value distribution or not
-				var wantDistribution = $('input[name=distributionRadioButton]:checked', '#vizSettings').val();
+        // Figure out if we want a log scale or not
+        var wantLogScale;
+        if ($('input[name=logScale]:checked', '#vizSettings').val() == "true") {
+          wantLogScale = "log";
+        }
+        else {
+          wantLogScale = "numeric";
+        }
+  
+        // We need to know what chart type we are dealing with
+        var chartType = vizChartType.value();
+  
+        // Figure out if we want a value distribution or not
+        var wantDistribution = $('input[name=distributionRadioButton]:checked', '#vizSettings').val();
         var measureName = $("#valueAxis").data('kendoComboBox').value();
         var seriesWanted = [];
         var seriesData = {};
         var seriesArray = [];
         
-				if (/^polarArea$|^polarLine$|^polarScatter$|^scatter$|^scatterLine$/.test(chartType)) {
-					var xAxis = $("#XAxis").data('kendoComboBox').value();
-					var yAxis = $("#YAxis").data('kendoComboBox').value();
-
-					$(".vizSeries input").each(function(index,object) {
-						if ($(object).attr('id')) {
-							if ($("#" + $(object).attr('id')).data('kendoComboBox').value() !== '') {
-								var seriesName = $("#" + $(object).attr('id')).data('kendoComboBox').value();
-								seriesWanted.push(seriesName);
-								seriesData[seriesName] = [];
-							}
-						}
-					});
-
-					// Now, iterate over the results and push them to the appropriate data arrays
-					$.each(data.results.results.bindings, function(index1,object1) {
-						$.each(seriesWanted, function(index2,object2) {
-							var XX = parseFloat(object1[xAxis].value) || 0;
-							var YY = parseFloat(object1[yAxis].value) || 0;
-							var category = object1[object2].value || '0';
-
-							var tmpObj = {x: XX, y: YY, category: category };
-							seriesData[object2].push(tmpObj);
-						});
-					});
-
-					// Finally, get the series data into the appropriate array
-					$.each(seriesData, function(key,objt) {
-						var toj = {name: key, data: objt};
-						seriesArray.push(toj);
-					});
-
-					// create the desired chart
-					$("#chartContainer").kendoChart({
-						theme: "Material",
-						title: {
-							align: "left",
-							text: "Result Set Visualization",
-							color: "black"
-						},
-						legend: {
-							visible: false
-						},
-						seriesDefaults: {
-							type: $("#vizChartType").val(),
-							tooltip: {
-								visible: true,
-								template: "#: dataItem.category #: #: value.x #,#: value.y #"
-							}
-						},
-						series: seriesArray,
-						xAxis: {
-							field: 'x',
-							title: {
-								text: xAxis
-							}
-						},
-						yAxis: {
-							field: 'y',
-							title:  {
-								text: yAxis
-							}
-						},
-						categoryAxis: {
-							field: 'category',
-							majorGridLines: {
-								visible: false
-							},
-							labels: {
-								visible: false,
-								step: 2,
-								rotation: 90
-							}
-						}
-					});
-				}
-				else if (/^area$|^bar$|^column$|^line$|^radarArea$|^radarColumn$|^verticalArea$|^verticalLine$/.test(chartType)) {
-					if (wantDistribution == 'true') {
-						// iterate over each of the selected series fields and push onto an array
-						var tempValueObj = {};
-
-						$(".vizSeries input").each(function(i,object) {
-							if ($(object).attr('id')) {
-								if ($("#" + $(object).attr('id')).data('kendoComboBox').value() !== '') {
-									var seriesName = $("#" + $(object).attr('id')).data('kendoComboBox').value();
-									seriesWanted.push(seriesName);
-									tempValueObj[seriesName] = {};
-								}
-							}
-						});
-
-						// Now, iterate over the results and push them to the appropriate data arrays
-						$.each(data.results.results.bindings, function(index1,object1) {
-							$.each(seriesWanted, function(index2,object2) {
-								var number = parseFloat(object1[measureName].value) || 0;
-								var roundedNumberString = parseFloat(number.toFixed(1));
-
-								if (tempValueObj[object2].hasOwnProperty(roundedNumberString)) {
-									tempValueObj[object2][roundedNumberString]++;
-								}
-								else {
-									tempValueObj[object2][roundedNumberString] = 1;
-								}
-							});
-						});
-
-						// Finally, get the series data into the appropriate array
-						$.each(tempValueObj, function(key,objt) {
-							var toj = { name: key, tooltip: { visible: true, template: "#: dataItem.category #: #: value #" }};
-							toj.data = [];
-							$.each(objt, function(key1,value) {
-								var toj1 = {category: key1, value: value};
-								toj.data.push(toj1);
-							});
-							seriesArray.push(toj);
-						});
-
-						// create the desired chart
-						$("#chartContainer").kendoChart({
-							theme: "Material",
-							title: {
-								align: "left",
-								text: "Result Set Visualization",
-								color: "black"
-							},
-							legend: {
-								visible: false
-							},
-							seriesDefaults: {
-								type: $("#vizChartType").val()
-							},
-							series: seriesArray,
-							valueAxis: {
-								field: 'value',
-								type: wantLogScale,
-								majorGridLines: {
-										visible: false
-								}
-							},
-							categoryAxis: {
-								field: 'category',
-								majorGridLines: {
-									visible: false
-								},
-								labels: {
-									visible: false,
-									step: 2,
-									rotation: 90
-								}
-							}
-						});
-					}
-					else {
-						// iterate over each of the selected series fields and push onto an array
-						$(".vizSeries input").each(function(i,object) {
-							if ($(object).attr('id')) {
-								if ($("#" + $(object).attr('id')).data('kendoComboBox').value() !== '') {
-									var seriesName = $("#" + $(object).attr('id')).data('kendoComboBox').value();
-									seriesWanted.push(seriesName);
-									seriesData[seriesName] = [];
-								}
-							}
-						});
-
-						// Now, iterate over the results and push them to the appropriate data arrays
-						$.each(data.results.results.bindings, function(index1,object1) {
-							$.each(seriesWanted, function(index2,object2) {
-								var value = parseFloat(object1[measureName].value) || 0;
-								var category = object1[object2].value || '0';
-
-								var tmpObj = {value: value, category: category };
-								seriesData[object2].push(tmpObj);
-							});
-						});
-
-						// Finally, get the series data into the appropriate array
-						$.each(seriesData, function(key,objt) {
-							var toj = {name: key, data: objt};
-							seriesArray.push(toj);
-						});
-
-						// create the desired chart
-						$("#chartContainer").kendoChart({
-							theme: "Material",
-							title: {
-								align: "left",
-								text: "Result Set Visualization",
-								color: "black"
-							},
-							legend: {
-								visible: false
-							},
-							seriesDefaults: {
-								type: $("#vizChartType").val(),
-								tooltip: {
-									visible: true,
-									template: "#: dataItem.category #: #: value #"
-								}
-							},
-							series: seriesArray,
-							valueAxis: {
-								field: 'value',
-								type: wantLogScale,
-								majorGridLines: {
-										visible: false
-								}
-							},
-							categoryAxis: {
-								field: 'category',
-								majorGridLines: {
-									visible: false
-								},
-								labels: {
-									visible: false,
-									step: 2,
-									rotation: 90
-								}
-							}
-						});
-					}
-				}
-
-				// Change function for log scale radio button.  We set it initially, but need to be able to change dynamically
-				$('input[name=logScale]').on('change',function() {
-					var wls = $('input[name=logScale]:checked').attr('value');
+        if (/^polarArea$|^polarLine$|^polarScatter$|^scatter$|^scatterLine$/.test(chartType)) {
+          var xAxis = $("#XAxis").data('kendoComboBox').value();
+          var yAxis = $("#YAxis").data('kendoComboBox').value();
+  
+          $(".vizSeries input").each(function(index,object) {
+            if ($(object).attr('id')) {
+              if ($("#" + $(object).attr('id')).data('kendoComboBox').value() !== '') {
+                var seriesName = $("#" + $(object).attr('id')).data('kendoComboBox').value();
+                seriesWanted.push(seriesName);
+                seriesData[seriesName] = [];
+              }
+            }
+          });
+  
+          // Now, iterate over the results and push them to the appropriate data arrays
+          $.each(data.results.results.bindings, function(index1,object1) {
+            $.each(seriesWanted, function(index2,object2) {
+              var XX = parseFloat(object1[xAxis].value) || 0;
+              var YY = parseFloat(object1[yAxis].value) || 0;
+              var category = object1[object2].value || '0';
+  
+              var tmpObj = {x: XX, y: YY, category: category };
+              seriesData[object2].push(tmpObj);
+            });
+          });
+  
+          // Finally, get the series data into the appropriate array
+          $.each(seriesData, function(key,objt) {
+            var toj = {name: key, data: objt};
+            seriesArray.push(toj);
+          });
+  
+          // create the desired chart
+          $("#chartContainer").kendoChart({
+            theme: "Material",
+            title: {
+              align: "left",
+              text: "Result Set Visualization",
+              color: "black"
+            },
+            legend: {
+              visible: false
+            },
+            seriesDefaults: {
+              type: $("#vizChartType").val(),
+              tooltip: {
+                visible: true,
+                template: "#: dataItem.category #: #: value.x #,#: value.y #"
+              }
+            },
+            series: seriesArray,
+            xAxis: {
+              field: 'x',
+              title: {
+                text: xAxis
+              }
+            },
+            yAxis: {
+              field: 'y',
+              title:  {
+                text: yAxis
+              }
+            },
+            categoryAxis: {
+              field: 'category',
+              majorGridLines: {
+                visible: false
+              },
+              labels: {
+                visible: false,
+                step: 2,
+                rotation: 90
+              }
+            }
+          });
+        }
+        else if (/^area$|^bar$|^column$|^line$|^radarArea$|^radarColumn$|^verticalArea$|^verticalLine$/.test(chartType)) {
+          if (wantDistribution == 'true') {
+            // iterate over each of the selected series fields and push onto an array
+            var tempValueObj = {};
+  
+            $(".vizSeries input").each(function(i,object) {
+              if ($(object).attr('id')) {
+                if ($("#" + $(object).attr('id')).data('kendoComboBox').value() !== '') {
+                  var seriesName = $("#" + $(object).attr('id')).data('kendoComboBox').value();
+                  seriesWanted.push(seriesName);
+                  tempValueObj[seriesName] = {};
+                }
+              }
+            });
+  
+            // Now, iterate over the results and push them to the appropriate data arrays
+            $.each(data.results.results.bindings, function(index1,object1) {
+              $.each(seriesWanted, function(index2,object2) {
+                var number = parseFloat(object1[measureName].value) || 0;
+                var roundedNumberString = parseFloat(number.toFixed(1));
+  
+                if (tempValueObj[object2].hasOwnProperty(roundedNumberString)) {
+                  tempValueObj[object2][roundedNumberString]++;
+                }
+                else {
+                  tempValueObj[object2][roundedNumberString] = 1;
+                }
+              });
+            });
+  
+            // Finally, get the series data into the appropriate array
+            $.each(tempValueObj, function(key,objt) {
+              var toj = { name: key, tooltip: { visible: true, template: "#: dataItem.category #: #: value #" }};
+              toj.data = [];
+              $.each(objt, function(key1,value) {
+                var toj1 = {category: key1, value: value};
+                toj.data.push(toj1);
+              });
+              seriesArray.push(toj);
+            });
+  
+            // create the desired chart
+            $("#chartContainer").kendoChart({
+              theme: "Material",
+              title: {
+                align: "left",
+                text: "Result Set Visualization",
+                color: "black"
+              },
+              legend: {
+                visible: false
+              },
+              seriesDefaults: {
+                type: $("#vizChartType").val()
+              },
+              series: seriesArray,
+              valueAxis: {
+                field: 'value',
+                type: wantLogScale,
+                majorGridLines: {
+                    visible: false
+                }
+              },
+              categoryAxis: {
+                field: 'category',
+                majorGridLines: {
+                  visible: false
+                },
+                labels: {
+                  visible: false,
+                  step: 2,
+                  rotation: 90
+                }
+              }
+            });
+          }
+          else {
+            // iterate over each of the selected series fields and push onto an array
+            $(".vizSeries input").each(function(i,object) {
+              if ($(object).attr('id')) {
+                if ($("#" + $(object).attr('id')).data('kendoComboBox').value() !== '') {
+                  var seriesName = $("#" + $(object).attr('id')).data('kendoComboBox').value();
+                  seriesWanted.push(seriesName);
+                  seriesData[seriesName] = [];
+                }
+              }
+            });
+  
+            // Now, iterate over the results and push them to the appropriate data arrays
+            $.each(data.results.results.bindings, function(index1,object1) {
+              $.each(seriesWanted, function(index2,object2) {
+                var value = parseFloat(object1[measureName].value) || 0;
+                var category = object1[object2].value || '0';
+  
+                var tmpObj = {value: value, category: category };
+                seriesData[object2].push(tmpObj);
+              });
+            });
+  
+            // Finally, get the series data into the appropriate array
+            $.each(seriesData, function(key,objt) {
+              var toj = {name: key, data: objt};
+              seriesArray.push(toj);
+            });
+  
+            // create the desired chart
+            $("#chartContainer").kendoChart({
+              theme: "Material",
+              title: {
+                align: "left",
+                text: "Result Set Visualization",
+                color: "black"
+              },
+              legend: {
+                visible: false
+              },
+              seriesDefaults: {
+                type: $("#vizChartType").val(),
+                tooltip: {
+                  visible: true,
+                  template: "#: dataItem.category #: #: value #"
+                }
+              },
+              series: seriesArray,
+              valueAxis: {
+                field: 'value',
+                type: wantLogScale,
+                majorGridLines: {
+                    visible: false
+                }
+              },
+              categoryAxis: {
+                field: 'category',
+                majorGridLines: {
+                  visible: false
+                },
+                labels: {
+                  visible: false,
+                  step: 2,
+                  rotation: 90
+                }
+              }
+            });
+          }
+        }
+  
+        // Change function for log scale radio button.  We set it initially, but need to be able to change dynamically
+        $('input[name=logScale]').on('change',function() {
+          var wls = $('input[name=logScale]:checked').attr('value');
           
-					if (wls == "true") {
-						$("#chartContainer").data('kendoChart').setOptions({ valueAxis: { type: "log" }});
-					}
-					else {
-						$("#chartContainer").data('kendoChart').setOptions({ valueAxis: { type: "numeric" }});
-					}
-				});
-
+          if (wls == "true") {
+            $("#chartContainer").data('kendoChart').setOptions({ valueAxis: { type: "log" }});
+          }
+          else {
+            $("#chartContainer").data('kendoChart').setOptions({ valueAxis: { type: "numeric" }});
+          }
+        });
+  
         // Need to resize the chart when the window is resized
         $(window).resize(function(){
           kendo.resize($(".k-chart"));
@@ -1470,33 +1524,32 @@ $(function() {
       });
       progressBar($('#query_progress'),false);
       $('.c-hamburger').trigger('click');
-    }).fail(function(xhr) {
-      progressBar($('#query_progress'),false);
-      popup.show("Error, no results (" + xhr.status + " " + xhr.statusText + ")","error");
-    });
+    }
   }
 
   // CONSTRUCT
-  function sparqlConstruct() {
-    $.post("sparqlConstruct", { current_database: $("#db_name").html(), current_port: $('#db_port').html(),'query': editor.getValue() }).done(function(data) {
-
+  function sparqlConstruct(data) {
+    if(data.hasOwnProperty('error_code'))  {
+      
+    }
+    else {
       // If the query worked, store it
       storeQueryHistory();
       $('.c-hamburger').trigger('click');
       // Draw the graph
       drawGraph(data.elements);
-    }).fail(function(xhr) {
-      progressBar($('#query_progress'),false);
-      popup.show("Error, no results (" + xhr.status + " " + xhr.statusText + ")","error");
-    });
+    }
   }
 
   // ASK
-  function sparqlAsk() {
-    $.post("sparqlSelect", { current_database: $("#db_name").html(), current_port: $('#db_port').html(),'query': editor.getValue() }).done(function(data, textStatus, xhr) {
+  function sparqlAsk(data) {
+    if(data.hasOwnProperty('error_code'))  {
+      
+    }
+    else {
       // If the query worked, store it
       storeQueryHistory();
-
+  
       // Hide the graph search panel
       $("#graphSearch").fadeOut(1400);
       
@@ -1506,23 +1559,20 @@ $(function() {
       }
       else {
         progressBar($('#query_progress'),false);
-        popup.show("Error, no results (" + xhr.status + " " + xhr.statusText + ")","error");
+        popup.show(data.error_code,"error");
       }
-
-    }).fail(function(xhr) {
-      progressBar($('#query_progress'),false);
-      popup.show("Error, no results (" + xhr.status + " " + xhr.statusText + ")","error");
-    });
+    }
   }
 
   // INSERT/INSERT DATA
-  function sparqlInsert() {
-		$.post("sparqlInsert", { current_database: $("#db_name").html(), current_port: $('#db_port').html(),'query': editor.getValue() }).done(function() {
-			popup.show("Update executed successfully.","success");
-		}).fail(function(xhr) {
+  function sparqlInsert(data) {
+    if(data.hasOwnProperty('error_code')) {
       progressBar($('#query_progress'),false);
-      popup.show("Error, no results (" + xhr.status + " " + xhr.statusText + ")","error");
-    });
+      popup.show(data.error_code,"error");
+    }
+    else {
+      popup.show("Update executed successfully.","success");
+    }
 	}
 
   // Function to start a database
@@ -1545,7 +1595,7 @@ $(function() {
       progressBar($('#spinner_container'), false);
     }).fail(function(xhr) {
       progressBar($('#spinner_container'), false);
-      popup.show("Failed to start the requested database (" + xhr.status + " " + xhr.statusText + ")" ,"error");
+      popup.show("Failed to start the requested database (" + xhr.status + " " + xhr.responseText + ")" ,"error");
     });
   }
 
@@ -1568,7 +1618,7 @@ $(function() {
       progressBar($('#spinner_container'), false);
     }).fail(function(xhr) {
       progressBar('#startDB',false);
-      popup.show("Failed to start the requested database (" + xhr.status + " " + xhr.statusText + ")" ,"error");
+      popup.show("Failed to start the requested database (" + xhr.status + " " + xhr.responseText + ")" ,"error");
     });
   }
 
@@ -1761,7 +1811,7 @@ $(function() {
         cy.layout(layoutS);
       }
     }).fail(function(xhr) {
-      popup.show("Error, no results (" + xhr.status + " " + xhr.statusText + ")","error");
+      popup.show(xhr.responseText,"error");
     });
   }
 
@@ -2072,6 +2122,29 @@ $(function() {
       arbornodeMass.setDataSource(testNumericDatasource);
       arbornodeMass.select(0);
 
+      $('#hiveplotaxisSort').data('kendoComboBox').setDataSource(testNumericDatasource);
+      $('#hiveplotaxisSort').data('kendoComboBox').select(0);
+      
+      if ($('#hiveplotaxisFilterType').val() === 'numeric') {
+        $('#hiveplotaxisProperty').data('kendoComboBox').setDataSource(testNumericDatasource);
+        $('#hiveplotaxisProperty').data('kendoComboBox').select(0);
+      }
+      else {
+        $('#hiveplotaxisProperty').data('kendoComboBox').setDataSource(allFieldsDatasource);
+        $('#hiveplotaxisProperty').data('kendoComboBox').select(0);
+      }
+      
+      
+      // Change event handler for the type of axis for hiveplot layouts
+      $('#hiveplotaxisFilterType').data('kendoComboBox').bind('change',function() {
+        if ($('#hiveplotaxisFilterType').val() === 'numeric') {
+          $('#hiveplotaxisProperty').data('kendoComboBox').setDataSource(testNumericDatasource);
+        }
+        else {
+          $('#hiveplotaxisProperty').data('kendoComboBox').setDataSource(allFieldsDatasource);
+        }
+      });
+      
       // Now that we have the arbor numeric fields, draw the graph
       var layoutSettings = {};
       layoutSettings = getLayoutSettings(layoutSelector.value());
@@ -2519,6 +2592,7 @@ $(function() {
     var gridWindow = $("#resultsPopup").kendoWindow({
         width: "70%",
 				height: "60%",
+        groupable: true,
         title: "Query Results",
         actions: [
             "Minimize",
@@ -2728,20 +2802,131 @@ $(function() {
 	}
 
   function websocketConnect () {
+    // Sinfo websocket that shows us system utilization such as CPU and memory utilization
+    var sinfo_ws = new WebSocket('wss://'+location.host+'/sinfo_ws');
+    sinfo_ws.onopen = function() {
+      console.log('sinfo websocket opened.');
+    };
+    sinfo_ws.onclose = function() {
+      closeWebsocket('Sinfo');
+    };
+    
+    sinfo_ws.onmessage = function(msg) {
+      var res = JSON.parse(msg.data);
+      
+      if(res.sinfo.length > 1) {
+        
+        // Sort the results based on node name
+        res.sinfo.sort(function(a,b) {return (Number(a.HOSTNAMES.match(/\d+$/)) > Number(b.HOSTNAMES.match(/\d+$/))) ? 1 : ((Number(b.HOSTNAMES.match(/\d+$/)) > Number(a.HOSTNAMES.match(/\d+$/))) ? -1 : 0);} );
+        
+        // Iterate over the results for the node stats
+        $.each(res.sinfo, function(i,obj) {
+          if(document.getElementById(obj.NODELIST) === null) {
+            createNodeStatsContainer(obj);
+          }
+          else {
+            updateNodeStatsContainer(obj);
+          }
+        });
+      }
+    };
+    
+    // Websocket for Select queries.  Doing this to help with long-running queries blocking the UI.  The websocket approach
+    // seems preferable to using web-workers or some other hack while waiting for POST response that could last anywhere from
+    // less than a second to hours depending on the query
+    sparqlQueryWs = new WebSocket('wss://'+location.host+'/sparqlQueryWs');
+    sparqlQueryWs.onopen = function() {
+      console.log('sparqlQueryWs websocket opened.');
+    };
+    sparqlQueryWs.onclose = function() {
+      closeWebsocket('sparqlQueryWs');
+    };
+    
+    sparqlQueryWs.onmessage = function(msg) {
+      var res = JSON.parse(msg.data);
+      if(res.qtype === 'select') {
+        sparqlSelect(res);
+      }
+      else if(res.qtype === 'ask') {
+        sparqlAsk(res);
+      }
+      else if(res.qtype === 'construct') {
+        sparqlConstruct(res);
+      }
+      else if(res.qtype === 'describe') {
+        sparqlConstruct(res);
+      }
+      else {
+        popup.show('Unrecognized query type: '+res.qtype,'error');
+      }
+    };
+    
+    sparqlInsertWs = new WebSocket('wss://'+location.host+'/sparqlInsertWs');
+    sparqlInsertWs.onopen = function() {
+      console.log('sparqlInsertWs websocket opened.');
+    };
+    sparqlInsertWs.onclose = function() {
+      closeWebsocket('sparqlInsertWs');
+    };
+    
+    sparqlInsertWs.onmessage = function(msg) {
+      var res = JSON.parse(msg.data);
+      sparqlInsert(res);
+    };
+    
+    // Websocket to start/stop database
+    dbStartStopWs = new WebSocket('wss://'+location.host+'/dbStartStopWs');
+    dbStartStopWs.onopen = function() {
+      console.log('dbStartStopWs websocket opened.');
+    };
+    dbStartStopWs.onclose = function() {
+      closeWebsocket('dbStartStopWs');
+    };
+    dbStartStopWs.onmessage = function(msg) {
+      var res = JSON.parse(msg.data);
+      console.log(res);
+      if(res.success === 'stopped') {
+        var currentPid = localStorage.getItem('current_pid');
+        
+        $('#db_name').html('None');
+        $('#db_port').html('-');
+        $('#db_status').text('STOPPED');
+        
+        
+        
+        $('#startDB').prop('value','Start');
+        localStorage.removeItem('current_pid');
+        localStorage.removeItem('current_port');
+        progressBar($('#spinner_container'), false);
+        
+        getQueryList();
+        popup.show('Stopped the current database: '+$('#db_name').html(),'success');
+      }
+      else if(res.success === 'started') {
+        // Assuming the startup works, set the current database
+        $('#db_status').text('RUNNING');
+        $('#startDB').prop('value','Stop');
+        $('#db_port').html(res.port);
+        localStorage.setItem('current_pid',res.pid);
+        localStorage.setItem('current_port',res.port);
+        localStorage.setItem('current_database',$('#selectDB').data('kendoComboBox').value());
+        getQueryList();
+        progressBar($('#spinner_container'), false);
+      }
+      else {
+        progressBar($('#spinner_container'), false);
+        popup.show('Failed to Stop the current database: '+$('#db_name').html(),'error');
+      }
+    };
+    
+    
+    // File system changes websocket that shows available NT files
     var filesystem_changes_ws = new WebSocket('wss://'+location.host+'/filesystem_changes');
     filesystem_changes_ws.onopen = function() {
-      popup.show('filesystem_changes websocket opened.','info');
+      console.log('filesystem_changes websocket opened.');
     };
     filesystem_changes_ws.onclose = function() {
-      popup.show('filesystem_changes websocket closed.','info');
-      websocketReconnect.center().open();
-      $("#websocketReconnectButtonYes").on('click', function() {
-        websocketConnect();
-        websocketReconnect.close();
-      });
-      $("#websocketReconnectButtonNo").on('click', function() {
-        websocketReconnect.close();
-      });
+      closeWebsocket('Filesystem_changes');
     };
 
     filesystem_changes_ws.onmessage = function(msg) {
@@ -2753,20 +2938,13 @@ $(function() {
       }
     };
 
+    // Squeue websocket that shows us which SLURM processes are running
     var squeue_ws = new WebSocket('wss://'+location.host+'/squeue_ws');
     squeue_ws.onopen = function() {
-      popup.show('Squeue websocket opened.','info');
+      console.log('Squeue websocket opened.');
     };
     squeue_ws.onclose = function() {
-      popup.show('Squeue websocket closed.','info');
-      websocketReconnect.center().open();
-      $("#websocketReconnectButtonYes").on('click', function() {
-        websocketConnect();
-        websocketReconnect.close();
-      });
-      $("#websocketReconnectButtonNo").on('click', function() {
-        websocketReconnect.close();
-      });
+      closeWebsocket('Squeue');
     };
 
     squeue_ws.onmessage = function(msg) {
@@ -2774,7 +2952,7 @@ $(function() {
       if(res.length >= 1) {
         $('#current_queue > tbody').html('');
         $.each(res,function(i,v) {
-          var htmlInsert = '<tr><td>'+v.JOBID+'</td><td>'+v.USER+'</td><td>'+v.STATE+'</td><td>'+v.TIME+'</td><td>'+v.NODES+'</td></tr>';
+          var htmlInsert = '<tr><td>'+v.JOBID+'</td><td>'+v.USER+'</td><td>'+v.STATE+'</td><td>'+v.TIME+'</td><td>'+v.NODES+'</td><td>'+v.NODELIST_STRING+'</td></tr>';
           $('#current_queue > tbody').append(htmlInsert);
 
           if(localStorage.getItem('current_pid') !== null &&
@@ -2789,6 +2967,119 @@ $(function() {
     };
   }
 
+  // A function to create a new container for the node statistics including a popup to show node details, a sparkline chart each for
+  // CPU and memory utilization, as well as a colored background color that reflects the status of the node
+  function createNodeStatsContainer(nodeDetails) {
+    var nodeState = 'idle';
+    if(nodeDetails.STATE.indexOf('idle#') > -1) { nodeState = 'bad'; }
+    else if(nodeDetails.STATE.indexOf('drain') > -1) { nodeState = 'bad'; }
+    else if(nodeDetails.STATE.indexOf('alloc') > -1) { nodeState = 'alloc'; }
+    
+    var newNode = '<div id="'+nodeDetails.NODELIST+'" class="flex-child node-'+nodeState+'"><div class="sparkline-container"><span id="'+nodeDetails.NODELIST+'-cpu" class="flex-child-sparkline"></span></div><div class="sparkline-container"><span id="'+nodeDetails.NODELIST+'-mem" class="flex-child-sparkline"></span></div><div class="node-name"><p id="'+nodeDetails.NODELIST+'-p">'+nodeDetails.NODELIST+'<br/>'+nodeDetails.STATE+'</p></div></div>';
+    
+    $('#nodeStatsContainer').append(newNode);
+    
+    $('#'+nodeDetails.NODELIST+'-cpu').kendoSparkline({
+      series: [{
+        type: "area",
+        color: "rgb(0, 86, 150)",
+        data: [ nodeDetails.CPU_LOAD ]}
+      ],
+      tooltip: {
+        format: "CPU: {0:d2} %"
+      },
+      valueAxis: {
+        min: 0,
+        max: 100
+      },
+      chartArea: {
+        background: ''
+      }
+    });
+    
+    var memUsed = (nodeDetails.FREE_MEM / nodeDetails.MEMORY) * 100;
+    
+    $('#'+nodeDetails.NODELIST+'-mem').kendoSparkline({
+      series: [{
+        type: "area",
+        color: "rgb(0, 86, 150)",
+        data: [ memUsed ]}
+      ],
+      tooltip: {
+        format: "MEM: {0:d2} %"
+      },
+      valueAxis: {
+        min: 0,
+        max: 100
+      },
+      chartArea: {
+        background: ''
+      }
+    });
+    
+    // Hack the sparkline tooltip location
+    sparklineTooltipTop(nodeDetails.NODELIST+'-mem');
+    sparklineTooltipTop(nodeDetails.NODELIST+'-cpu');
+  }
+  
+  function updateNodeStatsContainer(nodeDetails) {
+    var nodeState = 'idle';
+    if(nodeDetails.STATE.indexOf('idle#') > -1) { nodeState = 'bad'; }
+    else if(nodeDetails.STATE.indexOf('drain') > -1) { nodeState = 'bad'; }
+    else if(nodeDetails.STATE.indexOf('alloc') > -1) { nodeState = 'alloc'; }
+    
+    if(!$('#'+nodeDetails.NODELIST).hasClass('node-'+nodeState)) {
+      $('#'+nodeDetails.NODELIST).removeClass().addClass('flex-child node-'+nodeState);
+    }
+    
+    var ptext = $('#'+nodeDetails.NODELIST+'-p').text();
+    if(nodeDetails.NODELIST+nodeDetails.STATE !== ptext) {
+      $('#'+nodeDetails.NODELIST+'-p').html(nodeDetails.NODELIST+'<br />'+nodeDetails.STATE);
+    }
+    
+    var slcpu = $('#'+nodeDetails.NODELIST+'-cpu').data('kendoSparkline');
+    var slmem = $('#'+nodeDetails.NODELIST+'-mem').data('kendoSparkline');
+    
+    slcpu.options.series[0].data.push(nodeDetails.CPU_LOAD);
+    if(slcpu.options.series[0].data.length > 50) {
+      slcpu.options.series[0].data.shift();
+    }
+    
+    var memUsed = (nodeDetails.FREE_MEM / nodeDetails.MEMORY) * 100;
+    slmem.options.series[0].data.push(memUsed);
+    if(slmem.options.series[0].data.length > 50) {
+      slmem.options.series[0].data.shift();
+    }
+    
+    slcpu.refresh();
+    slmem.refresh();
+  }
+  
+  function sparklineTooltipTop(element) {
+    var height = $('#'+element).height();
+    var s = $('#'+element).data('kendoSparkline');
+    s._tooltip._slotAnchor = function(point, slot) {
+        var result = kendo.dataviz.SharedTooltip.fn._slotAnchor.call(this, point, slot);
+        return {
+            x: result.x,
+            y: result.y + (height * 2)
+        };
+    };
+  }
+  
+  // Avoiding duplication of code for closed websockets
+  function closeWebsocket(socket) {
+    popup.show(socket+' websocket closed.','info');
+      websocketReconnect.center().open();
+      $("#websocketReconnectButtonYes").on('click', function() {
+        websocketConnect();
+        websocketReconnect.close();
+      });
+      $("#websocketReconnectButtonNo").on('click', function() {
+        websocketReconnect.close();
+      });
+  }
+  
   // Function to show/hide a progress bar
   function progressBar(element,show) {
     if(show === true) {

@@ -15,29 +15,39 @@ body {
   height: 100%;
 }
 
-#navigation {
+#navigation_wrapper {
   position: fixed;
   top: 0;
+  margin: 0;
+  padding: 0;
   left: -500px;
+  width: 532px;
+  height: 100%;
+  min-height: 100%;
+  transition: left 1s;
+}
+
+#navigation {
+  position: absolute;
   width: 500px;
   min-height: 100%;
+  height: 100%;
   margin: 0;
   padding: 0;
   background-color: #005696;
-  transition: left 1s;
 }
 
 #menu_container {
   width: 100%;
   padding: 0;
   margin: 0;
-  max-height: 80vh;
+  max-height: 85vh;
   overflow-y: scroll;
 }
 
 #content_area {
   position: fixed;
-  left: 0;
+  left: 32px;
   width: 100%;
   height: 100%;
   margin: 0;
@@ -52,7 +62,7 @@ body {
   display: block;
   position: absolute;
   overflow: hidden;
-  left: 0;
+  right: 0;
   margin: 0;
   padding: 0;
   width: 32px;
@@ -191,10 +201,10 @@ body {
 
 /* Footer with Cray logo at bottom of slide out menu */
 #cray_logo {
-  width: 350px;
+  width: 120px;
   height: auto;
   display: block;
-  margin-left: auto;
+  margin-left: 10px;
   margin-right: auto;
   margin-top: 0;
   margin-bottom: -5px;
@@ -204,12 +214,13 @@ body {
   position: absolute;
   bottom: 0;
   width: 500px;
-  height: 120px;
-  margin: 0;
+  height: 100px;
+  margin: 0 10px 0 0;
   padding: 0;
   color: rgba(255,255,255,0.5);
   font-weight: bold;
   font-size: 10px;
+  text-align: left;
 }
 
 #logo_copyright a {
@@ -242,7 +253,9 @@ body {
 }
 
 #current_db {
-  width: 100%;
+  table-layout: fixed;
+  width: calc(100% - 20px);
+  margin: 10px;
 }
 
 #current_db td {
@@ -254,42 +267,53 @@ body {
   margin: 0;
 }
 
-#current_db tr:nth-child(1) {
-  width: 90%;
+.current_db_first {
+  width: 70%;
 }
 
-#current_db tr:nth-child(2) {
-  width: 5%;
+.current_db_middle {
+  width: 15%;
 }
 
-#current_db tr:nth-child(3) {
-  width: 5%;
+.current_db_last {
+  width: 15%;
 }
 
 #query_table {
   width: 100%;
   table-layout: fixed;
+  border-collapse: collapse;
 }
 
 #query_table td {
   width: 25%;
+  padding: 0;
+  margin: 0;
+}
+
+#query_table tr {
+  padding: 0;
+  margin: 0;
 }
 
 #query_table .k-combobox {
   width: 100%;
-  margin: 0;
+  margin-bottom: 5px;
 }
 
 #query_table .k-button {
   width: 100%;
-  margin: 0;
+  margin-bottom: 5px;
   font-size: 0.8em;
 }
 
+
+
 #query_progress {
   position: relative;
-  width: 100%;
+  width: calc(100% - 10px);
   z-index: 5;
+  margin: 0 5px 0 5px;
 }
 
 #current_db thead {
@@ -298,10 +322,21 @@ body {
   text-align: left;
 }
 
+#current_queue {
+  table-layout: fixed;
+  margin: 10px;
+  width: calc(100% - 20px);
+  min-height: 60px;
+}
+
 #current_queue thead {
   font-size: 1em;
   font-weight: bold;
   text-align: left;
+}
+
+#current_queue tbody {
+  font-size: 0.8em;
 }
 
 .widecombobox, .widecombobox .k-widget.k-combobox {
@@ -319,6 +354,12 @@ body {
 
 #CNCnumericSubmit {
   width: 9vw;
+}
+
+#db_config {
+  table-layout: fixed;
+  margin: 10px 10px 0 10px;
+  width: calc(100% - 20px);
 }
 
 #db_config .k-widget, #db_config .k-button {
@@ -352,13 +393,6 @@ span.k-in > span.highlight {
 #alterNodesContainer .k-button {
   font-size: 0.8em;
 }
-
-/*#alterNodesContainer .k-combobox,
-#alterNodesContainer .k-textbox {
-  width: 100%;
-}*/
-
-
 
 #alterNodesContainer table {
 	width: 100%;
@@ -496,7 +530,7 @@ span.k-in > span.highlight {
 }
 
 #querySubmitButton {
-  width: calc(100% - 2px);
+  width: 100%;
   margin-top: 5px;
 }
 
@@ -506,7 +540,6 @@ span.k-in > span.highlight {
 
 #clearHistory {
 	float: right;
-	margin-right: 12px;
 }
 
 .graphHistograms {
@@ -562,12 +595,12 @@ div.k-loading-mask {
 #viz {
   width: 100%;
   height: 100%;
-	margin: 30px 30px 0 30px;
+	margin: 30px 30px 0 0;
 	padding: 0;
 }
 
 #viz_main {
-	width: calc(100% - 60px);
+	width: calc(100% - 30px);
 	height: calc(100% - 30px);
 }
 
@@ -625,4 +658,75 @@ div.k-loading-mask {
 
 #saveQ {
   width: 100%;
+}
+
+/*
+ * Going to use CSS3 flexbox to create a grid of DIV's each showing node state and other information
+ * First, define some colors for node state
+*/
+.node-idle {
+  background-color: rgba(200, 230, 201, 1);
+  border-color: rgba(95, 182, 98, 1);
+  transition: all linear 0.5s;
+}
+
+.node-alloc {
+  background-color: rgba(187, 222, 251, 1);
+  border-color: rgba(43, 152, 243, 1);
+  transition: all linear 0.5s;
+}
+
+.node-drain {
+  background-color: rgba(253, 239, 186, 1);
+  border-color: rgba(250, 205, 37, 1);
+  transition: all linear 0.5s;
+}
+
+.node-bad {
+  background-color: rgba(255, 205, 210, 1);
+  border-color: rgba(255, 52, 72, 1);
+  transition: all linear 0.5s;
+}
+
+/* Now the flexbox stuff */
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  width: calc(100% - 10px);
+}
+
+.flex-child {
+  width: 74px;
+  height: 74px;
+  margin: 2px;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.sparkline-container {
+  width: calc(100% - 2px);
+  max-width: calc(100% - 2px);
+  height: 20px;
+}
+
+.flex-child-sparkline {
+  width: 100%;
+  max-width: 72px;
+}
+
+.node-name {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.node-name p {
+  text-align: center;
+  font-size: 0.8em;
 }

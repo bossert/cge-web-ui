@@ -147,6 +147,7 @@ sub sinfo {
     my %output = (
       sinfo  => [],
       system => {
+        idle_nodes           => 0,
         nodes                => 0,
         min_memory_per_node  => 0,
         cores_per_node       => undef
@@ -175,7 +176,8 @@ sub sinfo {
         $counter++;
       }
       #=+ increment the number of nodes available "now"
-      $output{system}->{nodes}++ if $temp{STATE} =~ /idle\~|idle$/;
+      $output{system}->{nodes}++;
+      $output{system}->{idle_nodes}++ if $temp{STATE} =~ /^idle/;
       $output{system}->{min_memory_per_node} = $temp{FREE_MEM} if ($output{system}->{min_memory_per_node} == 0 || $output{system}->{min_memory_per_node} > $temp{FREE_MEM});
       $output{system}->{cores_per_node} = $temp{CPUS};
       push @{$output{sinfo}}, \%temp;

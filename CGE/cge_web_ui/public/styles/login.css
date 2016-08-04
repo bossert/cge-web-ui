@@ -26,8 +26,8 @@ body {
 
 #login_panel {
   position: absolute;
-  width: 400px;
-  height: 200px;
+  width: 350px;
+  height: 265px;
   top: 50%;
   left: 50%;
   margin-right: -50%;
@@ -39,23 +39,14 @@ body {
   box-shadow: 1px 1px 15px rgba(0,0,0,0.5);
 }
 
-#form_title {
-  text-align: center;
-  font-size: 16px;
-  color: #005696;
-  margin-top: 1px;
-  margin-bottom: 32px;
-  font-weight: 100;
-}
-
 #cray_logo {
   width: 300px;
   height: auto;
   display: block;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 20px;
-  margin-bottom: 1px;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 #form_user {

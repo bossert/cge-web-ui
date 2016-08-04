@@ -35,7 +35,9 @@ sub cge_select {
     stream           => 'application/sparql-results+json',  #=+ See below END block for valid options
     'trust-keys'     => 1                                   #=+ binary
   );
-
+  
+  my $qtype = $arg_ref->{'qtype'};
+  
   #=+ iterate over provided config and replace defaults
   while(my($k,$v) = each %$arg_ref) {
     #=+ Replace each default value if the key exists.  Perhaps paranoid, but prevent arbitrary/unexpected settings
@@ -85,24 +87,32 @@ sub cge_select {
   my $arg_string = join('',@args).' '.$partial_string;
 
   $arg_ref->{current_database} .= '/' unless $arg_ref->{current_database} =~ /\/$/;
-  say Dumper($arg_ref);
+  
   open(my $TF,'>',$arg_ref->{current_database}.'.cge_web_ui/temp/query.rq');
   print {$TF} $arg_ref->{query};
   close($TF);
 
-  say $cge_cli.' query '.$arg_string.' '.$arg_ref->{current_database}.'.cge_web_ui/temp/query.rq';
   my($success,$error_message,$full_buf,$stdout_buf,$stderr_buf) = run(command => $cge_cli.' query '.$arg_string.' '.$arg_ref->{current_database}.'.cge_web_ui/temp/query.rq' , verbose => 1);
   if($success) {
     unlink $arg_ref->{current_database}.'.cge_web_ui/temp/query.rq';
+    
     my $json_response = join('',@$stdout_buf);
     my $json = decode_json($json_response);
-    my %results = ('qtype' => 'select',
+    my %results = ('qtype' => $qtype,
                    'results' => $json);
-    return \%results;
+    return (1,\%results);
   }
   else {
     unlink $arg_ref->{current_database}.'.cge_web_ui/temp/query.rq';
-    return undef;
+    
+    my $error = '';
+    foreach my $line(@$stderr_buf) {
+      $error .= $line unless $line =~ /^\d+ \[main\]|^com\.|^\s+at com\.|^\s*$/;
+    }
+    chomp $error;
+    
+    $error =~ s/\x1b.*?[mGKH]//g;
+    return (0,$error);
   }
 }
 
@@ -121,6 +131,8 @@ sub cge_construct {
     'trust-keys'     => 1                                   #=+ binary
   );
 
+  my $qtype = $arg_ref->{'qtype'};
+  
   #=+ iterate over provided config and replace defaults
   while(my($k,$v) = each %$arg_ref) {
     #=+ Replace each default value if the key exists.  Perhaps paranoid, but prevent arbitrary/unexpected settings
@@ -337,14 +349,21 @@ sub cge_construct {
       push @nodesArray, $tempV;
     }
 
-    $results{'qtype'} = 'construct';
+    $results{'qtype'} = $qtype;
     $results{'elements'}->{'nodes'} = \@nodesArray;
     $results{'elements'}->{'edges'} = \@edges;
-    return \%results;
+    return (1,\%results);
   }
   else {
     unlink $arg_ref->{current_database}.'.cge_web_ui/temp/query.rq';
-    return undef;
+    
+    my $error = '';
+    foreach my $line(@$stderr_buf) {
+      $error .= $line unless $line =~ /^\d+ \[main\]|^com\.|^\s+at com\.|^\s*$/;
+    }
+    
+    $error =~ s/\x1b.*?[mGKH]//g;
+    return (0,$error);
   }
 }
 
@@ -362,7 +381,6 @@ sub cge_insert {
     'opt-enable'     => undef,                              #=+ must be passed as CSV
     'path-expansion' => undef,
     trace            => 0,                                  #=+ binary
-    stream           => 'application/sparql-results+json',  #=+ See below END block for valid options
     'trust-keys'     => 1                                   #=+ binary
   );
 
@@ -426,140 +444,14 @@ sub cge_insert {
   }
   else {
     unlink $arg_ref->{current_database}.'.cge_web_ui/temp/update.ru';
-    return undef;
-  }
-}
-
-sub cge_ask {
-  my ($arg_ref) = @_;
-  my %arguments = (
-    dbhost           => undef,
-    dbport           => 3750,
-    identity         => undef,
-    nvp              => undef,                              #=+ must be passed as CSV
-    'opt-disable'    => undef,                              #=+ must be passed as CSV
-    'opt-enable'     => undef,                              #=+ must be passed as CSV
-    'path-expansion' => undef,
-    trace            => 0,                                  #=+ binary
-    stream           => 'application/sparql-results+json',  #=+ See below END block for valid options
-    'trust-keys'     => 1                                   #=+ binary
-  );
-
-  #=+ iterate over provided config and replace defaults
-  while(my($k,$v) = each %$arg_ref) {
-    #=+ Replace each default value if the key exists.  Perhaps paranoid, but prevent arbitrary/unexpected settings
-    $arguments{$k} = $v if (exists $arguments{$k} && $v ne '' && defined $v);
-  }
-
-  #=+ Get rid of any binary arguments that are not wanted (e.g. a zero)
-  foreach my $binary('path-expansion','trace','trust-keys') {
-    if($arguments{$binary} == 1) {
-      $arguments{$binary} = '';
+    
+    my $error = '';
+    foreach my $line(@$stderr_buf) {
+      $error .= $line unless $line =~ /^\d+ \[main\]|^com\.|^\s+at com\.|^\s*$/;
     }
-    else {
-      $arguments{$binary} = undef;
-    }
+    $error =~ s/\x1b.*?[mGKH]//g;
+    return (0,$error);
   }
-
-  #=+ Iterate over values that need to be split into repeating list of the same command-line switch
-  my $partial_string = '';
-  foreach my $rep('opt-disable','opt-enable') {
-    next unless (exists $arguments{$rep} && defined $arguments{$rep});
-    my @reps;
-    my @inners = split(/,/,$arguments{$rep});
-    foreach my $inner(@inners) {
-      push @reps, '--'.$rep.' '.$inner.' ';
-    }
-    $partial_string .= join('',@reps);
-    delete $arguments{$rep};
-  }
-
-  #=+ Now for NVP's, same process but the string is a bit different since these are key/value pairs
-  if(exists $arguments{nvp} and defined $arguments{nvp}) {
-    my @reps;
-    my @inners = split(/,/,$arguments{nvp});
-    foreach my $inner(@inners) {
-      my($k,$v) = split(/\=/,$inner);
-      push @reps, '--nvp '.$k.' '.$v.' ';
-    }
-    $partial_string .= join('',@reps);
-    delete $arguments{nvp};
-  }
-
-  #=+ Concatenate all the non-blank command line arguments
-  my @args;
-  while(my($k,$v) = each %arguments) {
-    push @args, '--'.$k.' '.$v.' ' if defined $v;
-  }
-  my $arg_string = join('',@args).' '.$partial_string;
-
-
-}
-
-sub cge_describe {
-  my ($arg_ref) = @_;
-  my %arguments = (
-    dbhost           => undef,
-    dbport           => 3750,
-    identity         => undef,
-    nvp              => undef,                              #=+ must be passed as CSV
-    'opt-disable'    => undef,                              #=+ must be passed as CSV
-    'opt-enable'     => undef,                              #=+ must be passed as CSV
-    'path-expansion' => undef,
-    trace            => 0,                                  #=+ binary
-    stream           => 'application/sparql-results+json',  #=+ See below END block for valid options
-    'trust-keys'     => 1                                   #=+ binary
-  );
-
-  #=+ iterate over provided config and replace defaults
-  while(my($k,$v) = each %$arg_ref) {
-    #=+ Replace each default value if the key exists.  Perhaps paranoid, but prevent arbitrary/unexpected settings
-    $arguments{$k} = $v if (exists $arguments{$k} && $v ne '' && defined $v);
-  }
-
-  #=+ Get rid of any binary arguments that are not wanted (e.g. a zero)
-  foreach my $binary('path-expansion','trace','trust-keys') {
-    if($arguments{$binary} == 1) {
-      $arguments{$binary} = '';
-    }
-    else {
-      $arguments{$binary} = undef;
-    }
-  }
-
-  #=+ Iterate over values that need to be split into repeating list of the same command-line switch
-  my $partial_string = '';
-  foreach my $rep('opt-disable','opt-enable') {
-    next unless (exists $arguments{$rep} && defined $arguments{$rep});
-    my @reps;
-    my @inners = split(/,/,$arguments{$rep});
-    foreach my $inner(@inners) {
-      push @reps, '--'.$rep.' '.$inner.' ';
-    }
-    $partial_string .= join('',@reps);
-    delete $arguments{$rep};
-  }
-
-  #=+ Now for NVP's, same process but the string is a bit different since these are key/value pairs
-  if(exists $arguments{nvp} and defined $arguments{nvp}) {
-    my @reps;
-    my @inners = split(/,/,$arguments{nvp});
-    foreach my $inner(@inners) {
-      my($k,$v) = split(/\=/,$inner);
-      push @reps, '--nvp '.$k.' '.$v.' ';
-    }
-    $partial_string .= join('',@reps);
-    delete $arguments{nvp};
-  }
-
-  #=+ Concatenate all the non-blank command line arguments
-  my @args;
-  while(my($k,$v) = each %arguments) {
-    push @args, '--'.$k.' '.$v.' ' if defined $v;
-  }
-  my $arg_string = join('',@args).' '.$partial_string;
-
-
 }
 
 1;

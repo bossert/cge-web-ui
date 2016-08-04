@@ -16,8 +16,7 @@
   <body>
     <div id='particle_background'>
       <div id='login_panel'>
-        <img id='cray_logo' alt="Cray logo" src="images/Cray_logo.svg" />
-        <h1 id='form_title'>Graph Engine (CGE)<sup>&reg;</sup></h1>
+        <img id='cray_logo' alt="Cray logo" src="images/CRAY-GRAPH-ENGINE-LOGO-01.svg" />
         <form id='form_login' method='post'>
           <input id='form_user' name='user' class='k-textbox' type='text' placeholder='Username' required autofocus="autofocus">
           <input id='form_pass' name='pass' class='k-textbox' type='password' placeholder='Password' required >

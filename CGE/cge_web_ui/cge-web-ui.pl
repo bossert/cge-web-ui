@@ -170,7 +170,8 @@ post '/bonafides' => sub {
   my $creds = $self->req->body_params->to_hash;
 
   #=+ Weed out anyone on the blacklist
-  if (exists $blacklist{$creds->{'user'}}) {
+  if (exists $blacklist{$creds->{'user'}} ||
+      exists $blacklist{$self->tx->remote_address}) {
     $self->session(expires => 1);
     $self->render(text => 'User has been blocked due to excessive failed login attempts, try again in an hour or so!', status => 403);
   }
@@ -194,6 +195,7 @@ post '/bonafides' => sub {
     else {
       $self->session(expires => 1);
       $blacklist{$creds->{'user'}} = time;
+      $blacklist{$self->tx->remote_address} = time;
       $self->rendered(401);
     }
   }
@@ -253,7 +255,7 @@ group {
   get '/list_databases' => sub {
     my $self = shift;
     my $qparams=$self->req->query_params->to_hash;
-    my $root;
+    my $root = $config->config->{'database_directory'};
     if(exists $qparams->{search_root}) {
       $root = $qparams->{search_root};
     }
@@ -266,7 +268,7 @@ group {
   get '/list_NT_files' => sub {
     my $self = shift;
     my $qparams=$self->req->query_params->to_hash;
-    my $root;
+    my $root = $config->config->{'file_directory'};
     if(exists $qparams->{search_root}) {
       $root = $qparams->{search_root};
     }
@@ -295,10 +297,9 @@ group {
     $self->stash('gzip' => 1);
 
     #=+ Set retrieve interval for the loop
-    my $interval = 10;
+    my $interval = 5;
 
     my $id = Mojo::IOLoop->recurring($interval => sub {
-
       my $sinfo = sinfo();
       my $sinfo_json = encode_json($sinfo);
       $self->send($sinfo_json);
@@ -315,10 +316,9 @@ group {
     $self->stash('gzip' => 1);
 
     #=+ Set retrieve interval for the loop
-    my $interval = 10;
+    my $interval = 5;
 
     my $id = Mojo::IOLoop->recurring($interval => sub {
-
       my $queue = squeue();
       my $queue_json = encode_json($queue);
       $self->send($queue_json);
@@ -338,8 +338,11 @@ group {
     my $old_databases = '';
     my $interval = 10;
     my $id = Mojo::IOLoop->recurring($interval => sub {
-      my $nt_files = _list_NT_files(undef,$self->session('username'));
-      my $databases = _list_databases(undef,$self->session('username'));
+      
+      my $root_file = $config->config->{'file_directory'};
+      my $root_directory = $config->config->{'database_directory'};
+      my $nt_files = _list_NT_files($root_file,$self->session('username'));
+      my $databases = _list_databases($root_directory,$self->session('username'));
 
       if(eq_deeply($nt_files,$old_nt_files)) {
         $old_nt_files = $nt_files;
@@ -487,7 +490,6 @@ group {
     my $json = decode_json($p->{models});
     say Dumper($p);
     my $qparams = $json->[0];
-    say Dumper($qparams);
     if($self->session('username') eq (getpwuid($<))[0]) {
       $qparams->{database} .= '/' unless $qparams->{database} =~ /\/$/;
       my %newuser = (
@@ -567,19 +569,167 @@ group {
     }
   };
 
+  websocket 'sparqlQueryWs' => sub {
+    my $ws = shift;
+    
+    $ws->on(message => sub {
+      my ($self,$msg) = @_;
+      my $qparams = decode_json($msg);
+      say Dumper($msg);
+      say Dumper($qparams);
+      
+      if($qparams->{qtype} eq 'select' ) {
+        my ($success,$results_ref) = cge_select($qparams);
+    
+        if($success == 1) {
+          $self->send(encode_json($results_ref));
+        }
+        else {
+          $self->send(json => [{ status => 500, error_code => $results_ref }]);
+        }
+      }
+      elsif($qparams->{qtype} eq 'ask' ) {
+        my ($success,$results_ref) = cge_select($qparams);
+    
+        if($success == 1) {
+          $self->send(encode_json($results_ref));
+        }
+        else {
+          $self->send(json => [{ status => 500, error_code => $results_ref }]);
+        }
+      }
+      elsif($qparams->{qtype} eq 'construct' ) {
+        my ($success,$results_ref) = cge_construct($qparams);
+        if($success == 1) {
+          $self->send(encode_json($results_ref));
+        }
+        else {
+          $self->send(json => [{ status => 500, error_code => $results_ref }]);
+        }
+      }
+      elsif($qparams->{qtype} eq 'describe' ) {
+        my ($success,$results_ref) = cge_construct($qparams);
+        if($success == 1) {
+          $self->send(encode_json($results_ref));
+        }
+        else {
+          $self->send(json => [{ status => 500, error_code => $results_ref }]);
+        }
+      }
+      else {
+        $log->error('invalid query type: '.$qparams->{qtype});
+      }
+    });
+    
+    $ws->on(finish => sub {
+    my ($self, $code, $reason) = @_;
+      $log->info('sparqlSelectWs closed with status code: '.$code);
+    });
+  };
+  
+  websocket 'sparqlInsertWs' => sub {
+    my $ws = shift;
+    
+    $ws->on(message => sub {
+      my ($self,$msg) = @_;
+      my $qparams = decode_json($msg);
+      
+      if($self->session('username') eq (getpwuid($<))[0]) {
+        #=+ Need to toss in the database directory
+        $qparams->{current_database} = $self->session('current_database');
+  
+        my ($success,$results_ref) = cge_insert($qparams);
+        if($success == 1) {
+          $self->send(encode_json($results_ref));
+        }
+        else {
+          $self->send(json => [{ status => 500, error_code => $results_ref }]);
+        }
+      }
+      else {
+        $log->error('[sparqlInsert] user '.$self->session('username').' was prevented from altering a database.  Only the the user who launched the web-application may alter databases.');
+        $self->render(text => 'Unauthorized:  Only the the user who launched the web-application may alter a database.', status => 403);
+      }
+    });
+    
+    $ws->on(finish => sub {
+    my ($self, $code, $reason) = @_;
+      $log->info('sparqlSelectWs closed with status code: '.$code);
+    });
+  };
+  
+  websocket 'dbStartStopWs' => sub {
+    my $ws = shift;
+    
+    $ws->on(message => sub {
+      my ($self,$msg) = @_;
+      say Dumper($msg);
+      my $qparams = decode_json($msg);
+      
+      if($qparams->{action} eq 'start') {
+        if(exists $qparams->{dataDir} && exists $qparams->{imagesPerNode} && exists $qparams->{nodeCount}) {
+          #=+ If we have a startup timeout, go ahead and adjust the session timeout accordingly
+          if(exists $qparams->{startupTimeout} && $qparams->{startupTimeout} ne '') {
+            Mojo::IOLoop->stream($self->tx->connection)->timeout($qparams->{startupTimeout});
+          }
+    
+          my($pid,$port) = cge_start($qparams);
+          if($pid && $port) {
+            $self->session(current_pid => $pid, current_port => $port, current_database => $qparams->{dataDir});
+            $self->send(encode_json({ pid => $pid, port => $port, success => 'started' }));
+          }
+          else {
+            $log->error('[start_db] Failed to start database.');
+            $self->send(encode_json({ error_code => 'Failed to start database', status => 500 }));
+          }
+        }
+        else {
+          $log->error('[start_db] Missing required parameters to build database.');
+          $self->send(encode_json({ error_code => 'Missing required parameters to build database.', status => 500 }));
+        }
+      }
+      elsif($qparams->{action} eq 'stop') {
+        my ($current_database,$current_port);
+        if($qparams->{current_database} && $qparams->{current_port}) {
+          $self->session(current_database => $qparams->{current_database},current_port => $qparams->{current_port});
+        }
+    
+        if($self->session('current_database') && $self->session('current_port')) {
+          my $success = cge_stop_graceful($self->session('current_port'),$self->session('current_database'));
+          if($success) {
+            $self->send(encode_json({ success => 'stopped' }));
+          }
+          else {
+            $log->error('[stop_db] Failed to stop database: '.$self->session('current_database'));
+            $self->send(encode_json({ error_code => 'Failed to stop database', status => 500 }));
+          }
+        }
+        else {
+          $log->error('[stop_db] Failed to stop database');
+          $self->send(encode_json({ error_code => 'Failed to stop database', status => 500 }));
+        }
+      }
+    });
+    
+    $ws->on(finish => sub {
+    my ($self, $code, $reason) = @_;
+      $log->info('sparqlSelectWs closed with status code: '.$code);
+    });
+  };
+  
   post 'sparqlSelect' => sub {
     my $self = shift;
     Mojo::IOLoop->stream($self->tx->connection)->timeout(3000);
     my $qparams = $self->req->body_params->to_hash;
     $self->stash('gzip' => 1);
 
-    my $results_ref = cge_select($qparams);
-    say Dumper($results_ref);
-    if(defined $results_ref) {
+    my ($success,$results_ref) = cge_select($qparams);
+    
+    if($success == 1) {
       $self->render(json => $results_ref);
     }
     else {
-      $self->render(text => 'A query error occurred, please check the logs.', status => 500);
+      $self->render(text => $results_ref, status => 500);
     }
   };
 
@@ -589,12 +739,12 @@ group {
     my $qparams = $self->req->body_params->to_hash;
     $self->stash('gzip' => 1);
 
-    my $results_ref = cge_construct($qparams);
-    if(defined $results_ref) {
+    my ($success,$results_ref) = cge_construct($qparams);
+    if($success == 1) {
       $self->render(json => $results_ref);
     }
     else {
-      $self->render(text => 'A query error occurred, please check the logs.', status => 500);
+      $self->render(text => $results_ref, status => 500);
     }
   };
 
@@ -608,12 +758,12 @@ group {
       #=+ Need to toss in the database directory
       $qparams->{current_database} = $self->session('current_database');
 
-      my $results_ref = cge_insert($qparams);
-      if(defined $results_ref) {
+      my ($success,$results_ref) = cge_insert($qparams);
+      if($success == 1) {
         $self->render(json => $results_ref);
       }
       else {
-        $self->render(text => 'A query error occurred, please check the logs.', status => 500);
+        $self->render(text => $results_ref, status => 500);
       }
     }
     else {
@@ -643,7 +793,7 @@ group {
   post 'saveQuery' => sub {
     my $self = shift;
     my $qparams = $self->req->body_params->to_hash;
-    say Dumper($qparams);
+    say Dumper($self);
     my $filename = $qparams->{'title'};
     my $shared = $qparams->{'general'};
     my $counter = 1;
@@ -678,7 +828,7 @@ group {
     else {
       $self->rendered(500);
     }
-};
+  };
 };
 
 #========================================#
@@ -940,7 +1090,7 @@ sub _list_NT_files {
 sub _list_databases {
   my($root,$current_user) = @_;
   $root = '/mnt/lustre' unless defined $root;
-
+  return if !defined $current_user;
   my @output;
   find(sub {
     if($File::Find::name =~ /dbQuads$/) {
