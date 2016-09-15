@@ -16,13 +16,14 @@ require Exporter;
 our $VERSION = 0.01;
 
 our @ISA = qw(Exporter);
-our @EXPORT_OK = qw(add_user modify_user sinfo squeue);
-our %EXPORT_TAGS = (ALL => [ qw(add_user modify_user sinfo squeue) ]);
+our @EXPORT_OK = qw(add_user modify_user sinfo squeue checkPid);
+our %EXPORT_TAGS = (ALL => [ qw(add_user modify_user sinfo squeue checkPid) ]);
 
 #=+ Need to be able to run ssh-keygen
 my $ssh_keygen = can_run('ssh-keygen');
 my $sinfo = can_run('sinfo');
 my $squeue = can_run('squeue');
+my $mrun = can_run('mrun');
 
 sub add_user {
   my($config_ref) = @_;
@@ -119,7 +120,7 @@ sub modify_user {
       $new_string .= $line unless $line =~ /\Q$changes{username}\E/;
     }
     close($FH);
-    open(my $FH,'>',$changes{database}.'authorized_keys');
+    open($FH,'>',$changes{database}.'authorized_keys');
     say {$FH} $new_string;
     close($FH);
 
@@ -183,6 +184,25 @@ sub sinfo {
       push @{$output{sinfo}}, \%temp;
     }
     return \%output;
+  }
+  else {
+    return undef;
+  }
+}
+
+sub checkPid {
+  my ($pid) = @_;
+  my ($success,$error_message,$full_buf,$stdout_buf,$stderr_buf) = run(command => $mrun.' --info', verbose => 0);
+  if($success) {
+    #=+ Join the stdout buffer into one array and split on newlines so we have one line per element
+    my @stdout_array = split(/\n/,join('',@$stdout_buf));
+    
+    foreach my $line(@stdout_array) {
+      if($line =~ /$pid/) {
+        return $pid;
+      }
+    }
+    return undef;
   }
   else {
     return undef;

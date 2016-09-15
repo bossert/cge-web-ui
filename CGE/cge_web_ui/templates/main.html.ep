@@ -41,10 +41,10 @@
     <div id='navigation_wrapper'>
       <div id='navigation'>
         <div id='menu_container'>
-          <div id='system_status' class='ss_button'>System Status</div>
+          <!--<div id='system_status' class='ss_button'>System Status</div>
           <div class='ss_content widecombobox'>
             <div id='nodeStatsContainer' class='flex-container'></div>
-          </div>
+          </div>-->
           <div id='database_management' class='ss_button'>Database Management</div>
           <div class='ss_content widecombobox'>
             <table id='current_db' class='sysinfo_tables'>
@@ -63,13 +63,13 @@
                 <tr><td colspan="2"><input id='selectDB' name='selectDB' placeholder='Select Database' class='k-button'></td><td><input id="startDB" type="button" value="Start" class="k-button k-primary"></td></tr>
               </tbody>
             </table>
-            <table id='current_queue' class='sysinfo_tables'>
+            <!--<table id='current_queue' class='sysinfo_tables'>
               <thead>
                 <tr><td>Job ID</td><td>User</td><td>State</td><td>Time</td><td>Nodes</td><td>Node List</td></tr>
               </thead>
               <tbody>
               </tbody>
-            </table>
+            </table>-->
           </div>
           <div id='available_data' class='ss_button'>Available Data</div>
           <div class='ss_content'>

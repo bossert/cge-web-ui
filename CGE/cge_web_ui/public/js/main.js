@@ -88,30 +88,45 @@ $(function() {
      and the first menu item is exposed on page load */
   $('.c-hamburger').trigger('click');
   setTimeout(function() {
-    $('#system_status').next('.ss_content').slideDown();
+    $('#database_management').next('.ss_content').slideDown();
   },1000);
 
   // Need to check if there is a running DB that "this user started" in case the app was closed and reopened
-  $.get('squeue',function(res) {
-    $('#current_queue > tbody').html('');
-    if(res.length >= 1) {
-      $.each(res,function(i,v) {
-        var htmlInsert = '<tr><td>'+v.JOBID+'</td><td>'+v.USER+'</td><td>'+v.STATE+'</td><td>'+v.TIME+'</td><td>'+v.NODES+'</td></tr>';
-        $('#current_queue > tbody').append(htmlInsert);
+  //$.get('squeue',function(res) {
+  //  $('#current_queue > tbody').html('');
+  //  if(res.length >= 1) {
+  //    $.each(res,function(i,v) {
+  //      var htmlInsert = '<tr><td>'+v.JOBID+'</td><td>'+v.USER+'</td><td>'+v.STATE+'</td><td>'+v.TIME+'</td><td>'+v.NODES+'</td></tr>';
+  //      $('#current_queue > tbody').append(htmlInsert);
+  //
+  //      if(localStorage.getItem('current_pid') !== null &&
+  //         localStorage.getItem('current_pid') == v.JOBID) {
+  //        $('#db_status').text('RUNNING');
+  //        $('#startDB').prop('value','Stop');
+  //        $('#db_name').html(localStorage.getItem('current_database'));
+  //        $('#db_port').html(localStorage.getItem('current_port'));
+  //      }
+  //    });
+  //  }
+  //}).fail(function(xhr) {
+  //  popup.show("Failed to retrieve system queue information (" + xhr.status + " " + xhr.responseText + ")" ,"error");
+  //});
 
-        if(localStorage.getItem('current_pid') !== null &&
-           localStorage.getItem('current_pid') == v.JOBID) {
-          $('#db_status').text('RUNNING');
-          $('#startDB').prop('value','Stop');
-          $('#db_name').html(localStorage.getItem('current_database'));
-          $('#db_port').html(localStorage.getItem('current_port'));
-        }
-      });
-    }
-  }).fail(function(xhr) {
-    popup.show("Failed to retrieve system queue information (" + xhr.status + " " + xhr.responseText + ")" ,"error");
-  });
-
+  // Check to see if we had a previously running database in the case where a user may have manually reloaded the webpage
+  // for whatever reason and update the database management panel and set it's button to "RUNNING"
+  if(localStorage.getItem('current_pid') !== null) {
+    var pid = encodeURIComponent(localStorage.getItem('current_pid'));
+    
+    $.get('check_pid'+'?pid='+pid, function() {
+      $('#db_status').text('RUNNING');
+      $('#startDB').prop('value','Stop');
+      $('#db_name').html(localStorage.getItem('current_database'));
+      $('#db_port').html(localStorage.getItem('current_port'));
+    }).fail(function(xhr) {
+      console.log("No current running DB (" + xhr.status + " " + xhr.responseText + ")");
+    });
+  }
+  
   // N_triples file browser
   var filebrowserDS = new kendo.data.HierarchicalDataSource({
     transport: {
@@ -2803,33 +2818,6 @@ $(function() {
 
   function websocketConnect () {
     // Sinfo websocket that shows us system utilization such as CPU and memory utilization
-    var sinfo_ws = new WebSocket('wss://'+location.host+'/sinfo_ws');
-    sinfo_ws.onopen = function() {
-      console.log('sinfo websocket opened.');
-    };
-    sinfo_ws.onclose = function() {
-      closeWebsocket('Sinfo');
-    };
-    
-    sinfo_ws.onmessage = function(msg) {
-      var res = JSON.parse(msg.data);
-      
-      if(res.sinfo.length > 1) {
-        
-        // Sort the results based on node name
-        res.sinfo.sort(function(a,b) {return (Number(a.HOSTNAMES.match(/\d+$/)) > Number(b.HOSTNAMES.match(/\d+$/))) ? 1 : ((Number(b.HOSTNAMES.match(/\d+$/)) > Number(a.HOSTNAMES.match(/\d+$/))) ? -1 : 0);} );
-        
-        // Iterate over the results for the node stats
-        $.each(res.sinfo, function(i,obj) {
-          if(document.getElementById(obj.NODELIST) === null) {
-            createNodeStatsContainer(obj);
-          }
-          else {
-            updateNodeStatsContainer(obj);
-          }
-        });
-      }
-    };
     
     // Websocket for Select queries.  Doing this to help with long-running queries blocking the UI.  The websocket approach
     // seems preferable to using web-workers or some other hack while waiting for POST response that could last anywhere from
@@ -2939,121 +2927,121 @@ $(function() {
     };
 
     // Squeue websocket that shows us which SLURM processes are running
-    var squeue_ws = new WebSocket('wss://'+location.host+'/squeue_ws');
-    squeue_ws.onopen = function() {
-      console.log('Squeue websocket opened.');
-    };
-    squeue_ws.onclose = function() {
-      closeWebsocket('Squeue');
-    };
-
-    squeue_ws.onmessage = function(msg) {
-      var res = JSON.parse(msg.data);
-      if(res.length >= 1) {
-        $('#current_queue > tbody').html('');
-        $.each(res,function(i,v) {
-          var htmlInsert = '<tr><td>'+v.JOBID+'</td><td>'+v.USER+'</td><td>'+v.STATE+'</td><td>'+v.TIME+'</td><td>'+v.NODES+'</td><td>'+v.NODELIST_STRING+'</td></tr>';
-          $('#current_queue > tbody').append(htmlInsert);
-
-          if(localStorage.getItem('current_pid') !== null &&
-             localStorage.getItem('current_pid') == v.JOBID) {
-            $('#db_status').text('RUNNING');
-            $('#startDB').prop('value','Stop');
-            $('#db_name').html(localStorage.getItem('current_database'));
-            $('#db_port').html(localStorage.getItem('current_port'));
-          }
-        });
-      }
-    };
+    //var squeue_ws = new WebSocket('wss://'+location.host+'/squeue_ws');
+    //squeue_ws.onopen = function() {
+    //  console.log('Squeue websocket opened.');
+    //};
+    //squeue_ws.onclose = function() {
+    //  closeWebsocket('Squeue');
+    //};
+    //
+    //squeue_ws.onmessage = function(msg) {
+    //  var res = JSON.parse(msg.data);
+    //  if(res.length >= 1) {
+    //    $('#current_queue > tbody').html('');
+    //    $.each(res,function(i,v) {
+    //      var htmlInsert = '<tr><td>'+v.JOBID+'</td><td>'+v.USER+'</td><td>'+v.STATE+'</td><td>'+v.TIME+'</td><td>'+v.NODES+'</td><td>'+v.NODELIST_STRING+'</td></tr>';
+    //      $('#current_queue > tbody').append(htmlInsert);
+    //
+    //      if(localStorage.getItem('current_pid') !== null &&
+    //         localStorage.getItem('current_pid') == v.JOBID) {
+    //        $('#db_status').text('RUNNING');
+    //        $('#startDB').prop('value','Stop');
+    //        $('#db_name').html(localStorage.getItem('current_database'));
+    //        $('#db_port').html(localStorage.getItem('current_port'));
+    //      }
+    //    });
+    //  }
+    //};
   }
 
   // A function to create a new container for the node statistics including a popup to show node details, a sparkline chart each for
   // CPU and memory utilization, as well as a colored background color that reflects the status of the node
-  function createNodeStatsContainer(nodeDetails) {
-    var nodeState = 'idle';
-    if(nodeDetails.STATE.indexOf('idle#') > -1) { nodeState = 'bad'; }
-    else if(nodeDetails.STATE.indexOf('drain') > -1) { nodeState = 'bad'; }
-    else if(nodeDetails.STATE.indexOf('alloc') > -1) { nodeState = 'alloc'; }
-    
-    var newNode = '<div id="'+nodeDetails.NODELIST+'" class="flex-child node-'+nodeState+'"><div class="sparkline-container"><span id="'+nodeDetails.NODELIST+'-cpu" class="flex-child-sparkline"></span></div><div class="sparkline-container"><span id="'+nodeDetails.NODELIST+'-mem" class="flex-child-sparkline"></span></div><div class="node-name"><p id="'+nodeDetails.NODELIST+'-p">'+nodeDetails.NODELIST+'<br/>'+nodeDetails.STATE+'</p></div></div>';
-    
-    $('#nodeStatsContainer').append(newNode);
-    
-    $('#'+nodeDetails.NODELIST+'-cpu').kendoSparkline({
-      series: [{
-        type: "area",
-        color: "rgb(0, 86, 150)",
-        data: [ nodeDetails.CPU_LOAD ]}
-      ],
-      tooltip: {
-        format: "CPU: {0:d2} %"
-      },
-      valueAxis: {
-        min: 0,
-        max: 100
-      },
-      chartArea: {
-        background: ''
-      }
-    });
-    
-    var memUsed = (nodeDetails.FREE_MEM / nodeDetails.MEMORY) * 100;
-    
-    $('#'+nodeDetails.NODELIST+'-mem').kendoSparkline({
-      series: [{
-        type: "area",
-        color: "rgb(0, 86, 150)",
-        data: [ memUsed ]}
-      ],
-      tooltip: {
-        format: "MEM: {0:d2} %"
-      },
-      valueAxis: {
-        min: 0,
-        max: 100
-      },
-      chartArea: {
-        background: ''
-      }
-    });
-    
-    // Hack the sparkline tooltip location
-    sparklineTooltipTop(nodeDetails.NODELIST+'-mem');
-    sparklineTooltipTop(nodeDetails.NODELIST+'-cpu');
-  }
+  //function createNodeStatsContainer(nodeDetails) {
+  //  var nodeState = 'idle';
+  //  if(nodeDetails.STATE.indexOf('idle#') > -1) { nodeState = 'bad'; }
+  //  else if(nodeDetails.STATE.indexOf('drain') > -1) { nodeState = 'bad'; }
+  //  else if(nodeDetails.STATE.indexOf('alloc') > -1) { nodeState = 'alloc'; }
+  //  
+  //  var newNode = '<div id="'+nodeDetails.NODELIST+'" class="flex-child node-'+nodeState+'"><div class="sparkline-container"><span id="'+nodeDetails.NODELIST+'-cpu" class="flex-child-sparkline"></span></div><div class="sparkline-container"><span id="'+nodeDetails.NODELIST+'-mem" class="flex-child-sparkline"></span></div><div class="node-name"><p id="'+nodeDetails.NODELIST+'-p">'+nodeDetails.NODELIST+'<br/>'+nodeDetails.STATE+'</p></div></div>';
+  //  
+  //  $('#nodeStatsContainer').append(newNode);
+  //  
+  //  $('#'+nodeDetails.NODELIST+'-cpu').kendoSparkline({
+  //    series: [{
+  //      type: "area",
+  //      color: "rgb(0, 86, 150)",
+  //      data: [ nodeDetails.CPU_LOAD ]}
+  //    ],
+  //    tooltip: {
+  //      format: "CPU: {0:d2} %"
+  //    },
+  //    valueAxis: {
+  //      min: 0,
+  //      max: 100
+  //    },
+  //    chartArea: {
+  //      background: ''
+  //    }
+  //  });
+  //  
+  //  var memUsed = (nodeDetails.FREE_MEM / nodeDetails.MEMORY) * 100;
+  //  
+  //  $('#'+nodeDetails.NODELIST+'-mem').kendoSparkline({
+  //    series: [{
+  //      type: "area",
+  //      color: "rgb(0, 86, 150)",
+  //      data: [ memUsed ]}
+  //    ],
+  //    tooltip: {
+  //      format: "MEM: {0:d2} %"
+  //    },
+  //    valueAxis: {
+  //      min: 0,
+  //      max: 100
+  //    },
+  //    chartArea: {
+  //      background: ''
+  //    }
+  //  });
+  //  
+  //  // Hack the sparkline tooltip location
+  //  sparklineTooltipTop(nodeDetails.NODELIST+'-mem');
+  //  sparklineTooltipTop(nodeDetails.NODELIST+'-cpu');
+  //}
   
-  function updateNodeStatsContainer(nodeDetails) {
-    var nodeState = 'idle';
-    if(nodeDetails.STATE.indexOf('idle#') > -1) { nodeState = 'bad'; }
-    else if(nodeDetails.STATE.indexOf('drain') > -1) { nodeState = 'bad'; }
-    else if(nodeDetails.STATE.indexOf('alloc') > -1) { nodeState = 'alloc'; }
-    
-    if(!$('#'+nodeDetails.NODELIST).hasClass('node-'+nodeState)) {
-      $('#'+nodeDetails.NODELIST).removeClass().addClass('flex-child node-'+nodeState);
-    }
-    
-    var ptext = $('#'+nodeDetails.NODELIST+'-p').text();
-    if(nodeDetails.NODELIST+nodeDetails.STATE !== ptext) {
-      $('#'+nodeDetails.NODELIST+'-p').html(nodeDetails.NODELIST+'<br />'+nodeDetails.STATE);
-    }
-    
-    var slcpu = $('#'+nodeDetails.NODELIST+'-cpu').data('kendoSparkline');
-    var slmem = $('#'+nodeDetails.NODELIST+'-mem').data('kendoSparkline');
-    
-    slcpu.options.series[0].data.push(nodeDetails.CPU_LOAD);
-    if(slcpu.options.series[0].data.length > 50) {
-      slcpu.options.series[0].data.shift();
-    }
-    
-    var memUsed = (nodeDetails.FREE_MEM / nodeDetails.MEMORY) * 100;
-    slmem.options.series[0].data.push(memUsed);
-    if(slmem.options.series[0].data.length > 50) {
-      slmem.options.series[0].data.shift();
-    }
-    
-    slcpu.refresh();
-    slmem.refresh();
-  }
+  //function updateNodeStatsContainer(nodeDetails) {
+  //  var nodeState = 'idle';
+  //  if(nodeDetails.STATE.indexOf('idle#') > -1) { nodeState = 'bad'; }
+  //  else if(nodeDetails.STATE.indexOf('drain') > -1) { nodeState = 'bad'; }
+  //  else if(nodeDetails.STATE.indexOf('alloc') > -1) { nodeState = 'alloc'; }
+  //  
+  //  if(!$('#'+nodeDetails.NODELIST).hasClass('node-'+nodeState)) {
+  //    $('#'+nodeDetails.NODELIST).removeClass().addClass('flex-child node-'+nodeState);
+  //  }
+  //  
+  //  var ptext = $('#'+nodeDetails.NODELIST+'-p').text();
+  //  if(nodeDetails.NODELIST+nodeDetails.STATE !== ptext) {
+  //    $('#'+nodeDetails.NODELIST+'-p').html(nodeDetails.NODELIST+'<br />'+nodeDetails.STATE);
+  //  }
+  //  
+  //  var slcpu = $('#'+nodeDetails.NODELIST+'-cpu').data('kendoSparkline');
+  //  var slmem = $('#'+nodeDetails.NODELIST+'-mem').data('kendoSparkline');
+  //  
+  //  slcpu.options.series[0].data.push(nodeDetails.CPU_LOAD);
+  //  if(slcpu.options.series[0].data.length > 50) {
+  //    slcpu.options.series[0].data.shift();
+  //  }
+  //  
+  //  var memUsed = (nodeDetails.FREE_MEM / nodeDetails.MEMORY) * 100;
+  //  slmem.options.series[0].data.push(memUsed);
+  //  if(slmem.options.series[0].data.length > 50) {
+  //    slmem.options.series[0].data.shift();
+  //  }
+  //  
+  //  slcpu.refresh();
+  //  slmem.refresh();
+  //}
   
   function sparklineTooltipTop(element) {
     var height = $('#'+element).height();

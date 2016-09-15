@@ -20,7 +20,7 @@ our %EXPORT_TAGS = (ALL => [ qw(cge_start cge_stop_graceful cge_stop_scancel) ])
 #=+ This module will wrap the cge-launch command-line application
 my $cge_launch = can_run('cge-launch') or croak $!;
 my $cge_cli    = can_run('cge-cli') or croak $!;
-my $cge_scancel = can_run('scancel') or croak $!;
+my $cge_scancel = can_run('mrun') or croak $!;
 
 sub cge_start {
   my($arg_ref) = @_;
@@ -30,7 +30,7 @@ sub cge_start {
     dataDir        => '', #=+ mandatory
     resultDir      => '', #=+ mandatory
     logFile        => '', #=+ mandatory
-    queryPort      => '',
+    'db-port'      => '',
     configFile     => '',
     inRPNmsg       => '',
     inRPNmsgsFile  => '',
@@ -95,7 +95,7 @@ sub cge_start {
       $port++;
     }
   }
-  $arguments{queryPort} = $port;
+  $arguments{'db-port'} = $port;
 
   #=+ Concatenate all the non-blank command line arguments
   my @args;
@@ -119,9 +119,11 @@ sub cge_start {
 
   my $pid;
   open(my $CU,'<',$arguments{cleanupScript}) or croak $!;
+  
   while(my $l = <$CU>) {
-    if($l =~ /scancel (\d+)/) {
+    if($l =~ /mrun --cancel (\/mrun\/cge\/.+)/) {
       $pid = $1;
+      say $pid;
     }
   }
   return ($pid,$port);
@@ -145,7 +147,7 @@ sub cge_stop_graceful {
 sub cge_stop_scancel {
   #=+ If a graceful shutdown fails, then it may be necessary to just kill the PID
   my($pid) = @_;
-  my $success = run(command => $cge_scancel.' '.$pid, verbose => 0);
+  my $success = run(command => $cge_scancel.' --cancel '.$pid, verbose => 0);
   return $success;
 }
 
@@ -190,7 +192,7 @@ Where the common options are:
         Display this help message
 
     -p port_num
-    --queryPort=port_num
+    --db-port=port_num
         Specify the publicly visible TCP/IP port number on which
         queries can be presented to the server.  By default this is
         port 3750.

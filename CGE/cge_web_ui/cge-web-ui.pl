@@ -16,6 +16,7 @@ use Mojolicious::Lite;
 use Mojolicious::Sessions;
 use Mojo::Log;
 use Mojo::JSON qw(decode_json encode_json);
+use Mojo::Util qw(url_unescape);
 use Try::Tiny;
 use Net::EmptyPort;
 use Tie::Hash::Expire;
@@ -25,7 +26,7 @@ use File::Find;
 use File::Slurp;
 use FindBin;
 use Test::Deep::NoTest;
-use lib '/mnt/lustre/bossert/git';
+use lib '/mnt/lustre/bossert/git/cge-web-ui';
 use CGE::cge_cli_wrapper::cge_utils qw(:ALL);
 use CGE::cge_cli_wrapper::cge_launch qw(:ALL);
 use CGE::cge_cli_wrapper::cge_query qw(:ALL);
@@ -277,7 +278,26 @@ group {
     my $stuff = _list_NT_files($root,$self->session('username'));
     $self->render(json => $stuff);
   };
-
+              
+  get '/check_pid' => sub {
+    my $self = shift;
+    my $qparams=$self->req->query_params->to_hash;
+    
+    if(exists $qparams->{pid}) {
+      my $pid = checkPid(url_unescape($qparams->{pid}));
+      
+      if($pid) {
+        $self->rendered(200);
+      }
+      else {
+        $self->rendered(404);
+      }
+    }
+    else {
+      $self->render(text => 'Missing PID to check', status => 500);
+    }
+  };
+  
   get '/sinfo' => sub {
     my $self = shift;
     my $sinfo_json = sinfo();
