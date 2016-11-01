@@ -6,7 +6,7 @@ use 5.016;
 use Carp qw(cluck carp croak);
 use Cwd 'abs_path';
 use Data::Dumper;
-use Net::LDAP;
+use Net::LDAP; 
 use YAML::AppConfig;
 use IO::Compress::Gzip 'gzip';
 use POSIX;
@@ -16,7 +16,7 @@ use Mojolicious::Lite;
 use Mojolicious::Sessions;
 use Mojo::Log;
 use Mojo::JSON qw(decode_json encode_json);
-use Mojo::Util qw(url_unescape);
+use Mojo::Util qw(url_unescape b64_encode b64_decode);
 use Try::Tiny;
 use Net::EmptyPort;
 use Tie::Hash::Expire;
@@ -25,12 +25,12 @@ use File::Path::Tiny;
 use File::Find;
 use File::Slurp;
 use FindBin;
-use Test::Deep::NoTest;
+use Test::Deep::NoTest; 
 use lib '/mnt/lustre/bossert/git/cge-web-ui';
 use CGE::cge_cli_wrapper::cge_utils qw(:ALL);
 use CGE::cge_cli_wrapper::cge_launch qw(:ALL);
 use CGE::cge_cli_wrapper::cge_query qw(:ALL);
-
+ 
 no warnings 'File::Find';
 use File::Basename;
 ## no critic qw(RegularExpressions::RequireExtendedFormatting)
@@ -297,19 +297,6 @@ group {
       $self->render(text => 'Missing PID to check', status => 500);
     }
   };
-  
-  get '/sinfo' => sub {
-    my $self = shift;
-    my $sinfo_json = sinfo();
-    $self->render(json => $sinfo_json);
-  };
-
-  get '/squeue' => sub {
-    my $self = shift;
-    $self->stash('gzip' => 1);
-    my $queue = squeue();
-    $self->render(json => $queue);
-  };
 
   #=+ Let the app see how many nodes are available
   websocket '/sinfo_ws' => sub {
@@ -401,7 +388,7 @@ group {
 
       my($pid,$port) = cge_start($qparams);
       if($pid && $port) {
-        $self->session(current_pid => $pid, current_port => $port, current_database => $qparams->{dataDir});
+        $self->session(current_pid => $pid, 'db-port' => $port, current_database => $qparams->{dataDir});
         $self->render(json => {pid => $pid, port => $port});
       }
       else {
@@ -418,13 +405,13 @@ group {
   get 'stop_db' => sub {
     my $self = shift;
     my $qparams=$self->req->query_params->to_hash;
-    my ($current_database,$current_port);
-    if($qparams->{current_database} && $qparams->{current_port}) {
-      $self->session(current_database => $qparams->{current_database},current_port => $qparams->{current_port});
+    my ($current_database,$db_port);
+    if($qparams->{current_database} && $qparams->{'db-port'}) {
+      $self->session(current_database => $qparams->{current_database},'db-port' => $qparams->{'db-port'});
     }
 
-    if($self->session('current_database') && $self->session('current_port')) {
-      my $success = cge_stop_graceful($self->session('current_port'),$self->session('current_database'));
+    if($self->session('current_database') && $self->session('db-port')) {
+      my $success = cge_stop_graceful($self->session('db-port'),$self->session('current_database'));
       if($success) {
         $self->rendered(200);
       }
@@ -472,7 +459,7 @@ group {
 
         my($pid,$port) = cge_start($qparams);
         if($pid && $port) {
-          $self->session(current_pid => $pid, current_port => $port, current_database => $qparams->{dataDir});
+          $self->session(current_pid => $pid, 'db-port' => $port, current_database => $qparams->{dataDir});
           $self->render(json => {pid => $pid, port => $port, current_database => $qparams->{dataDir}});
         }
         else {
@@ -508,7 +495,6 @@ group {
     my $self = shift;
     my $p = $self->req->body_params->to_hash;
     my $json = decode_json($p->{models});
-    say Dumper($p);
     my $qparams = $json->[0];
     if($self->session('username') eq (getpwuid($<))[0]) {
       $qparams->{database} .= '/' unless $qparams->{database} =~ /\/$/;
@@ -535,9 +521,7 @@ group {
     my $self = shift;
     my $p = $self->req->body_params->to_hash;
     my $json = decode_json($p->{models});
-    say Dumper($p);
     my $qparams = $json->[0];
-    say Dumper($qparams);
     if($self->session('username') eq (getpwuid($<))[0]) {
       $qparams->{database}->{path} .= '/' unless $qparams->{database}->{path} =~ /\/$/;
       my %changes = (
@@ -564,9 +548,7 @@ group {
     my $self = shift;
     my $p = $self->req->body_params->to_hash;
     my $json = decode_json($p->{models});
-    say Dumper($p);
     my $qparams = $json->[0];
-    say Dumper($qparams);
     if($self->session('username') eq (getpwuid($<))[0]) {
       $qparams->{database}->{path} .= '/' unless $qparams->{database}->{path} =~ /\/$/;
       my %delete = (
@@ -595,8 +577,6 @@ group {
     $ws->on(message => sub {
       my ($self,$msg) = @_;
       my $qparams = decode_json($msg);
-      say Dumper($msg);
-      say Dumper($qparams);
       
       if($qparams->{qtype} eq 'select' ) {
         my ($success,$results_ref) = cge_select($qparams);
@@ -605,7 +585,7 @@ group {
           $self->send(encode_json($results_ref));
         }
         else {
-          $self->send(json => [{ status => 500, error_code => $results_ref }]);
+          $self->send(encode_json({error_code => $results_ref}));
         }
       }
       elsif($qparams->{qtype} eq 'ask' ) {
@@ -615,7 +595,7 @@ group {
           $self->send(encode_json($results_ref));
         }
         else {
-          $self->send(json => [{ status => 500, error_code => $results_ref }]);
+          $self->send(encode_json({error_code => $results_ref}));
         }
       }
       elsif($qparams->{qtype} eq 'construct' ) {
@@ -624,7 +604,7 @@ group {
           $self->send(encode_json($results_ref));
         }
         else {
-          $self->send(json => [{ status => 500, error_code => $results_ref }]);
+          $self->send(encode_json({error_code => $results_ref}));
         }
       }
       elsif($qparams->{qtype} eq 'describe' ) {
@@ -633,7 +613,7 @@ group {
           $self->send(encode_json($results_ref));
         }
         else {
-          $self->send(json => [{ status => 500, error_code => $results_ref }]);
+         $self->send(encode_json({error_code => $results_ref}));
         }
       }
       else {
@@ -663,7 +643,7 @@ group {
           $self->send(encode_json($results_ref));
         }
         else {
-          $self->send(json => [{ status => 500, error_code => $results_ref }]);
+          $self->send(encode_json({error_code => $results_ref}));
         }
       }
       else {
@@ -683,7 +663,6 @@ group {
     
     $ws->on(message => sub {
       my ($self,$msg) = @_;
-      say Dumper($msg);
       my $qparams = decode_json($msg);
       
       if($qparams->{action} eq 'start') {
@@ -695,7 +674,7 @@ group {
     
           my($pid,$port) = cge_start($qparams);
           if($pid && $port) {
-            $self->session(current_pid => $pid, current_port => $port, current_database => $qparams->{dataDir});
+            $self->session(current_pid => $pid, 'db-port' => $port, current_database => $qparams->{dataDir});
             $self->send(encode_json({ pid => $pid, port => $port, success => 'started' }));
           }
           else {
@@ -709,13 +688,13 @@ group {
         }
       }
       elsif($qparams->{action} eq 'stop') {
-        my ($current_database,$current_port);
-        if($qparams->{current_database} && $qparams->{current_port}) {
-          $self->session(current_database => $qparams->{current_database},current_port => $qparams->{current_port});
+        my ($current_database,$db_port);
+        if($qparams->{current_database} && $qparams->{'db-port'}) {
+          $self->session(current_database => $qparams->{current_database},'db-port' => $qparams->{'db-port'});
         }
     
-        if($self->session('current_database') && $self->session('current_port')) {
-          my $success = cge_stop_graceful($self->session('current_port'),$self->session('current_database'));
+        if($self->session('current_database') && $self->session('db-port')) {
+          my $success = cge_stop_graceful($self->session('db-port'),$self->session('current_database'));
           if($success) {
             $self->send(encode_json({ success => 'stopped' }));
           }
@@ -735,61 +714,6 @@ group {
     my ($self, $code, $reason) = @_;
       $log->info('sparqlSelectWs closed with status code: '.$code);
     });
-  };
-  
-  post 'sparqlSelect' => sub {
-    my $self = shift;
-    Mojo::IOLoop->stream($self->tx->connection)->timeout(3000);
-    my $qparams = $self->req->body_params->to_hash;
-    $self->stash('gzip' => 1);
-
-    my ($success,$results_ref) = cge_select($qparams);
-    
-    if($success == 1) {
-      $self->render(json => $results_ref);
-    }
-    else {
-      $self->render(text => $results_ref, status => 500);
-    }
-  };
-
-  post 'sparqlConstruct' => sub {
-    my $self = shift;
-    Mojo::IOLoop->stream($self->tx->connection)->timeout(3000);
-    my $qparams = $self->req->body_params->to_hash;
-    $self->stash('gzip' => 1);
-
-    my ($success,$results_ref) = cge_construct($qparams);
-    if($success == 1) {
-      $self->render(json => $results_ref);
-    }
-    else {
-      $self->render(text => $results_ref, status => 500);
-    }
-  };
-
-  post 'sparqlInsert' => sub {
-    my $self = shift;
-    Mojo::IOLoop->stream($self->tx->connection)->timeout(3000);
-    my $qparams = $self->req->body_params->to_hash;
-    $self->stash('gzip' => 1);
-
-    if($self->session('username') eq (getpwuid($<))[0]) {
-      #=+ Need to toss in the database directory
-      $qparams->{current_database} = $self->session('current_database');
-
-      my ($success,$results_ref) = cge_insert($qparams);
-      if($success == 1) {
-        $self->render(json => $results_ref);
-      }
-      else {
-        $self->render(text => $results_ref, status => 500);
-      }
-    }
-    else {
-      $log->error('[sparqlInsert] user '.$self->session('username').' was prevented from altering a database.  Only the the user who launched the web-application may alter databases.');
-      $self->render(text => 'Unauthorized:  Only the the user who launched the web-application may alter a database.', status => 403);
-    }
   };
   
   get 'query_list' => sub {
@@ -813,7 +737,6 @@ group {
   post 'saveQuery' => sub {
     my $self = shift;
     my $qparams = $self->req->body_params->to_hash;
-    say Dumper($self);
     my $filename = $qparams->{'title'};
     my $shared = $qparams->{'general'};
     my $counter = 1;
@@ -837,9 +760,7 @@ group {
       }
       $filename .= '_'.$counter;
     }
-    say $which_directory.$filename.'.rq';
     open(my $OF, '>', $which_directory.$filename.'.rq') or croak;
-    say {$OF} $qparams->{'query'};
     close($OF);
   
     if (!-z $which_directory.$filename.'_'.$counter.'.rq') {
@@ -848,6 +769,21 @@ group {
     else {
       $self->rendered(500);
     }
+  };
+  
+  post 'saveExcel' => sub {
+    my $self = shift;
+    Mojo::IOLoop->stream($self->tx->connection)->timeout(3000);
+    my $qparams = $self->req->body_params->to_hash;
+    $self->stash('gzip' => 1);
+
+    my $contentType = $qparams->{'contentType'};
+    my $b64 = $qparams->{'base64'};
+    my $file = b64_decode $b64;
+    my $fileName = $qparams->{'fileName'};
+    $self->res->headers->header('Content-Type' => $contentType);
+    $self->res->headers->header('Content-Disposition' => 'attachment; filename="'.$fileName.'"');
+    $self->render(data => $file);
   };
 };
 
@@ -1008,7 +944,7 @@ sub _checkDirectories {
 }
 
 sub _list_database_permissions {
-  my $root = '/mnt/lustre';
+  my $root = $config->config->{'database_directory'};
   my @userperms;
 
   find(sub {

@@ -32,6 +32,7 @@
     <script type="text/javascript" src="js/cytoscape-spread.js"></script>
     <script type="text/javascript" src="js/springy.js"></script>
     <script type="text/javascript" src="js/cytoscape-springy.js"></script>
+    <script type="text/javascript" src="js/cytoscape-ngraph-forcelayout.js"></script>
     <script type="text/javascript" src="js/cytoscape-hive.js"></script>
     <script type="text/javascript" src="js/cytoscape-panzoom.js"></script>
     <script type="text/javascript" src="js/yasqe.bundled.min.js"></script>
@@ -460,6 +461,45 @@
                     </tr>
                     <tr>
                       <td>Axis Sort Order</td><td></td><td><input id="hiveplotaxisSortDirection" data-layoutsetting="axisSortDirection" /></td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+              <tr id="cytoscape-ngraph-forcelayout" class="hidden_layout_options lsettr">
+                <td colspan="3">
+                  <table id="ngraphLayoutTable">
+                    <tr>
+                      <td>Animate</td><td></td><td><input type='radio'  name="ngraphanimate" data-layoutsetting="animate" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="ngraphanimate" data-layoutsetting="animate" value="false"/>false</td>
+                    </tr>
+                    <tr>
+                      <td>Fit to viewport</td><td></td><td><input type='radio'  name="ngraphfit" data-layoutsetting="fit" value="true" checked />true &nbsp; &nbsp;<input type='radio'  name="ngraphfit" data-layoutsetting="fit" value="false" />false</td>
+                    </tr>
+                    <tr>
+                      <td>Stable Threshold</td><td><input id="ngraphstableThresholdBox" class="numbox k-textbox" type="number" min="1" max="50" value="2" data-layoutsetting="stableThreshold" /> </td><td><input id="ngraphstableThreshold" data-layoutsetting="stableThreshold" class="kslider" /> </td>
+                    </tr>
+                    <tr>
+                      <td>Refresh Iterations</td><td><input id="ngraphrefreshIterationsBox" class="numbox k-textbox" type="number" min="1" max="100" value="10" data-layoutsetting="refreshIterations" /> </td><td><input id="ngraphrefreshIterations" data-layoutsetting="refreshIterations" class="kslider" /> </td>
+                    </tr>
+                    <tr>
+                      <td>Refresh Interval</td><td><input id="ngraphrefreshIntervalBox" class="numbox k-textbox" type="number" min="10" max="100" value="16" data-layoutsetting="refreshInterval" /> </td><td><input id="ngraphrefreshInterval" data-layoutsetting="refreshInterval" class="kslider" /> </td>
+                    </tr>
+                    <tr>
+                      <td>Iterations</td><td><input id="ngrapiterationsBox" class="numbox k-textbox" type="number" min="100" max="100000" value="10000" data-layoutsetting="iterations" /> </td><td><input id="ngraphiterations" data-layoutsetting="iterations" class="kslider" /> </td>
+                    </tr>
+                    <tr>
+                      <td>Physics: spring length</td><td><input id="ngraphphysicsspringLengthBox" class="numbox k-textbox hasDepth" type="number" min="1" max="1000" value="100" data-configPart="physics" data-layoutsetting="springLength" /> </td><td><input id="ngraphphysicsspringLength" data-configPart="physics" data-layoutsetting="springLength" class="kslider hasDepth" /> </td>
+                    </tr>
+                    <tr>
+                      <td>Physics: spring coefficient</td><td><input id="ngraphphysicsspringCoeffBox" class="numbox k-textbox hasDepth" type="number" min="0" max="1" value="0.0008" data-configPart="physics" data-layoutsetting="springCoeff" /> </td><td><input id="ngraphphysicsspringCoeff" data-configPart="physics" data-layoutsetting="springCoeff" class="kslider hasDepth" /> </td>
+                    </tr>
+                    <tr>
+                      <td>Physics: gravity</td><td><input id="ngraphphysicsgravityBox" class="numbox k-textbox hasDepth" type="number" min="-10" max="1" value="-1.2" data-configPart="physics" data-layoutsetting="gravity" /> </td><td><input id="ngraphphysicsgravity" data-configPart="physics" data-layoutsetting="gravity" class="kslider hasDepth" /> </td>
+                    </tr>
+                    <tr>
+                      <td>Physics: theta</td><td><input id="ngraphphysicsthetaBox" class="numbox k-textbox hasDepth" type="number" min="0" max="1" value="0.8" data-configPart="physics" data-layoutsetting="theta" /> </td><td><input id="ngraphphysicstheta" data-configPart="physics" data-layoutsetting="theta" class="kslider hasDepth" /> </td>
+                    </tr>
+                    <tr>
+                      <td>Physics: drag coefficient</td><td><input id="ngraphphysicsdragCoeffBox" class="numbox k-textbox hasDepth" type="number" min="0" max="1" value="0.02" data-configPart="physics" data-layoutsetting="dragCoeff" /> </td><td><input id="ngraphphysicsdragCoeff" data-configPart="physics" data-layoutsetting="dragCoeff" class="kslider hasDepth" /> </td>
                     </tr>
                   </table>
                 </td>

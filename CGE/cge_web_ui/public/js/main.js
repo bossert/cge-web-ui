@@ -91,27 +91,6 @@ $(function() {
     $('#database_management').next('.ss_content').slideDown();
   },1000);
 
-  // Need to check if there is a running DB that "this user started" in case the app was closed and reopened
-  //$.get('squeue',function(res) {
-  //  $('#current_queue > tbody').html('');
-  //  if(res.length >= 1) {
-  //    $.each(res,function(i,v) {
-  //      var htmlInsert = '<tr><td>'+v.JOBID+'</td><td>'+v.USER+'</td><td>'+v.STATE+'</td><td>'+v.TIME+'</td><td>'+v.NODES+'</td></tr>';
-  //      $('#current_queue > tbody').append(htmlInsert);
-  //
-  //      if(localStorage.getItem('current_pid') !== null &&
-  //         localStorage.getItem('current_pid') == v.JOBID) {
-  //        $('#db_status').text('RUNNING');
-  //        $('#startDB').prop('value','Stop');
-  //        $('#db_name').html(localStorage.getItem('current_database'));
-  //        $('#db_port').html(localStorage.getItem('current_port'));
-  //      }
-  //    });
-  //  }
-  //}).fail(function(xhr) {
-  //  popup.show("Failed to retrieve system queue information (" + xhr.status + " " + xhr.responseText + ")" ,"error");
-  //});
-
   // Check to see if we had a previously running database in the case where a user may have manually reloaded the webpage
   // for whatever reason and update the database management panel and set it's button to "RUNNING"
   if(localStorage.getItem('current_pid') !== null) {
@@ -121,7 +100,7 @@ $(function() {
       $('#db_status').text('RUNNING');
       $('#startDB').prop('value','Stop');
       $('#db_name').html(localStorage.getItem('current_database'));
-      $('#db_port').html(localStorage.getItem('current_port'));
+      $('#db_port').html(localStorage.getItem('db-port'));
     }).fail(function(xhr) {
       console.log("No current running DB (" + xhr.status + " " + xhr.responseText + ")");
     });
@@ -268,7 +247,7 @@ $(function() {
     columns: [
       {field: 'username',title: 'User Name'},
       {field: 'dbObj', title: 'Database', nullable: true, template: "#= dbObj.path #", editor: function(container,options) {
-        console.log(options);
+        
         $('<input required data-text-field="path" data-value-field="path" data-bind="value:' + options.field + '"/>')
         .appendTo(container)
         .kendoDropDownList({
@@ -330,7 +309,7 @@ $(function() {
       $('#db_status').html('&nbsp;');
       var currentInput = {
         current_database: $('#db_name').html(),
-        current_port: $('#db_port').html(),
+        'db-port': $('#db_port').html(),
         action: 'stop'
       };
 
@@ -858,13 +837,14 @@ $(function() {
       { text: "Dagre"       , value: "dagre" },
       { text: "Grid"        , value: "grid" },
       { text: "Hive Plot"   , value: "hiveplot" },
+      { text: "Ngraph"      , value: "cytoscape-ngraph-forcelayout" },
       { text: "Random"      , value: "random" },
       { text: "Spread"      , value: "spread" },
       { text: "Springy"     , value: "springy" }
     ],
     filter: "contains",
     suggest: true,
-    index: 7,
+    index: 10,
     change: function() {
     	$(".lsettr").addClass("hidden_layout_options");
     	var newselection = this.value();
@@ -990,23 +970,23 @@ $(function() {
     switch(queryType) {
       case 'SELECT':
         progressBar($('#query_progress'),true);
-        sparqlQueryWs.send(JSON.stringify({ qtype: 'select', current_database: $("#db_name").html(), current_port: $('#db_port').html(), 'query': editor.getValue() }));
+        sparqlQueryWs.send(JSON.stringify({ qtype: 'select', current_database: $("#db_name").html(), 'db-port': $('#db_port').html(), 'query': editor.getValue() }));
         break;
       case 'CONSTRUCT':
         progressBar($('#query_progress'),true);
-        sparqlQueryWs.send(JSON.stringify({ qtype: 'construct', current_database: $("#db_name").html(), current_port: $('#db_port').html(), 'query': editor.getValue() }));
+        sparqlQueryWs.send(JSON.stringify({ qtype: 'construct', current_database: $("#db_name").html(), 'db-port': $('#db_port').html(), 'query': editor.getValue() }));
         break;
       case 'ASK':
         progressBar($('#query_progress'),true);
-        sparqlQueryWs.send(JSON.stringify({ qtype: 'ask', current_database: $("#db_name").html(), current_port: $('#db_port').html(), 'query': editor.getValue() }));
+        sparqlQueryWs.send(JSON.stringify({ qtype: 'ask', current_database: $("#db_name").html(), 'db-port': $('#db_port').html(), 'query': editor.getValue() }));
         break;
       case 'DESCRIBE':
         progressBar($('#query_progress'),true);
-        sparqlQueryWs.send(JSON.stringify({ qtype: 'describe', current_database: $("#db_name").html(), current_port: $('#db_port').html(), 'query': editor.getValue() }));
+        sparqlQueryWs.send(JSON.stringify({ qtype: 'describe', current_database: $("#db_name").html(), 'db-port': $('#db_port').html(), 'query': editor.getValue() }));
         break;
       case 'INSERT':
         progressBar($('#query_progress'),true);
-        sparqlInsertWs.send(JSON.stringify({ qtype: 'insert', current_database: $("#db_name").html(), current_port: $('#db_port').html(), 'query': editor.getValue() }));
+        sparqlInsertWs.send(JSON.stringify({ qtype: 'insert', current_database: $("#db_name").html(), 'db-port': $('#db_port').html(), 'query': editor.getValue() }));
         break;
       default:
         popup.show("Unrecognized query type.","error");
@@ -1111,7 +1091,7 @@ $(function() {
           }
         }
       });
-      console.log(fieldTypes);
+      
       var configuration = {
         dataSource: {
           data: dataBindings,
@@ -1545,14 +1525,18 @@ $(function() {
   // CONSTRUCT
   function sparqlConstruct(data) {
     if(data.hasOwnProperty('error_code'))  {
-      
+      progressBar($('#query_progress'),false);
+      popup.show(data.error_code,'error');
     }
     else {
       // If the query worked, store it
       storeQueryHistory();
-      $('.c-hamburger').trigger('click');
-      // Draw the graph
-      drawGraph(data.elements);
+      var promise = new Promise(function() {
+        $('.c-hamburger').trigger('click');
+      });
+      
+      // In order to ensure the graph is not drawn until after the slider is done
+      promise.then(drawGraph(data.elements));
     }
   }
 
@@ -1590,30 +1574,6 @@ $(function() {
     }
 	}
 
-  // Function to start a database
-  function startDB() {
-    var dataDir       = $('#selectDB').data('kendoComboBox').value();
-    var imagesPerNode = $('#instances').val();
-    var nodeCount     = $('#nodes').val();
-    var timeout       = $('#timeout').val();
-    var nvps          = $('#nvps').val();
-
-    $.post('start_db',{ dataDir: dataDir, imagesPerNode: imagesPerNode, nodeCount: nodeCount, startupTimeout: timeout, nvps: nvps }).done(function(res) {
-      // Assuming the startup works, set the current database
-      $('#db_status').text('RUNNING');
-      $('#startDB').prop('value','Stop');
-      $('#db_port').html(res.port);
-      localStorage.setItem('current_pid',res.pid);
-      localStorage.setItem('current_port',res.port);
-      localStorage.setItem('current_database',dataDir);
-      getQueryList();
-      progressBar($('#spinner_container'), false);
-    }).fail(function(xhr) {
-      progressBar($('#spinner_container'), false);
-      popup.show("Failed to start the requested database (" + xhr.status + " " + xhr.responseText + ")" ,"error");
-    });
-  }
-
   function buildDB(files) {
     var name          = $('#new_db_name').val();
     var imagesPerNode = $('#new_instances').val();
@@ -1628,7 +1588,7 @@ $(function() {
       $('#db_status').text('RUNNING');
       $('#startDB').prop('value','Stop');
       localStorage.setItem('current_pid',res.pid);
-      localStorage.setItem('current_port',res.port);
+      localStorage.setItem('db-port',res.port);
       localStorage.setItem('current_database',res.current_database);
       progressBar($('#spinner_container'), false);
     }).fail(function(xhr) {
@@ -1773,7 +1733,7 @@ $(function() {
     	sparql = "CONSTRUCT { ?s ?p \"" + node + "\" . } WHERE { ?s ?p \"" + node + "\" . } LIMIT "+$('#limitAssociates').val();
     }
 
-    $.post("sparqlConstruct", { current_database: $("#db_name").html(), current_port: $('#db_port').html(),'query': sparql }, function(data) {
+    $.post("sparqlConstruct", { current_database: $("#db_name").html(), 'db-port': $('#db_port').html(),'query': sparql }, function(data) {
       // Need to make sure we actually got some results
       if (data.elements.nodes.length === 0) {
         popup.show("No connected nodes","error");
@@ -1848,13 +1808,30 @@ $(function() {
   		  };
   		}
   		else if($(this).val() == 'true' || $(this).val() == 'false') {
-  			ls[$(this).attr('data-layoutsetting')] = $(this).val() == 'true';
+        if($(this).hasClass('hasDepth')) {
+          ls[$(this).attr('data-configPart')][$(this).attr('data-layoutsetting')] = $(this).val() == 'true';
+        }
+        else {
+          ls[$(this).attr('data-layoutsetting')] = $(this).val() == 'true';
+        }
+        
+  			
   		}
   		else if($.isNumeric($(this).val())) {
-  			ls[$(this).attr('data-layoutsetting')] = Number($(this).val());
+        if($(this).hasClass('hasDepth')) {
+          ls[$(this).attr('data-configPart')][$(this).attr('data-layoutsetting')] = Number($(this).val());
+        }
+        else {
+          ls[$(this).attr('data-layoutsetting')] = Number($(this).val());
+        }
   		}
   		else {
-  			ls[$(this).attr('data-layoutsetting')] = $(this).val();
+        if($(this).hasClass('hasDepth')) {
+          ls[$(this).attr('data-configPart')][$(this).attr('data-layoutsetting')] = $(this).val();
+        }
+        else {
+          ls[$(this).attr('data-layoutsetting')] = $(this).val();
+        }
   		}
   	});
   	ls.name = id;
@@ -2832,7 +2809,12 @@ $(function() {
     
     sparqlQueryWs.onmessage = function(msg) {
       var res = JSON.parse(msg.data);
-      if(res.qtype === 'select') {
+      
+      if(res.hasOwnProperty('error_code')) {
+        progressBar($('#query_progress'),false);
+        popup.show('Error: '+res.error_code,'error');
+      }
+      else if(res.qtype === 'select') {
         sparqlSelect(res);
       }
       else if(res.qtype === 'ask') {
@@ -2859,7 +2841,13 @@ $(function() {
     
     sparqlInsertWs.onmessage = function(msg) {
       var res = JSON.parse(msg.data);
-      sparqlInsert(res);
+      if(res.hasOwnProperty('error_code')) {
+        progressBar($('#query_progress'),false);
+        popup.show('Error: '+res.error_code,'error');
+      }
+      else {
+        sparqlInsert(res);
+      }
     };
     
     // Websocket to start/stop database
@@ -2872,19 +2860,17 @@ $(function() {
     };
     dbStartStopWs.onmessage = function(msg) {
       var res = JSON.parse(msg.data);
-      console.log(res);
+      
       if(res.success === 'stopped') {
-        var currentPid = localStorage.getItem('current_pid');
+        //var currentPid = localStorage.getItem('current_pid');
         
         $('#db_name').html('None');
         $('#db_port').html('-');
         $('#db_status').text('STOPPED');
         
-        
-        
         $('#startDB').prop('value','Start');
         localStorage.removeItem('current_pid');
-        localStorage.removeItem('current_port');
+        localStorage.removeItem('db-port');
         progressBar($('#spinner_container'), false);
         
         getQueryList();
@@ -2896,7 +2882,7 @@ $(function() {
         $('#startDB').prop('value','Stop');
         $('#db_port').html(res.port);
         localStorage.setItem('current_pid',res.pid);
-        localStorage.setItem('current_port',res.port);
+        localStorage.setItem('db-port',res.port);
         localStorage.setItem('current_database',$('#selectDB').data('kendoComboBox').value());
         getQueryList();
         progressBar($('#spinner_container'), false);
@@ -2948,7 +2934,7 @@ $(function() {
     //        $('#db_status').text('RUNNING');
     //        $('#startDB').prop('value','Stop');
     //        $('#db_name').html(localStorage.getItem('current_database'));
-    //        $('#db_port').html(localStorage.getItem('current_port'));
+    //        $('#db_port').html(localStorage.getItem('db-port'));
     //      }
     //    });
     //  }

@@ -14,13 +14,13 @@ use Data::Dumper;
 our $VERSION = 0.01;
 
 our @ISA = qw(Exporter);
-our @EXPORT_OK = qw(cge_start cge_stop_graceful cge_stop_scancel);
-our %EXPORT_TAGS = (ALL => [ qw(cge_start cge_stop_graceful cge_stop_scancel) ]);
+our @EXPORT_OK = qw(cge_start cge_stop_graceful cge_stop_mrun);
+our %EXPORT_TAGS = (ALL => [ qw(cge_start cge_stop_graceful cge_stop_mrun) ]);
 
 #=+ This module will wrap the cge-launch command-line application
 my $cge_launch = can_run('cge-launch') or croak $!;
 my $cge_cli    = can_run('cge-cli') or croak $!;
-my $cge_scancel = can_run('mrun') or croak $!;
+my $cge_mrun = can_run('mrun') or croak $!;
 
 sub cge_start {
   my($arg_ref) = @_;
@@ -144,10 +144,10 @@ sub cge_stop_graceful {
   return $success;
 }
 
-sub cge_stop_scancel {
+sub cge_stop_mrun {
   #=+ If a graceful shutdown fails, then it may be necessary to just kill the PID
   my($pid) = @_;
-  my $success = run(command => $cge_scancel.' --cancel '.$pid, verbose => 0);
+  my $success = run(command => $cge_mrun.' --cancel '.$pid, verbose => 0);
   return $success;
 }
 

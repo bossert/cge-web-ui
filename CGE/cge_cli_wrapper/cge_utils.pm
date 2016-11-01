@@ -16,13 +16,11 @@ require Exporter;
 our $VERSION = 0.01;
 
 our @ISA = qw(Exporter);
-our @EXPORT_OK = qw(add_user modify_user sinfo squeue checkPid);
-our %EXPORT_TAGS = (ALL => [ qw(add_user modify_user sinfo squeue checkPid) ]);
+our @EXPORT_OK = qw(add_user modify_user checkPid);
+our %EXPORT_TAGS = (ALL => [ qw(add_user modify_user checkPid) ]);
 
 #=+ Need to be able to run ssh-keygen
 my $ssh_keygen = can_run('ssh-keygen');
-my $sinfo = can_run('sinfo');
-my $squeue = can_run('squeue');
 my $mrun = can_run('mrun');
 
 sub add_user {
@@ -141,55 +139,6 @@ sub modify_user {
   }
 }
 
-sub sinfo {
-  #=+ When executing sinfo -o %all, we dump the output for all fields in a pipe delimited format
-  my($success,$error_message,$full_buf,$stdout_buf,$stderr_buf) = run(command => $sinfo.' -o %all', verbose => 0);
-  if($success) {
-    my %output = (
-      sinfo  => [],
-      system => {
-        idle_nodes           => 0,
-        nodes                => 0,
-        min_memory_per_node  => 0,
-        cores_per_node       => undef
-      }
-    );
-    #=+ Join the stdout buffer into one array and split on newlines so we have one line per element
-    my @stdout_array = split(/\n/,join('',@$stdout_buf));
-
-    #=+ Input is pipe (|) delimited
-    my @header_fields = split(/\|/,shift @stdout_array);
-
-    #=+ Getting rid of whitespaces
-    foreach my $hf(@header_fields) {
-      $hf =~ s/\s+//g;
-    }
-
-    foreach my $line(@stdout_array) {
-      #=+ Input is pipe (|) delimited
-      my @fields = split(/\|/,$line);
-      my %temp;
-      my $counter = 0;
-      foreach my $field(@header_fields) {
-        #=+ Getting rid of whitespaces
-        $fields[$counter] =~ s/\s+//g;
-        $temp{$field} = $fields[$counter];
-        $counter++;
-      }
-      #=+ increment the number of nodes available "now"
-      $output{system}->{nodes}++;
-      $output{system}->{idle_nodes}++ if $temp{STATE} =~ /^idle/;
-      $output{system}->{min_memory_per_node} = $temp{FREE_MEM} if ($output{system}->{min_memory_per_node} == 0 || $output{system}->{min_memory_per_node} > $temp{FREE_MEM});
-      $output{system}->{cores_per_node} = $temp{CPUS};
-      push @{$output{sinfo}}, \%temp;
-    }
-    return \%output;
-  }
-  else {
-    return undef;
-  }
-}
-
 sub checkPid {
   my ($pid) = @_;
   my ($success,$error_message,$full_buf,$stdout_buf,$stderr_buf) = run(command => $mrun.' --info', verbose => 0);
@@ -203,57 +152,6 @@ sub checkPid {
       }
     }
     return undef;
-  }
-  else {
-    return undef;
-  }
-}
-
-sub squeue {
-  #=+ When executing sinfo -o %all, we dump the output for all fields in a pipe delimited format
-  my($success,$error_message,$full_buf,$stdout_buf,$stderr_buf) = run(command => $squeue.' -al --noheader', verbose => 0);
-  if($success) {
-    #=+ JOBID PARTITION     NAME     USER    STATE       TIME TIME_LIMI  NODES NODELIST(REASON)
-    #=+  1251   Elastic cge-serv  bossert  RUNNING      37:15 UNLIMITED     16 elastic-[1-16]
-    my @output;
-
-    #=+ Join the stdout buffer into one array and split on newlines so we have one line per element
-    my @stdout_array = split(/\n/,join('',@$stdout_buf));
-
-    foreach my $line(@stdout_array) {
-      $line =~ s/^\s+|\s+$//g;
-      my @fields = split(/\s+/,$line);
-
-      my @nodelist;
-      if($fields[8] =~ m/^elastic-\[([\d,-]+)\]$/) {
-        my $nodes = $1;
-        my @nodepieces = split(/,/,$nodes);
-        foreach my $piece(@nodepieces) {
-          if($piece =~ /(\d+)-(\d+)/) {
-            my $start = $1; my $end = $2;
-            for($start .. $end) {
-              push @nodelist, $_;
-            }
-          }
-        }
-      }
-
-      my %temp = (
-        JOBID => $fields[0],
-        PARTITION => $fields[1],
-        NAME => $fields[2],
-        USER => $fields[3],
-        STATE => $fields[4],
-        TIME => $fields[5],
-        TIME_LIMIT => $fields[6],
-        NODES => $fields[7],
-        NODELIST_STRING => $fields[8],
-        NODELIST => \@nodelist
-      );
-
-      push @output, \%temp;
-    }
-    return \@output;
   }
   else {
     return undef;

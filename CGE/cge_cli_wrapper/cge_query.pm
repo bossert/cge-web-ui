@@ -24,8 +24,8 @@ my $cge_cli    = can_run('cge-cli') or croak $!;
 sub cge_select {
   my ($arg_ref) = @_;
   my %arguments = (
-    dbhost           => undef,
-    dbport           => 3750,
+    'db-host'        => undef,
+    'db-port'        => 3750,
     identity         => undef,
     nvp              => undef,                              #=+ must be passed as CSV
     'opt-disable'    => undef,                              #=+ must be passed as CSV
@@ -92,7 +92,7 @@ sub cge_select {
   print {$TF} $arg_ref->{query};
   close($TF);
 
-  my($success,$error_message,$full_buf,$stdout_buf,$stderr_buf) = run(command => $cge_cli.' query '.$arg_string.' '.$arg_ref->{current_database}.'.cge_web_ui/temp/query.rq' , verbose => 1);
+  my($success,$error_message,$full_buf,$stdout_buf,$stderr_buf) = run(command => $cge_cli.' query '.$arg_string.' '.$arg_ref->{current_database}.'.cge_web_ui/temp/query.rq' , verbose => 0);
   if($success) {
     unlink $arg_ref->{current_database}.'.cge_web_ui/temp/query.rq';
     
@@ -119,8 +119,8 @@ sub cge_select {
 sub cge_construct {
   my ($arg_ref) = @_;
   my %arguments = (
-    dbhost           => undef,
-    dbport           => 3750,
+    'db-host'        => undef,
+    'db-port'        => 3750,
     identity         => undef,
     nvp              => undef,                              #=+ must be passed as CSV
     'opt-disable'    => undef,                              #=+ must be passed as CSV
@@ -186,7 +186,7 @@ sub cge_construct {
   print {$TF} $arg_ref->{query};
   close($TF);
 
-  my($success,$error_message,$full_buf,$stdout_buf,$stderr_buf) = run(command => $cge_cli.' query '.$arg_string.' '.$arg_ref->{current_database}.'.cge_web_ui/temp/query.rq' , verbose => 1);
+  my($success,$error_message,$full_buf,$stdout_buf,$stderr_buf) = run(command => $cge_cli.' query '.$arg_string.' '.$arg_ref->{current_database}.'.cge_web_ui/temp/query.rq' , verbose => 0);
   if($success) {
     unlink $arg_ref->{current_database}.'.cge_web_ui/temp/query.rq';
     #=+ Join the stdout buffer into one array and split on newlines so we have one line per element
@@ -373,8 +373,8 @@ sub cge_insert {
   #=+ In addition to the arguments, we also need the query and database location
 
   my %arguments = (
-    dbhost           => undef,
-    dbport           => 3750,
+    'db-host'        => undef,
+    'db-port'        => 3750,
     identity         => undef,
     nvp              => undef,                              #=+ must be passed as CSV
     'opt-disable'    => undef,                              #=+ must be passed as CSV
@@ -437,7 +437,7 @@ sub cge_insert {
   print {$TF} $arg_ref->{query};
   close($TF);
 
-  my($success,$error_message,$full_buf,$stdout_buf,$stderr_buf) = run(command => $cge_cli.' update '.$arg_string.' '.$arg_ref->{current_database}.'.cge_web_ui/temp/update.ru' , verbose => 1);
+  my($success,$error_message,$full_buf,$stdout_buf,$stderr_buf) = run(command => $cge_cli.' update '.$arg_string.' '.$arg_ref->{current_database}.'.cge_web_ui/temp/update.ru' , verbose => 0);
   if($success) {
     unlink $arg_ref->{current_database}.'.cge_web_ui/temp/update.ru';
     return 1;

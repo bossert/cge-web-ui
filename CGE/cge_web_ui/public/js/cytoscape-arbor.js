@@ -248,13 +248,13 @@ SOFTWARE.
       });
 
       var lockHandler;
-      nodes.on('lock unlock', lockHandler = function(e){
+      nodes.on('lock unlock', lockHandler = function(){
         node.scratch().arbor.fixed = node.locked();
       });
 
       var resizeHandler;
       cy.on('resize', resizeHandler = function(){
-        if( options.boundingBox == null && layout.system != null ){
+        if( options.boundingBox === null && layout.system !== null ){
           var w = cy.width();
           var h = cy.height();
 
@@ -263,7 +263,8 @@ SOFTWARE.
       });
 
       function addNode( node ){
-        if( node.isFullAutoParent() ){ return; } // they don't exist in the sim
+        // Had to change as a "hot" patch from .isFullAutoParent to .isParent
+        if( node.isParent() ){ return; } // they don't exist in the sim
 
         var id = node.id();
         var mass = calculateValueForElement(node, options.nodeMass);
