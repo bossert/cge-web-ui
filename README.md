@@ -111,7 +111,7 @@ As mentioned earlier, a great deal of care has been taken to ensure that this ap
 In order to start the web-application, there are two options.  In development mode (e.g. you are doing customization or adding features), start the development server on port 3000 (substitute any other available port number you may wish to use if 3000 is already in use) thusly:
 
 ```bash
-morbo -l "https://[::]:3000 /path/to/your/executable/cge-web-ui.pl
+morbo -l "https://[::]:3000" /path/to/your/executable/cge-web-ui.pl
 ```
 
 In a production or regular use mode, use the built-in web-server (hypnotoad), which will choose which port to run on based on your application configuration file default choice.  If the default port is unavailable, the next available port will be automatically selected and used.  To start the application, use the following command:
