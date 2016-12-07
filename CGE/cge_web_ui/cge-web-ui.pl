@@ -90,7 +90,7 @@ _checkDirectories($root_directory,$home_directory.'.cge_web_ui/log');
 #=+ Set up logging
 my $logLevel = 'debug';
 my $ts = strftime("%Y-%m-%d", localtime(time));
-my $log = Mojo::Log->new(path => $home_directory.'.cge_web_ui/log/analytics_ui_log_'.$ts.'.log', level => $logLevel);
+my $log = Mojo::Log->new(path => $home_directory.'.cge_web_ui/log/cge_web_ui_log_'.$ts.'.log', level => $logLevel);
 
 #=+ Need to initialize the application based on the configuration file
 my $config = _config_init();
@@ -120,7 +120,8 @@ $ENV{'MOJO_INACTIVITY_TIMEOUT'} = $config->config->{'MOJO_INACTIVITY_TIMEOUT'};
 app->config('hypnotoad' => {
               'listen'       => ['https://*:'.$config->config->{'port'}],
               'workers'      => $config->config->{'workers'},
-              'multi_accept' => $config->config->{'multi_accept'}
+              'multi_accept' => $config->config->{'multi_accept'},
+              'pid_file'     => $home_directory.'.cge_web_ui/hypnotoad.pid'
             });
 
 #=+ Set up and tie our blacklist hash, which automatically expires after 1 hour, perhaps this should be configurable?
@@ -217,6 +218,22 @@ group {
     $self->stash(gzip => 1);
   } => 'main';
 
+  #=+ Lookup usernames by full name or username fragment
+  get '/user_lookup' => sub {
+    my $self = shift;
+    my $qparams = $self->req->query_params->to_hash;
+    my $user_fragment = $qparams->{'user'};
+    my $arrayRef = _user_lookup($user_fragment);
+    $self->render(json => $arrayRef);
+  };
+  
+  #=+ Lookup usernames by full name or username fragment
+  get '/user_list' => sub {
+    my $self = shift;
+    my $arrayRef = _user_list();
+    $self->render(json => $arrayRef);
+  };
+  
   #=+ A quick way to ensure we are grabbing the prefix file from a secure location with a current copy and
   #   also add our own prefixes
   get '/yasqe_prefixes/all.file.json' => sub {
@@ -498,11 +515,13 @@ group {
     my $qparams = $json->[0];
     if($self->session('username') eq (getpwuid($<))[0]) {
       $qparams->{database} .= '/' unless $qparams->{database} =~ /\/$/;
+      say 'NEW QPARAMS:'.Dumper($qparams);
       my %newuser = (
-        username    => $qparams->{username},
-        database    => $qparams->{database},
-        permissions => $qparams->{permissions}->{permissions}
+        username      => $qparams->{username},
+        database      => $qparams->{database},
+        permissions   => $qparams->{permissions}->{permissions}
       );
+      say 'NEW:'.Dumper(\%newuser);
       my $success = add_user(\%newuser);
 
       if($success) {
@@ -524,13 +543,14 @@ group {
     my $qparams = $json->[0];
     if($self->session('username') eq (getpwuid($<))[0]) {
       $qparams->{database}->{path} .= '/' unless $qparams->{database}->{path} =~ /\/$/;
+      say 'EDIT QPARAMS:'.Dumper($qparams);
       my %changes = (
-        action      => 'modify',
-        username    => $qparams->{username},
-        database    => $qparams->{database}->{path},
-        permissions => $qparams->{permissions}->{permissions}
+        action        => 'modify',
+        username      => $qparams->{username},
+        database      => $qparams->{database}->{path},
+        permissions   => $qparams->{permissions}->{permissions}
       );
-
+      say 'EDIT:'.Dumper(\%changes);
       my $success = modify_user(\%changes);
       if($success) {
         $self->render(json => []);
@@ -551,12 +571,13 @@ group {
     my $qparams = $json->[0];
     if($self->session('username') eq (getpwuid($<))[0]) {
       $qparams->{database}->{path} .= '/' unless $qparams->{database}->{path} =~ /\/$/;
+      say 'DESTROY QPARAMS:'.Dumper($qparams);
       my %delete = (
-        action   => 'revoke',
-        username => $qparams->{username},
-        database => $qparams->{database}->{path}
+        action        => 'revoke',
+        username      => $qparams->{username},
+        database      => $qparams->{database}->{path}
       );
-
+      say 'DESTROY:'.Dumper(\%delete);
       my $success = modify_user(\%delete);
       if($success) {
         $self->render(json => []);
@@ -720,11 +741,15 @@ group {
     my $self = shift;
     my $qparams = $self->req->query_params->to_hash;
     
-    my @databases = (
-      (getpwnam $self->session('username'))[7].'/.cge_web_ui/queries/',
-      $root_directory.'queries/'
-    );
+    my @databases;
+    push @databases, $root_directory.'queries/';
     
+    #=+ Check to see if the user has a query directory
+    if(-d ((getpwnam $self->session('username'))[7].'/.cge_web_ui/queries/')) {
+      push @databases, (getpwnam $self->session('username'))[7].'/.cge_web_ui/queries/';
+    }
+    
+    #=+ Check to see if there is a running database
     if(exists $qparams->{current_database}) {
       $qparams->{current_database} .= '/' unless $qparams->{current_database} =~ /\/$/;
       push @databases, $qparams->{current_database}.'.cge_web_ui/queries/';
@@ -916,11 +941,36 @@ sub _user_lookup {
     my %temp;
     foreach my $kv(@{$entry->{'asn'}->{'attributes'}}) {
       #=+ The regex here is looking for a value that is EXACTLY cn, uid, or homeDirectory (case-sensitive).  Feel free to add more values if they are useful
-      if ($kv->{'type'} =~ m/^(:?cn|uid|homeDirectory)$/) {
+      if($kv->{'type'} =~ m/^uid$/) {
+        $temp{'username'} = $kv->{'vals'}->[0]; 
+      }
+      elsif ($kv->{'type'} =~ m/^(:?cn|homeDirectory)$/) {
         $temp{$kv->{'type'}} = $kv->{'vals'}->[0];
       }
     }
-    push @results, \%temp;
+    push @results, \%temp if (exists $temp{'username'} && exists $temp{'cn'} && exists $temp{'homeDirectory'});
+  }
+  say Dumper(\@results);
+  return \@results;
+}
+
+sub _user_list {
+  my @results;
+  my $ldap = _ldap_connect();
+  my $mesg = $ldap->bind;
+  $mesg = $ldap->search(base => $config->config->{'search_base'},filter => '(|(uid=*)(cn=*))');
+  foreach my $entry($mesg->entries) {
+    my %temp;
+    foreach my $kv(@{$entry->{'asn'}->{'attributes'}}) {
+      #=+ The regex here is looking for a value that is EXACTLY cn, uid, or homeDirectory (case-sensitive).  Feel free to add more values if they are useful
+      if($kv->{'type'} =~ m/^uid$/) {
+        $temp{'username'}->{'username'} = $kv->{'vals'}->[0]; 
+      }
+      elsif ($kv->{'type'} =~ m/^(:?cn|homeDirectory)$/) {
+        $temp{'username'}->{$kv->{'type'}} = $kv->{'vals'}->[0];
+      }
+    }
+    push @results, \%temp if (exists $temp{'username'}->{'username'} && exists $temp{'username'}->{'cn'} && exists $temp{'username'}->{'homeDirectory'});
   }
   return \@results;
 }
@@ -937,7 +987,7 @@ sub _checkDirectories {
       croak $dir.' : Directory is not readable';
     }
     unless(-w $dir) {
-      croak $dir.' : Directory is not writable.';
+      warn $dir.' : Directory is not writable.';
     }
   }
   return 1;
@@ -968,7 +1018,7 @@ sub _list_database_permissions {
             
             my %temp_user = (
               id            => $perms_config->config->{database}.$perms_config->config->{username},
-              username      => $perms_config->config->{username},
+              username      => { username => $perms_config->config->{username} },
               permissions   => \%permissions,
               created       => $perms_config->config->{created},
               last_modified => $perms_config->config->{last_modified},
@@ -987,7 +1037,6 @@ sub _list_database_permissions {
 sub _list_NT_files {
   my($root,$current_user) = @_;
   $root = '/mnt/lustre' unless defined $root;
-
   my @output;
   find(sub {
     if($File::Find::name =~ /\.nt$/) {
@@ -1077,6 +1126,8 @@ sub _list_databases {
             my $perms_config = YAML::AppConfig->new(file => $authorized_users_dir.$f.'/properties.yaml');
             my %temp_user = (
               username      => $perms_config->config->{username},
+              cn            => $perms_config->config->{cn},
+              homeDirectory => $perms_config->config->{homeDirectory},
               permissions   => $perms_config->config->{permissions},
               created       => $perms_config->config->{created},
               last_modified => $perms_config->config->{last_modified},
@@ -1094,6 +1145,7 @@ sub _list_databases {
         bytes            => $size,
         name             => $name,
         path             => $File::Find::dir,
+        database         => { 'path' => $File::Find::dir },
         hasFiles         => undef,
         authorized_users => \@auth_users,
         last_modified    => strftime("%Y-%m-%d %H:%M:%S",localtime((stat $File::Find::dir)[9]))

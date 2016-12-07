@@ -28,10 +28,10 @@ sub add_user {
 
   #=+ default settings
   my %config = (
-    username    => '',
-    database    => '',   #=+ Need to know the path to the directory we want to add a user to
-    bits        => 2048,
-    permissions => 'ro'  #=+ Possible permissions are: read-only (ro), read-write (rw), admin (admin)
+    username      => '',
+    database      => '',   #=+ Need to know the path to the directory we want to add a user to
+    bits          => 2048,
+    permissions   => 'ro'  #=+ Possible permissions are: read-only (ro), read-write (rw), admin (admin)
   );
 
   #=+ Take user-supplied options and replace defaults.  Maybe overkill, but we only allow expected settings
@@ -88,10 +88,10 @@ sub modify_user {
 
   #=+ Keeping with our pattern of a default structure to work with
   my %changes = (
-    action      => '', #=+ Can be one of 'modify' or 'revoke': MANDATORY
-    username    => '', #=+ MANDATORY
-    permissions => '', #=+ These will be the new permissions.  Same as before: ro, rw, or admin
-    database    => ''
+    action        => '', #=+ Can be one of 'modify' or 'revoke': MANDATORY
+    username      => '', #=+ MANDATORY
+    permissions   => '', #=+ These will be the new permissions.  Same as before: ro, rw, or admin
+    database      => ''
   );
 
   #=+ Take user-supplied options and replace defaults.  Maybe overkill, but we only allow expected settings

@@ -123,7 +123,6 @@ sub cge_start {
   while(my $l = <$CU>) {
     if($l =~ /mrun --cancel (\/mrun\/cge\/.+)/) {
       $pid = $1;
-      say $pid;
     }
   }
   return ($pid,$port);

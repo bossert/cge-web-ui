@@ -314,6 +314,7 @@ sub cge_construct {
       elsif($p =~ m/http:\/\/www\.cray\.com\/analysisUI\/node-property\/(.+)/) {
         my $property = $1;
         $nodes{$s}->{'crayProp:'.$property} = $o;
+        say Dumper($nodes{$s});
       }
       else {
         $nodes{$s}->{'id'} = $sid;

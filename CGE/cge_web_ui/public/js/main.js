@@ -232,9 +232,9 @@ $(function() {
       model: {
         id: 'id',
         fields: {
-          username:      {type: 'text'},
-          dbObj:         'database',
-          permissions:   {type: 'text', defaultValue: { permissions: 'ro'}}
+          username:    'username',
+          dbObj:       'database',
+          permissions: {type: 'text', defaultValue: { permissions: 'ro'}}
         }
       }
     }
@@ -243,47 +243,82 @@ $(function() {
     dataSource: userAccessControlDS,
     pageable: true,
     width: '380px',
+    editable: 'inline',
+    groupable: true,
+    edit: function(e) {
+      console.log('NEW: ',e.model);
+    },
+    save: function(e) {
+      console.log('SAVE: ',e);
+      //var testInput = e.container.find();
+    },
     toolbar: ['create'],
     columns: [
-      {field: 'username',title: 'User Name'},
-      {field: 'dbObj', title: 'Database', nullable: true, template: "#= dbObj.path #", editor: function(container,options) {
-        
-        $('<input required data-text-field="path" data-value-field="path" data-bind="value:' + options.field + '"/>')
+      {field: 'username',title: 'User Name', nullable: true, template: "#= username.username #", editor: function(container,options) {
+        $('<input required data-bind="value:' + options.field + '"/>')
         .appendTo(container)
-        .kendoDropDownList({
+        .kendoComboBox({
+          dataSource: {
+            transport: {
+              parameterMap: function(options,operation) {
+                if(operation !== 'read' && options.models) {
+                  console.log(operation,options);
+                  return {models: kendo.stringify(options.models)};
+                }
+              },
+              read: {
+                url: 'user_list',
+                dataType: 'json'
+              }
+            }
+          },
+          autoBind: true,
+          suggest: true,
+          dataTextField: 'username.cn',
+          dataValueField: 'username.username',
+          placeholder: "Username"
+        }).data('kendoComboBox');
+      }},
+      {field: 'dbObj', title: 'Database', nullable: true, template: "#= dbObj.path #", editor: function(container,options) {
+        $('<input required data-bind="value:' + options.field + '"/>')
+        .appendTo(container)
+        .kendoComboBox({
           dataTextField: 'path',
           dataValueField: 'path',
           autoBind: false,
           optionLabel: 'Select',
+          placeholder: "Database",
           dataSource: {
             transport: {
+              parameterMap: function(options,operation) {
+                if(operation !== 'read' && options.models) {
+                  return {models: kendo.stringify(options.models)};
+                }
+              },
               read: {
                 url: 'list_databases'
               },
               dataType: 'json'
             }
           }
-        }).data('kendoDropDownList').list.width('350px');
+        }).data('kendoComboBox').list.width('350px');
       }},
       {field: 'permissions', title: 'Permissions', nullable: true, template: "#= permissions.permissionsString #", editor: function(container,options) {
-        $('<input required data-text-field="permissionsString" data-value-field="permissions" data-bind="value:' + options.field + '"/>')
+        $('<input required data-bind="value:' + options.field + '"/>')
         .appendTo(container)
-        .kendoDropDownList({
+        .kendoComboBox({
           dataTextField: 'permissionsString',
           dataValueField: 'permissions',
           autoBind: false,
-          optionLabel: 'Select',
           index: 0,
           dataSource: [
             {permissionsString: 'Read-Only',permissions: 'ro'},
             {permissionsString: 'Read-Write',permissions: 'rw'}
           ]
-        }).data('kendoDropDownList').list.width('100px');
+        }).data('kendoComboBox').list.width('100px');
       }},
       {command: ["edit", "destroy"], title: "Action" }
-    ],
-    editable: 'inline',
-    groupable: true
+    ]
   }).data('kendoGrid');
 
   // Start a database
@@ -1120,7 +1155,10 @@ $(function() {
           numeric: false,
           pageSizes: [10,25,50,100,250,500, "all"]
         },
-        columns: columns
+        columns: columns,
+        excelExport: function(e) {
+          console.log(e);
+        }
       };
   
       // Create the popup window
@@ -1563,7 +1601,7 @@ $(function() {
     }
   }
 
-  // INSERT/INSERT DATA
+  // INSERT DATA
   function sparqlInsert(data) {
     if(data.hasOwnProperty('error_code')) {
       progressBar($('#query_progress'),false);
@@ -1844,13 +1882,7 @@ $(function() {
 
     // Show the graph search panel
     $("#graphSearch").fadeIn(1400);
-
-    if($("#layoutSelector").data('kendoComboBox').value() == 'jgraph') {
-      drawJgraph(data);
-    }
-    else {
-      drawCytoscape(data);
-    }
+    drawCytoscape(data);
 
     popup.show("Returned " + data.nodes.length + " nodes and " + data.edges.length + " edges.");
   }
@@ -2236,6 +2268,7 @@ $(function() {
         {
           content: 'Retrieve connected nodes',
           select: function(ele){
+            
             retrieveAssociates(cy,ele.data('label'),ele.data('nodeType'));
           }
         },
@@ -2640,7 +2673,10 @@ $(function() {
         { field: "source_name", title: "Subject" },
         { field: "label", title: "Predicate" },
         { field: "target_name", title: "Object" }
-      ]
+      ],
+      excelExport: function(e) {
+        console.log(e.data);
+      }
     };
 
     // Create/update/refresh the grid
