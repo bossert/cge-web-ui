@@ -151,11 +151,11 @@ $(function() {
   $('#selectDB').kendoComboBox({
     dataSource: databasebrowserDS,
     filter:'contains',
-    dataTextField: 'name',
-    dataValueField: 'path',
+    dataTextField: 'database_path',
+    dataValueField: 'database_path',
     template: '<table style=\'width: 100%; border-collapse: collapse;\'>'+
-              '<tr><td colspan=2 style="font-weight: bold; font-size: 1.2em; background-color: rgb(193, 193, 193); padding-left: 5px;">#: data.name #</td></tr>'+
-              '<tr><td colspan=2 style="font-size: 0.9em; background-color: rgb(193, 193, 193); padding-left: 5px;">#: data.path #</td></tr>'+
+              '<tr><td colspan=2 style="font-weight: bold; font-size: 1.2em; background-color: rgb(193, 193, 193); padding-left: 5px;">#: data.database_path #</td></tr>'+
+              '<tr><td colspan=2 style="font-size: 0.9em; background-color: rgb(193, 193, 193); padding-left: 5px;">#: data.database_path #</td></tr>'+
               '<tr><td style="text-align: right; font-size: 0.9em;">Owner:</td>         <td style="text-align: right; font-size: 0.9em;">#: data.owner #</td></tr>'+
               '<tr><td style="text-align: right; font-size: 0.9em;">Size:</td>          <td style="text-align: right; font-size: 0.9em;">#: data.size #</td></tr>'+
               '<tr><td style="text-align: right; font-size: 0.9em;">Last Modified:</td> <td style="text-align: right; font-size: 0.9em;">#: data.last_modified #</td></tr></table>'
@@ -232,9 +232,9 @@ $(function() {
       model: {
         id: 'id',
         fields: {
-          username:    'username',
-          dbObj:       'database',
-          permissions: {type: 'text', defaultValue: { permissions: 'ro'}}
+          username:        'username',
+          'database_path': 'database_path',
+          permissions:     {defaultValue: {permissions: 'ro', permissionsString: 'Read-Only'}}
         }
       }
     }
@@ -246,55 +246,40 @@ $(function() {
     editable: 'inline',
     groupable: true,
     edit: function(e) {
-      console.log('NEW: ',e.model);
-    },
-    save: function(e) {
-      console.log('SAVE: ',e);
-      //var testInput = e.container.find();
+      if(e.model.isNew() === false) {
+        $(e.container.find("input[data-bind='"+"value:username"+"']")).data('kendoComboBox').value(e.model.username.username);
+        $(e.container.find("input[data-bind='"+"value:username"+"']")).data('kendoComboBox').readonly(true);
+      }
     },
     toolbar: ['create'],
     columns: [
-      {field: 'username',title: 'User Name', nullable: true, template: "#= username.username #", editor: function(container,options) {
-        $('<input required data-bind="value:' + options.field + '"/>')
+      {field: 'username',title: 'User Name', nullable: true, template: "#= username #", editor: function(container,options) {
+        $('<input required data-text-field="cn" data-value-field="username" data-bind="value:' + options.field + '"/>')
         .appendTo(container)
         .kendoComboBox({
           dataSource: {
             transport: {
-              parameterMap: function(options,operation) {
-                if(operation !== 'read' && options.models) {
-                  console.log(operation,options);
-                  return {models: kendo.stringify(options.models)};
-                }
-              },
               read: {
                 url: 'user_list',
                 dataType: 'json'
               }
             }
           },
-          autoBind: true,
+          autoBind: false,
           suggest: true,
-          dataTextField: 'username.cn',
-          dataValueField: 'username.username',
-          placeholder: "Username"
+          dataTextField: 'cn',
+          dataValueField: 'username',
         }).data('kendoComboBox');
       }},
-      {field: 'dbObj', title: 'Database', nullable: true, template: "#= dbObj.path #", editor: function(container,options) {
+      {field: 'database_path', title: 'Database', nullable: true, template: "#= database_path #", editor: function(container,options) {
         $('<input required data-bind="value:' + options.field + '"/>')
         .appendTo(container)
         .kendoComboBox({
-          dataTextField: 'path',
-          dataValueField: 'path',
+          dataTextField: 'database_path',
+          dataValueField: 'database_path',
           autoBind: false,
-          optionLabel: 'Select',
-          placeholder: "Database",
           dataSource: {
             transport: {
-              parameterMap: function(options,operation) {
-                if(operation !== 'read' && options.models) {
-                  return {models: kendo.stringify(options.models)};
-                }
-              },
               read: {
                 url: 'list_databases'
               },
@@ -310,7 +295,7 @@ $(function() {
           dataTextField: 'permissionsString',
           dataValueField: 'permissions',
           autoBind: false,
-          index: 0,
+          index: 1,
           dataSource: [
             {permissionsString: 'Read-Only',permissions: 'ro'},
             {permissionsString: 'Read-Write',permissions: 'rw'}

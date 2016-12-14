@@ -29,7 +29,7 @@ sub add_user {
   #=+ default settings
   my %config = (
     username      => '',
-    database      => '',   #=+ Need to know the path to the directory we want to add a user to
+    database_path => '',   #=+ Need to know the path to the directory we want to add a user to
     bits          => 2048,
     permissions   => 'ro'  #=+ Possible permissions are: read-only (ro), read-write (rw), admin (admin)
   );
@@ -43,11 +43,11 @@ sub add_user {
   return undef unless $config{permissions} =~ /^rw$|^ro$|^admin$/;
 
   #=+ Well, we are not going to get very far if we don't know who to generate a key pair for or which database
-  return undef if $config{username} eq '' || $config{database} eq '';
+  return undef if $config{username} eq '' || $config{database_path} eq '';
 
   #=+ Make sure the database directory has a trailing slash
-  $config{database} .= '/' unless $config{database} =~ /\/$/;
-  my $authorized_users_dir = $config{database}.'.cge_web_ui/authorized_users/'.$config{username}.'/';
+  $config{database_path} .= '/' unless $config{database_path} =~ /\/$/;
+  my $authorized_users_dir = $config{database_path}.'.cge_web_ui/authorized_users/'.$config{username}.'/';
 
   #=+ Make sure our directory for authorized users exists
   File::Path::Tiny::mk($authorized_users_dir);
@@ -56,7 +56,7 @@ sub add_user {
   my $property_file = $authorized_users_dir.'properties.yaml';
   my $yaml = YAML::AppConfig->new();
   $yaml->set('username',$config{username});
-  $yaml->set('database',$config{database});
+  $yaml->set('database_path',$config{database_path});
   $yaml->set('permissions',$config{permissions});
 
   #=+ Need to track when the record was created and last modified
@@ -73,7 +73,7 @@ sub add_user {
     my $public_key = <$PUBLIC>;
     close($PUBLIC);
 
-    open(my $AUTHORIZED_KEYS, '>>',$config{database}.'/authorized_keys');
+    open(my $AUTHORIZED_KEYS, '>>',$config{database_path}.'/authorized_keys');
     say {$AUTHORIZED_KEYS} $public_key;
     close($AUTHORIZED_KEYS);
   }
@@ -91,7 +91,7 @@ sub modify_user {
     action        => '', #=+ Can be one of 'modify' or 'revoke': MANDATORY
     username      => '', #=+ MANDATORY
     permissions   => '', #=+ These will be the new permissions.  Same as before: ro, rw, or admin
-    database      => ''
+    database_path => ''
   );
 
   #=+ Take user-supplied options and replace defaults.  Maybe overkill, but we only allow expected settings
@@ -103,22 +103,22 @@ sub modify_user {
   return undef if ($changes{action}  eq 'modify' && $changes{permissions} !~ /^rw$|^ro$|^admin$/);
   return undef if $changes{action}   eq '' ||
                   $changes{username} eq '' ||
-                  $changes{database} eq '' ||
+                  $changes{database_path} eq '' ||
                   ($changes{action}  eq 'modify' && $changes{permissions} eq '');
 
   #=+ Make sure the database directory has a trailing slash
-  $changes{database} .= '/' unless $changes{database} =~ /\/$/;
-  my $authorized_users_dir = $changes{database}.'.cge_web_ui/authorized_users/'.$changes{username}.'/';
+  $changes{database_path} .= '/' unless $changes{database_path} =~ /\/$/;
+  my $authorized_users_dir = $changes{database_path}.'.cge_web_ui/authorized_users/'.$changes{username}.'/';
 
   if($changes{action} eq 'revoke') {
     #=+ Remove the user from the authorized_keys file
     my $new_string;
-    open(my $FH,'<',$changes{database}.'authorized_keys');
+    open(my $FH,'<',$changes{database_path}.'authorized_keys');
     while(my $line = <$FH>) {
       $new_string .= $line unless $line =~ /\Q$changes{username}\E/;
     }
     close($FH);
-    open($FH,'>',$changes{database}.'authorized_keys');
+    open($FH,'>',$changes{database_path}.'authorized_keys');
     say {$FH} $new_string;
     close($FH);
 

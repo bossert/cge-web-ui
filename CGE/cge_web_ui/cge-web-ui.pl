@@ -514,14 +514,12 @@ group {
     my $json = decode_json($p->{models});
     my $qparams = $json->[0];
     if($self->session('username') eq (getpwuid($<))[0]) {
-      $qparams->{database} .= '/' unless $qparams->{database} =~ /\/$/;
-      say 'NEW QPARAMS:'.Dumper($qparams);
+      $qparams->{database_path} .= '/' unless $qparams->{database_path} =~ /\/$/;
       my %newuser = (
         username      => $qparams->{username},
-        database      => $qparams->{database},
+        database_path => $qparams->{database_path},
         permissions   => $qparams->{permissions}->{permissions}
       );
-      say 'NEW:'.Dumper(\%newuser);
       my $success = add_user(\%newuser);
 
       if($success) {
@@ -542,15 +540,13 @@ group {
     my $json = decode_json($p->{models});
     my $qparams = $json->[0];
     if($self->session('username') eq (getpwuid($<))[0]) {
-      $qparams->{database}->{path} .= '/' unless $qparams->{database}->{path} =~ /\/$/;
-      say 'EDIT QPARAMS:'.Dumper($qparams);
+      $qparams->{database_path} .= '/' unless $qparams->{database_path} =~ /\/$/;
       my %changes = (
         action        => 'modify',
         username      => $qparams->{username},
-        database      => $qparams->{database}->{path},
+        database_path => $qparams->{database_path},
         permissions   => $qparams->{permissions}->{permissions}
       );
-      say 'EDIT:'.Dumper(\%changes);
       my $success = modify_user(\%changes);
       if($success) {
         $self->render(json => []);
@@ -570,14 +566,12 @@ group {
     my $json = decode_json($p->{models});
     my $qparams = $json->[0];
     if($self->session('username') eq (getpwuid($<))[0]) {
-      $qparams->{database}->{path} .= '/' unless $qparams->{database}->{path} =~ /\/$/;
-      say 'DESTROY QPARAMS:'.Dumper($qparams);
+      $qparams->{database_path} .= '/' unless $qparams->{database_path} =~ /\/$/;
       my %delete = (
         action        => 'revoke',
         username      => $qparams->{username},
-        database      => $qparams->{database}->{path}
+        database_path => $qparams->{database_path}
       );
-      say 'DESTROY:'.Dumper(\%delete);
       my $success = modify_user(\%delete);
       if($success) {
         $self->render(json => []);
@@ -964,13 +958,13 @@ sub _user_list {
     foreach my $kv(@{$entry->{'asn'}->{'attributes'}}) {
       #=+ The regex here is looking for a value that is EXACTLY cn, uid, or homeDirectory (case-sensitive).  Feel free to add more values if they are useful
       if($kv->{'type'} =~ m/^uid$/) {
-        $temp{'username'}->{'username'} = $kv->{'vals'}->[0]; 
+        $temp{'username'} = $kv->{'vals'}->[0]; 
       }
       elsif ($kv->{'type'} =~ m/^(:?cn|homeDirectory)$/) {
-        $temp{'username'}->{$kv->{'type'}} = $kv->{'vals'}->[0];
+        $temp{$kv->{'type'}} = $kv->{'vals'}->[0];
       }
     }
-    push @results, \%temp if (exists $temp{'username'}->{'username'} && exists $temp{'username'}->{'cn'} && exists $temp{'username'}->{'homeDirectory'});
+    push @results, \%temp if (exists $temp{'username'} && exists $temp{'cn'} && exists $temp{'homeDirectory'});
   }
   return \@results;
 }
@@ -1017,12 +1011,12 @@ sub _list_database_permissions {
             }
             
             my %temp_user = (
-              id            => $perms_config->config->{database}.$perms_config->config->{username},
-              username      => { username => $perms_config->config->{username} },
+              id            => $perms_config->config->{database_path}.$perms_config->config->{username},
+              username      => $perms_config->config->{username},
               permissions   => \%permissions,
               created       => $perms_config->config->{created},
               last_modified => $perms_config->config->{last_modified},
-              database      => { path => $perms_config->config->{database} }
+              database_path => $perms_config->config->{database_path}
             );
             push @userperms, \%temp_user;
           }
@@ -1131,7 +1125,7 @@ sub _list_databases {
               permissions   => $perms_config->config->{permissions},
               created       => $perms_config->config->{created},
               last_modified => $perms_config->config->{last_modified},
-              database      => $perms_config->config->{database}
+              database_path => $perms_config->config->{database_path}
             );
             push @auth_users, \%temp_user;
           }
@@ -1144,8 +1138,7 @@ sub _list_databases {
         size             => _file_size($size),
         bytes            => $size,
         name             => $name,
-        path             => $File::Find::dir,
-        database         => { 'path' => $File::Find::dir },
+        database_path    => $File::Find::dir,
         hasFiles         => undef,
         authorized_users => \@auth_users,
         last_modified    => strftime("%Y-%m-%d %H:%M:%S",localtime((stat $File::Find::dir)[9]))
