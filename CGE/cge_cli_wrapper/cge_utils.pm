@@ -71,6 +71,7 @@ sub add_user {
   if($success) {
     open(my $PUBLIC, '<',$authorized_users_dir.'id_rsa.pub');
     my $public_key = <$PUBLIC>;
+    chomp $public_key;
     close($PUBLIC);
 
     open(my $AUTHORIZED_KEYS, '>>',$config{database_path}.'/authorized_keys');
@@ -112,10 +113,13 @@ sub modify_user {
 
   if($changes{action} eq 'revoke') {
     #=+ Remove the user from the authorized_keys file
+    open (my $KEYFILE,'<',$authorized_users_dir.'id_rsa.pub');
+    my $rsakey = <$KEYFILE>;
+    close($KEYFILE);
     my $new_string;
     open(my $FH,'<',$changes{database_path}.'authorized_keys');
     while(my $line = <$FH>) {
-      $new_string .= $line unless $line =~ /\Q$changes{username}\E/;
+      $new_string .= $line unless $line =~ /\Q$rsakey\E/;
     }
     close($FH);
     open($FH,'>',$changes{database_path}.'authorized_keys');

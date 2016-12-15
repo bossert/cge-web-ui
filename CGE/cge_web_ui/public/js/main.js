@@ -266,7 +266,8 @@ $(function() {
             }
           },
           autoBind: false,
-          suggest: true,
+          suggest: false,
+          filter: "contains",
           dataTextField: 'cn',
           dataValueField: 'username',
         }).data('kendoComboBox');
